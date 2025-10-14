@@ -7,8 +7,10 @@ A modern, professional taxi booking website built with React, Vite, and Tailwind
 ### Core Functionality
 
 - **Smart Booking System**: Book rides from/to airports or custom locations
+- **Round Trip Booking**: Book both outbound and return journeys with automatic 10% discount on return
+- **Date & Time Selection**: Schedule your pickup and return with convenient date/time pickers
 - **Vehicle Selection**: Choose from a variety of vehicles based on passenger count and luggage requirements
-- **Dynamic Pricing**: Real-time price calculation based on distance and vehicle type
+- **Dynamic Pricing**: Real-time price calculation based on distance, vehicle type, and trip type
 - **Secure Payment**: Integrated payment processing (simulated for demo)
 - **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
 
@@ -132,27 +134,33 @@ VITE_STRIPE_PUBLIC_KEY=your_stripe_public_key_here
    - Select from/to locations (airport or custom)
    - Specify number of passengers
    - Specify luggage count
+   - Choose round trip option (optional with 10% discount)
+   - Select pickup date and time
+   - Select return date and time (if round trip)
 
 2. **Car Selection**: System shows available vehicles
 
    - Filters cars based on capacity requirements
-   - Displays pricing and features
+   - Displays pricing (with round trip discount if applicable)
+   - Shows complete trip details including dates/times
    - User selects preferred vehicle
 
 3. **Payment**: Secure checkout
 
    - Enter payment details
-   - Review booking summary
+   - Review complete booking summary
+   - See price breakdown (outbound/return if round trip)
    - Complete payment
 
 4. **Confirmation**: Success message
-   - Booking details displayed
+   - Complete booking details displayed
+   - Shows both trip dates if round trip
    - Automatic redirect to home
 
 ### Data Flow
 
 - Booking data is stored in `localStorage` during the flow
-- Data includes: locations, passenger count, luggage, selected car, and total price
+- Data includes: locations, passenger count, luggage, round trip flag, pickup/return dates and times, selected car, and total price
 - Upon successful payment, data is cleared
 
 ## 🎨 Design Features

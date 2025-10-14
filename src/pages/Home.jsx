@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MapPin, Users, Briefcase, ArrowRight, CheckCircle, Clock, Shield, Star } from 'lucide-react';
+import { MapPin, Users, Briefcase, ArrowRight, CheckCircle, Clock, Shield, Star, RefreshCw, Calendar } from 'lucide-react';
 import { airports } from '../data/airports';
 
 const Home = () => {
@@ -12,6 +12,11 @@ const Home = () => {
     toLocation: '',
     passengers: 1,
     luggage: 1,
+    isRoundTrip: false,
+    pickupDate: '',
+    pickupTime: '',
+    returnDate: '',
+    returnTime: '',
   });
 
   const handleSubmit = (e) => {
@@ -22,8 +27,11 @@ const Home = () => {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({ 
+      ...prev, 
+      [name]: type === 'checkbox' ? checked : value 
+    }));
   };
 
   return (
@@ -173,6 +181,82 @@ const Home = () => {
                     ))}
                   </select>
                 </div>
+              </div>
+
+              {/* Round Trip Toggle */}
+              <div className="flex items-center space-x-3 p-4 bg-primary-50 rounded-lg border border-primary-200">
+                <input
+                  type="checkbox"
+                  id="isRoundTrip"
+                  name="isRoundTrip"
+                  checked={formData.isRoundTrip}
+                  onChange={handleChange}
+                  className="w-5 h-5 text-primary-600 rounded focus:ring-2 focus:ring-primary-500"
+                />
+                <label htmlFor="isRoundTrip" className="flex items-center cursor-pointer">
+                  <RefreshCw className="h-5 w-5 text-primary-600 mr-2" />
+                  <span className="font-semibold text-gray-900">Round Trip</span>
+                  <span className="ml-2 text-sm text-gray-600">(Save on return journey!)</span>
+                </label>
+              </div>
+
+              {/* Date and Time Fields */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Pickup Date & Time */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <Calendar className="inline h-4 w-4 mr-2" />
+                    Pickup Date & Time
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <input
+                      type="date"
+                      name="pickupDate"
+                      value={formData.pickupDate}
+                      onChange={handleChange}
+                      min={new Date().toISOString().split('T')[0]}
+                      className="input-field"
+                      required
+                    />
+                    <input
+                      type="time"
+                      name="pickupTime"
+                      value={formData.pickupTime}
+                      onChange={handleChange}
+                      className="input-field"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Return Date & Time (only if round trip) */}
+                {formData.isRoundTrip && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <Calendar className="inline h-4 w-4 mr-2" />
+                      Return Date & Time
+                    </label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <input
+                        type="date"
+                        name="returnDate"
+                        value={formData.returnDate}
+                        onChange={handleChange}
+                        min={formData.pickupDate || new Date().toISOString().split('T')[0]}
+                        className="input-field"
+                        required
+                      />
+                      <input
+                        type="time"
+                        name="returnTime"
+                        value={formData.returnTime}
+                        onChange={handleChange}
+                        className="input-field"
+                        required
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
 
               <button type="submit" className="w-full btn-primary flex items-center justify-center">

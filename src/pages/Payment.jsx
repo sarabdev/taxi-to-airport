@@ -93,6 +93,11 @@ const Payment = () => {
             </p>
             <div className="bg-gray-50 rounded-lg p-6 mb-6">
               <div className="space-y-3 text-left">
+                {bookingData.isRoundTrip && (
+                  <div className="bg-primary-100 text-primary-700 px-3 py-1 rounded text-sm font-semibold mb-2">
+                    ✓ Round Trip Booked
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <span className="text-gray-600">Vehicle:</span>
                   <span className="font-semibold">{bookingData.selectedCar.name}</span>
@@ -105,6 +110,28 @@ const Payment = () => {
                   <span className="text-gray-600">To:</span>
                   <span className="font-semibold">{bookingData.toLocation}</span>
                 </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Pickup:</span>
+                  <span className="font-semibold text-sm">
+                    {bookingData.pickupDate && new Date(bookingData.pickupDate).toLocaleDateString('en-US', { 
+                      month: 'short', 
+                      day: 'numeric',
+                      year: 'numeric'
+                    })} at {bookingData.pickupTime}
+                  </span>
+                </div>
+                {bookingData.isRoundTrip && bookingData.returnDate && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Return:</span>
+                    <span className="font-semibold text-sm">
+                      {new Date(bookingData.returnDate).toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric',
+                        year: 'numeric'
+                      })} at {bookingData.returnTime}
+                    </span>
+                  </div>
+                )}
                 <div className="flex justify-between border-t pt-3 mt-3">
                   <span className="text-gray-600">Total Paid:</span>
                   <span className="text-2xl font-bold text-primary-600">${bookingData.totalPrice}</span>
@@ -268,6 +295,11 @@ const Payment = () => {
                 <div className="border-t pt-4">
                   <p className="text-sm text-gray-500 mb-2">Trip Details</p>
                   <div className="space-y-2 text-sm">
+                    {bookingData.isRoundTrip && (
+                      <div className="bg-primary-50 text-primary-700 px-2 py-1 rounded text-xs font-semibold mb-2">
+                        Round Trip - 10% Off Return
+                      </div>
+                    )}
                     <div className="flex justify-between">
                       <span className="text-gray-600">From:</span>
                       <span className="font-medium">{bookingData.fromLocation}</span>
@@ -276,6 +308,26 @@ const Payment = () => {
                       <span className="text-gray-600">To:</span>
                       <span className="font-medium">{bookingData.toLocation}</span>
                     </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Pickup:</span>
+                      <span className="font-medium text-xs">
+                        {bookingData.pickupDate && new Date(bookingData.pickupDate).toLocaleDateString('en-US', { 
+                          month: 'short', 
+                          day: 'numeric' 
+                        })} {bookingData.pickupTime}
+                      </span>
+                    </div>
+                    {bookingData.isRoundTrip && bookingData.returnDate && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Return:</span>
+                        <span className="font-medium text-xs">
+                          {new Date(bookingData.returnDate).toLocaleDateString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric' 
+                          })} {bookingData.returnTime}
+                        </span>
+                      </div>
+                    )}
                     <div className="flex justify-between">
                       <span className="text-gray-600">Passengers:</span>
                       <span className="font-medium">{bookingData.passengers}</span>
@@ -289,14 +341,33 @@ const Payment = () => {
 
                 <div className="border-t pt-4">
                   <div className="space-y-2 text-sm mb-3">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Base Fare:</span>
-                      <span>${bookingData.selectedCar.basePrice}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Distance Charge:</span>
-                      <span>${(parseFloat(bookingData.totalPrice) - bookingData.selectedCar.basePrice).toFixed(2)}</span>
-                    </div>
+                    {bookingData.isRoundTrip ? (
+                      <>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Outbound Trip:</span>
+                          <span>${((parseFloat(bookingData.totalPrice) / 1.9) * 1).toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Return Trip:</span>
+                          <span>${((parseFloat(bookingData.totalPrice) / 1.9) * 0.9).toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between text-green-600">
+                          <span>Discount (10%):</span>
+                          <span>-${((parseFloat(bookingData.totalPrice) / 1.9) * 0.1).toFixed(2)}</span>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Base Fare:</span>
+                          <span>${bookingData.selectedCar.basePrice}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Distance Charge:</span>
+                          <span>${(parseFloat(bookingData.totalPrice) - bookingData.selectedCar.basePrice).toFixed(2)}</span>
+                        </div>
+                      </>
+                    )}
                   </div>
                   <div className="flex justify-between items-center pt-3 border-t">
                     <span className="text-lg font-semibold">Total:</span>

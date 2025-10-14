@@ -27,9 +27,9 @@ The application will open at `http://localhost:5173`
 
 ### Booking Flow
 
-1. **Home Page**: Fill out booking form
-2. **Car Selection** (`/booking/cars`): Choose your vehicle
-3. **Payment** (`/booking/payment`): Complete booking
+1. **Home Page**: Fill out booking form (locations, passengers, luggage, round trip option, dates/times)
+2. **Car Selection** (`/booking/cars`): Choose your vehicle (prices include round trip discount if applicable)
+3. **Payment** (`/booking/payment`): Complete booking with detailed price breakdown
 
 ## 🎨 Customization
 

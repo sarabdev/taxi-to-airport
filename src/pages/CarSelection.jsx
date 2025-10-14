@@ -31,8 +31,16 @@ const CarSelection = () => {
     // Simplified pricing calculation
     // In real app, you'd calculate actual distance
     const estimatedMiles = 25;
-    const total = car.basePrice + (car.pricePerMile * estimatedMiles);
-    return total.toFixed(2);
+    const oneWayPrice = car.basePrice + (car.pricePerMile * estimatedMiles);
+    
+    // If round trip, add return journey with 10% discount
+    if (bookingData?.isRoundTrip) {
+      const returnPrice = oneWayPrice * 0.9; // 10% discount on return
+      const total = oneWayPrice + returnPrice;
+      return total.toFixed(2);
+    }
+    
+    return oneWayPrice.toFixed(2);
   };
 
   const handleSelectCar = (car) => {
@@ -78,8 +86,15 @@ const CarSelection = () => {
 
         {/* Booking Summary */}
         <div className="card mb-8">
-          <h2 className="text-xl font-semibold mb-4">Trip Details</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold">Trip Details</h2>
+            {bookingData.isRoundTrip && (
+              <span className="bg-primary-100 text-primary-700 px-3 py-1 rounded-full text-sm font-semibold">
+                Round Trip - 10% Off Return
+              </span>
+            )}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             <div>
               <p className="text-sm text-gray-500">From</p>
               <p className="font-semibold">{bookingData.fromLocation}</p>
@@ -96,6 +111,32 @@ const CarSelection = () => {
               <p className="text-sm text-gray-500">Luggage</p>
               <p className="font-semibold">{bookingData.luggage} {bookingData.luggage === '1' ? 'Bag' : 'Bags'}</p>
             </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
+            <div>
+              <p className="text-sm text-gray-500">Pickup Date & Time</p>
+              <p className="font-semibold">
+                {bookingData.pickupDate && new Date(bookingData.pickupDate).toLocaleDateString('en-US', { 
+                  weekday: 'short', 
+                  year: 'numeric', 
+                  month: 'short', 
+                  day: 'numeric' 
+                })} at {bookingData.pickupTime}
+              </p>
+            </div>
+            {bookingData.isRoundTrip && bookingData.returnDate && (
+              <div>
+                <p className="text-sm text-gray-500">Return Date & Time</p>
+                <p className="font-semibold">
+                  {new Date(bookingData.returnDate).toLocaleDateString('en-US', { 
+                    weekday: 'short', 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric' 
+                  })} at {bookingData.returnTime}
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
