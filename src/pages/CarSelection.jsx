@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, Briefcase, Check, ArrowLeft } from 'lucide-react';
+import { Users, Briefcase, Check, ArrowLeft, Car } from 'lucide-react';
 import { getAvailableCars } from '../data/cars';
 
 const CarSelection = () => {
@@ -57,7 +57,7 @@ const CarSelection = () => {
     };
     
     localStorage.setItem('bookingData', JSON.stringify(updatedBooking));
-    navigate('/booking/payment');
+    navigate('/booking/info');
   };
 
   if (!bookingData) {
@@ -67,21 +67,27 @@ const CarSelection = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+        {/* Map Preview */}
+        <div className="w-full bg-gray-200 h-44 rounded-xl flex flex-col items-center justify-center mb-6 border">
+          <span className="text-gray-500 font-semibold text-lg">Map preview here</span>
+        </div>
+
+        {/* Info Notification */}
+        <div className="w-full bg-red-600 text-white font-bold text-center py-2 rounded-lg mb-8">
+          £3 OFF EVERY Online Journey + 5% Return Booking Discount!
+        </div>
+
+        {/* Header (unchanged) */}
         <div className="mb-8">
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/')} 
             className="flex items-center text-primary-600 hover:text-primary-700 mb-4"
           >
             <ArrowLeft className="h-5 w-5 mr-2" />
             Back to Booking Form
           </button>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
-            Select Your Vehicle
-          </h1>
-          <p className="text-gray-600 mt-2">
-            Choose from our premium fleet of vehicles
-          </p>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900">Select Your Vehicle</h1>
+          <p className="text-gray-600 mt-2">Choose from our premium fleet of vehicles</p>
         </div>
 
         {/* Booking Summary */}
@@ -140,123 +146,87 @@ const CarSelection = () => {
           </div>
         </div>
 
-        {/* Available Cars */}
-        {availableCars.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {availableCars.map((car) => (
+        {/* Car List / Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          {availableCars.map((car) => {
+            // Price calculations
+            const estimatedMiles = 25;
+            const oneWayOld = car.basePrice + car.pricePerMile * estimatedMiles;
+            const oneWayNew = Math.max(oneWayOld - 3, 0); // £3 off per screenshot
+            let returnOld = oneWayOld * 2;
+            let returnNew = null;
+            let returnDiscountPounds = 0;
+            if (bookingData.isRoundTrip) {
+              returnNew = Math.round((oneWayOld + (oneWayOld * 0.95)) - 0.01); // 5% discount (simulate as screenshot)
+              returnDiscountPounds = returnOld - returnNew;
+            }
+            returnOld = Math.round(returnOld);
+            
+            return (
               <div
                 key={car.id}
-                className={`card cursor-pointer transition-all ${
-                  selectedCar?.id === car.id
-                    ? 'ring-4 ring-primary-500 shadow-xl'
-                    : 'hover:shadow-xl'
-                }`}
-                onClick={() => handleSelectCar(car)}
+                className={`card flex flex-col space-y-2 shadow-sm border border-gray-200 p-5 transition-all ${selectedCar?.id === car.id ? 'ring-4 ring-primary-500' : ''}`}
               >
-                <div className="relative">
-                  <img
-                    src={car.image}
-                    alt={car.name}
-                    className="w-full h-48 object-cover rounded-lg mb-4"
-                  />
-                  {selectedCar?.id === car.id && (
-                    <div className="absolute top-2 right-2 bg-primary-600 text-white rounded-full p-2">
-                      <Check className="h-5 w-5" />
-                    </div>
-                  )}
+                <div className='mx-auto bg-white border-2 border-gray-200 w-16 h-16 rounded-full flex items-center justify-center mb-3'>
+                  <Car size={32} className='text-gray-600' />
                 </div>
-                
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  {car.name}
-                </h3>
-                
-                <p className="text-sm text-gray-600 mb-4">
+                <div className="flex items-center justify-between w-full mb-2">
+                  <div className="font-bold text-lg text-gray-900">{car.name}</div>
+                  <div className="flex gap-3 text-gray-600 text-xs font-medium items-center">
+                    <Users className='inline h-4 w-4 mr-1' />{car.capacity.passengers}
+                    <Briefcase className='inline h-4 w-4 mr-1' />{car.capacity.luggage}
+                  </div>
+                </div>
+                <div className="text-xs text-gray-500 mb-2">
                   {car.description}
-                </p>
-                
-                <div className="flex items-center justify-between mb-4 pb-4 border-b">
-                  <div className="flex items-center text-gray-600">
-                    <Users className="h-5 w-5 mr-2" />
-                    <span className="text-sm">{car.capacity.passengers} passengers</span>
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <Briefcase className="h-5 w-5 mr-2" />
-                    <span className="text-sm">{car.capacity.luggage} bags</span>
-                  </div>
                 </div>
-                
-                <div className="mb-4">
-                  <p className="text-sm font-semibold text-gray-700 mb-2">Features:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {car.features.slice(0, 3).map((feature, index) => (
-                      <span
-                        key={index}
-                        className="text-xs bg-primary-50 text-primary-700 px-2 py-1 rounded"
-                      >
-                        {feature}
-                      </span>
-                    ))}
-                    {car.features.length > 3 && (
-                      <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                        +{car.features.length - 3} more
-                      </span>
+                {/* Prices Row */}
+                <div className="flex gap-3 mt-2">
+                  {/* One Way Price */}
+                  <button
+                    className={`relative flex-1 flex flex-col items-center justify-center py-2 px-2 rounded-lg border-2 font-bold bg-blue-600 text-white transition-all ${selectedCar?.id === car.id ? 'ring-2 ring-blue-400' : ''}`}
+                    type="button"
+                    onClick={() => handleSelectCar(car)}
+                  >
+                    {/* Discount badge */}
+                    <span className="absolute top-1 left-1 bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-semibold">-£3</span>
+                    <span className="line-through text-xs opacity-70">£{oneWayOld}</span>
+                    <span className="text-lg font-bold">£{oneWayNew}</span>
+                    <span className="text-[11px] font-semibold uppercase">One Way</span>
+                  </button>
+                  {/* Return Price */}
+                  <button
+                    className={`relative flex-1 flex flex-col items-center justify-center py-2 px-2 rounded-lg border-2 font-bold ${bookingData.isRoundTrip ? 'bg-yellow-400 text-gray-900' : 'bg-gray-200 text-gray-400 cursor-not-allowed'} transition-all ${selectedCar?.id === car.id ? 'ring-2 ring-yellow-500' : ''}`}
+                    type="button"
+                    disabled={!bookingData.isRoundTrip}
+                    onClick={() => bookingData.isRoundTrip && handleSelectCar(car)}
+                  >
+                    {bookingData.isRoundTrip && (
+                      <span className="absolute top-1 left-1 bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-semibold">-£{returnDiscountPounds}</span>
                     )}
-                  </div>
-                </div>
-                
-                <div className="mt-4 pt-4 border-t">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-500">Estimated Total</p>
-                      <p className="text-2xl font-bold text-primary-600">
-                        ${calculatePrice(car)}
-                      </p>
-                    </div>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleSelectCar(car);
-                      }}
-                      className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-                        selectedCar?.id === car.id
-                          ? 'bg-primary-600 text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                    >
-                      {selectedCar?.id === car.id ? 'Selected' : 'Select'}
-                    </button>
-                  </div>
+                    <span className="line-through text-xs opacity-70">£{returnOld}</span>
+                    <span className="text-lg font-bold">{bookingData.isRoundTrip ? `£${returnNew}` : '--'}</span>
+                    <span className="text-[11px] font-semibold uppercase">Return</span>
+                  </button>
                 </div>
               </div>
-            ))}
-          </div>
-        ) : (
-          <div className="card text-center py-12">
-            <p className="text-lg text-gray-600">
-              No vehicles available for your requirements. Please adjust your passenger or luggage count.
-            </p>
-            <button
-              onClick={() => navigate('/')}
-              className="btn-primary mt-4"
-            >
-              Modify Booking
-            </button>
-          </div>
-        )}
+            )
+          })}
+        </div>
 
         {/* Continue Button */}
         {selectedCar && (
-          <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-4">
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-4 z-50">
             <div className="max-w-7xl mx-auto flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Selected Vehicle</p>
-                <p className="text-lg font-bold">{selectedCar.name} - ${calculatePrice(selectedCar)}</p>
+                <p className="text-lg font-bold">{selectedCar.name} - £{calculatePrice(selectedCar)}</p>
               </div>
               <button
                 onClick={handleContinue}
                 className="btn-primary"
               >
-                Continue to Payment
+                Move to Next Step
               </button>
             </div>
           </div>

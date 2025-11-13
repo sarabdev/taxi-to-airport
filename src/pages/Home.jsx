@@ -28,9 +28,9 @@ const Home = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({ 
-      ...prev, 
-      [name]: type === 'checkbox' ? checked : value 
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
     }));
   };
 
@@ -184,7 +184,7 @@ const Home = () => {
               </div>
 
               {/* Round Trip Toggle */}
-              <div className="flex items-center space-x-3 p-4 bg-primary-50 rounded-lg border border-primary-200">
+              {/* <div className="flex items-center space-x-3 p-4 bg-primary-50 rounded-lg border border-primary-200">
                 <input
                   type="checkbox"
                   id="isRoundTrip"
@@ -198,7 +198,7 @@ const Home = () => {
                   <span className="font-semibold text-gray-900">Round Trip</span>
                   <span className="ml-2 text-sm text-gray-600">(Save on return journey!)</span>
                 </label>
-              </div>
+              </div> */}
 
               {/* Date and Time Fields */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -279,7 +279,7 @@ const Home = () => {
               Experience the difference with our premium service
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-4">
