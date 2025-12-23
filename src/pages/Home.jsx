@@ -63,7 +63,7 @@ const Home = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     From
                   </label>
-                  <select
+                  {/* <select
                     name="fromType"
                     value={formData.fromType}
                     onChange={handleChange}
@@ -72,8 +72,8 @@ const Home = () => {
                   >
                     <option value="airport">Airport</option>
                     <option value="custom">Custom Location</option>
-                  </select>
-                  {formData.fromType === 'airport' ? (
+                  </select> */}
+                  {formData.fromType === 'airport' && false ? (
                     <select
                       name="fromLocation"
                       value={formData.fromLocation}
@@ -106,7 +106,7 @@ const Home = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     To
                   </label>
-                  <select
+                  {/* <select
                     name="toType"
                     value={formData.toType}
                     onChange={handleChange}
@@ -115,8 +115,8 @@ const Home = () => {
                   >
                     <option value="airport">Airport</option>
                     <option value="custom">Custom Location</option>
-                  </select>
-                  {formData.toType === 'airport' ? (
+                  </select> */}
+                  {formData.toType === 'airport' && false ? (
                     <select
                       name="toLocation"
                       value={formData.toLocation}
@@ -145,7 +145,7 @@ const Home = () => {
                 </div>
 
                 {/* Passengers */}
-                <div>
+                {/* <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     <Users className="inline h-4 w-4 mr-2" />
                     Number of Passengers
@@ -161,10 +161,10 @@ const Home = () => {
                       <option key={num} value={num}>{num} {num === 1 ? 'Person' : 'People'}</option>
                     ))}
                   </select>
-                </div>
+                </div> */}
 
                 {/* Luggage */}
-                <div>
+                {/* <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     <Briefcase className="inline h-4 w-4 mr-2" />
                     Luggage Count
@@ -180,7 +180,7 @@ const Home = () => {
                       <option key={num} value={num}>{num} {num === 1 ? 'Bag' : 'Bags'}</option>
                     ))}
                   </select>
-                </div>
+                </div> */}
               </div>
 
               {/* Round Trip Toggle */}
