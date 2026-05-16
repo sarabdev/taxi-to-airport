@@ -1,318 +1,803 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Mail, Phone, Smartphone, MapPin, Building2, Info, User } from "lucide-react";
+
+import {
+  User,
+  Mail,
+  Smartphone,
+  Briefcase,
+  Plane,
+  Calendar,
+  Users,
+  CheckCircle,
+  Shield,
+  ArrowLeft,
+  BadgeCheck,
+} from "lucide-react";
 
 const initialForm = {
-  firstName: "",
-  lastName: "",
+  fullName: "",
   email: "",
-  telephone: "",
   mobile: "",
-  emergency: "",
-  address1: "",
-  address2: "",
-  city: "",
-  postcode: "",
-  country: "United Kingdom",
-  state: "",
-};
+  passengers: 1,
 
-const requiredFields = {
-  firstName: "First Name",
-  lastName: "Last Name",
-  email: "E-Mail Address",
-  address1: "Billing Address, Line 1",
-  city: "City",
-  postcode: "Postcode",
-};
+  luggage: {
+    largeBags23kg: 0,
+    smallBags15kg: 0,
+    shoulderBags: 0,
+    extraLargeItemType: "none",
+    extraLargeItemNote: "",
+  },
 
-const countries = ["United Kingdom", "United States", "France", "Germany", "India", "United Arab Emirates"];
+  flight: {
+    flightNumber: "",
+    arrivingFrom: "",
+    arrivalDateTime: "",
+    meetAndGreet: false,
+  },
+};
 
 const UserInfo = () => {
   const navigate = useNavigate();
+
   const [form, setForm] = useState(initialForm);
+
   const [errors, setErrors] = useState({});
+
+  const [bookingData, setBookingData] = useState(null);
+
+  /* ========================================================= */
+  /* LOAD */
+  /* ========================================================= */
 
   useEffect(() => {
     const bookingDataRaw = localStorage.getItem("bookingData");
+
     if (!bookingDataRaw) {
       navigate("/booking");
       return;
     }
-    const bookingData = JSON.parse(bookingDataRaw);
-    if (!bookingData?.selectedCar) {
+
+    const parsed = JSON.parse(bookingDataRaw);
+
+    if (!parsed?.selectedCar) {
       navigate("/booking/cars");
       return;
     }
-    if (bookingData.user) {
-      setForm((prev) => ({ ...prev, ...bookingData.user }));
+
+    setBookingData(parsed);
+
+    if (parsed.user) {
+      setForm(parsed.user);
     }
   }, [navigate]);
 
+  /* ========================================================= */
+  /* HELPERS */
+  /* ========================================================= */
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleNestedChange = (path, value) => {
+    setForm((prev) => {
+      const updated = { ...prev };
+
+      let ref = updated;
+
+      for (let i = 0; i < path.length - 1; i++) {
+        ref = ref[path[i]];
+      }
+
+      ref[path[path.length - 1]] = value;
+
+      return updated;
+    });
   };
 
   const validate = () => {
     const err = {};
-    Object.keys(requiredFields).forEach((field) => {
-      if (!form[field]?.trim()) {
-        err[field] = "Required";
-      }
-    });
-    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+
+    if (!form.fullName.trim()) err.fullName = "Required";
+
+    if (!form.mobile.trim()) err.mobile = "Required";
+
+    if (!form.email.trim()) err.email = "Required";
+
+    if (!form.flight.flightNumber.trim())
+      err.flightNumber = "Required";
+
+    if (!form.flight.arrivingFrom.trim())
+      err.arrivingFrom = "Required";
+
+    if (!form.flight.arrivalDateTime)
+      err.arrivalDateTime = "Required";
+
+    if (
+      form.luggage.extraLargeItemType === "other" &&
+      !form.luggage.extraLargeItemNote.trim()
+    ) {
+      err.extraLargeItemNote = "Please specify the item";
+    }
+
+    if (
+      form.email &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)
+    ) {
       err.email = "Enter a valid email";
     }
+
     return err;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const err = validate();
+
     setErrors(err);
+
     if (Object.keys(err).length) return;
 
-    const bookingData = JSON.parse(localStorage.getItem("bookingData") || "{}");
-    localStorage.setItem("bookingData", JSON.stringify({ ...bookingData, user: form }));
+    const existing = JSON.parse(
+      localStorage.getItem("bookingData") || "{}"
+    );
+
+    localStorage.setItem(
+      "bookingData",
+      JSON.stringify({
+        ...existing,
+        user: form,
+      })
+    );
+
     navigate("/booking/payment");
   };
 
   const renderError = (field) =>
-    errors[field] ? <p className="text-xs text-red-600 mt-1">{errors[field]}</p> : null;
+    errors[field] ? (
+      <p className="text-sm text-red-600 mt-2">
+        {errors[field]}
+      </p>
+    ) : null;
+
+  const numberOptions = [0, 1, 2, 3, 4];
+
+  if (!bookingData) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-surface-light py-6 md:py-10">
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        {/* ========================================================= */}
+        {/* HEADER */}
+        {/* ========================================================= */}
+
         <div className="mb-10">
-          <div className="flex items-center gap-2 text-primary-600 font-semibold uppercase tracking-wide text-sm">
-            <Info className="h-4 w-4" /> Step 3 of 4
+
+          <button
+            onClick={() => navigate("/booking/cars")}
+            className="inline-flex items-center text-primary-900 hover:text-accent-500 mb-5 text-sm font-semibold transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+
+            Back To Vehicle Selection
+          </button>
+
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+
+            <div>
+
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary-50 text-primary-900 px-4 py-2 text-sm font-semibold mb-5">
+
+                <BadgeCheck className="h-4 w-4 text-accent-500" />
+
+                Step 3 Of 4
+              </div>
+
+              <h1 className="text-4xl md:text-5xl font-black text-primary-900 leading-tight">
+
+                Passenger Information
+              </h1>
+
+              <p className="text-gray-600 text-lg mt-4">
+                Complete your booking details
+              </p>
+            </div>
+
+            {/* Summary */}
+            <div className="bg-white rounded-[28px] border border-gray-100 shadow-soft px-8 py-6 min-w-[300px]">
+
+              <p className="text-sm text-gray-500 mb-2">
+                Selected Vehicle
+              </p>
+
+              <h3 className="text-2xl font-black text-primary-900">
+
+                {bookingData.selectedCar?.name}
+              </h3>
+
+              <p className="text-gray-500 mt-2">
+                {bookingData.tripType === "RETURN"
+                  ? "Return Journey"
+                  : "One Way Journey"}
+              </p>
+
+              <div className="mt-4 text-3xl font-black text-accent-500">
+
+                £{bookingData.pricing?.totalFare}
+              </div>
+            </div>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mt-2">Passenger Information</h1>
-          <p className="text-gray-600 mt-3 max-w-2xl">
-            We use these details to confirm your booking and keep you updated about your ride. Please double-check that everything is accurate.
-          </p>
         </div>
 
-        <form className="card space-y-8" onSubmit={handleSubmit}>
-          {/* Personal Details */}
-          <section className="space-y-4">
-            <h2 className="text-lg font-semibold text-gray-900">Personal Details</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  First Name <span className="text-red-500">*</span>
-                </label>
-                <div className="relative mt-1">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <input
-                    type="text"
-                    name="firstName"
-                    value={form.firstName}
-                    onChange={handleChange}
-                    placeholder="John"
-                    className={`input-field pl-11 ${errors.firstName ? 'border-red-400 ring-2 ring-red-100' : ''}`}
-                  />
-                </div>
-                {renderError('firstName')}
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Last Name <span className="text-red-500">*</span>
-                </label>
-                <div className="relative mt-1">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <input
-                    type="text"
-                    name="lastName"
-                    value={form.lastName}
-                    onChange={handleChange}
-                    placeholder="Doe"
-                    className={`input-field pl-11 ${errors.lastName ? 'border-red-400 ring-2 ring-red-100' : ''}`}
-                  />
-                </div>
-                {renderError('lastName')}
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                E-mail Address <span className="text-red-500">*</span>
-              </label>
-              <div className="relative mt-1">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <input
-                  type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  placeholder="you@example.com"
-                  className={`input-field pl-11 ${errors.email ? 'border-red-400 ring-2 ring-red-100' : ''}`}
-                />
-              </div>
-              {renderError('email')}
-            </div>
-          </section>
+        {/* ========================================================= */}
+        {/* MAIN GRID */}
+        {/* ========================================================= */}
 
-          {/* Contact Details */}
-          <section className="space-y-4">
-            <h2 className="text-lg font-semibold text-gray-900">Contact Details</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Telephone Number</label>
-                <div className="relative mt-1">
-                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <input
-                    type="text"
-                    name="telephone"
-                    value={form.telephone}
-                    onChange={handleChange}
-                    placeholder="01234 567 890"
-                    className="input-field pl-11"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Mobile Number</label>
-                <div className="relative mt-1">
-                  <Smartphone className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <input
-                    type="text"
-                    name="mobile"
-                    value={form.mobile}
-                    onChange={handleChange}
-                    placeholder="+44 7000 000000"
-                    className="input-field pl-11"
-                  />
-                </div>
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-500">
-                Emergency Number <span className="text-xs text-gray-400">(Optional)</span>
-              </label>
-              <div className="relative mt-1">
-                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <input
-                  type="text"
-                  name="emergency"
-                  value={form.emergency}
-                  onChange={handleChange}
-                  placeholder="Backup contact"
-                  className="input-field pl-11"
-                />
-              </div>
-            </div>
-          </section>
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
 
-          {/* Billing Address */}
-          <section className="space-y-4">
-            <h2 className="text-lg font-semibold text-gray-900">Billing Address</h2>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Address Line 1 <span className="text-red-500">*</span>
-              </label>
-              <div className="relative mt-1">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <input
-                  type="text"
-                  name="address1"
-                  value={form.address1}
-                  onChange={handleChange}
-                  placeholder="Apartment, suite, etc."
-                  className={`input-field pl-11 ${errors.address1 ? 'border-red-400 ring-2 ring-red-100' : ''}`}
-                />
-              </div>
-              {renderError('address1')}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-500">
-                Address Line 2 <span className="text-xs text-gray-400">(Optional)</span>
-              </label>
-              <div className="relative mt-1">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <input
-                  type="text"
-                  name="address2"
-                  value={form.address2}
-                  onChange={handleChange}
-                  placeholder="Floor, building"
-                  className="input-field pl-11"
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  City <span className="text-red-500">*</span>
-                </label>
-                <div className="relative mt-1">
-                  <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <input
-                    type="text"
-                    name="city"
-                    value={form.city}
-                    onChange={handleChange}
-                    placeholder="London"
-                    className={`input-field pl-11 ${errors.city ? 'border-red-400 ring-2 ring-red-100' : ''}`}
-                  />
-                </div>
-                {renderError('city')}
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Postcode <span className="text-red-500">*</span>
-                </label>
-                <div className="relative mt-1">
-                  <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <input
-                    type="text"
-                    name="postcode"
-                    value={form.postcode}
-                    onChange={handleChange}
-                    placeholder="SW1A 1AA"
-                    className={`input-field pl-11 ${errors.postcode ? 'border-red-400 ring-2 ring-red-100' : ''}`}
-                  />
-                </div>
-                {renderError('postcode')}
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Country</label>
-                <select
-                  name="country"
-                  value={form.country}
-                  onChange={handleChange}
-                  className="input-field"
-                >
-                  {countries.map((c) => (
-                    <option key={c}>{c}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">State (US Only)</label>
-                <input
-                  type="text"
-                  name="state"
-                  value={form.state}
-                  onChange={handleChange}
-                  placeholder="Optional"
-                  className="input-field"
-                />
-              </div>
-            </div>
-          </section>
+          {/* ========================================================= */}
+          {/* FORM */}
+          {/* ========================================================= */}
 
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <p className="text-sm text-gray-500">
-              By continuing you agree to receive booking confirmations and ride updates for this journey.
-            </p>
-            <button type="submit" className="btn-primary px-8 py-3 text-base font-semibold">
-              Continue to Payment
-            </button>
+          <div className="xl:col-span-2">
+
+            <form
+              onSubmit={handleSubmit}
+              className="bg-white rounded-[36px] border border-gray-100 shadow-premium overflow-hidden"
+            >
+
+              {/* ========================================================= */}
+              {/* TOP HEADER */}
+              {/* ========================================================= */}
+
+              <div className="bg-primary-900 px-8 md:px-10 py-8">
+
+                <h2 className="text-3xl font-black text-white">
+                  Booking Information
+                </h2>
+
+                <p className="text-gray-300 mt-3 text-lg">
+                  Passenger, luggage and flight details
+                </p>
+              </div>
+
+              {/* ========================================================= */}
+              {/* CONTENT */}
+              {/* ========================================================= */}
+
+              <div className="p-6 md:p-10">
+
+                {/* ========================================================= */}
+                {/* PASSENGER */}
+                {/* ========================================================= */}
+
+                <section>
+
+                  {/* Section Header */}
+                  <div className="flex items-center gap-4 mb-8">
+
+                    <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-primary-900 text-accent-400">
+
+                      <User className="h-6 w-6" />
+                    </div>
+
+                    <div>
+
+                      <h3 className="text-2xl font-black text-primary-900">
+                        Passenger Details
+                      </h3>
+
+                      <p className="text-gray-500 mt-1">
+                        Main passenger information
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+
+                    {/* Name */}
+                    <div>
+
+                      <label className="block text-sm font-semibold text-gray-700 mb-3">
+                        Full Name *
+                      </label>
+
+                      <div className="relative">
+
+                        <User className="icon-left" />
+
+                        <input
+                          name="fullName"
+                          value={form.fullName}
+                          onChange={handleChange}
+                          className="input-field pl-11 h-14 border-gray-200 focus:ring-primary-900"
+                          placeholder="John Doe"
+                        />
+                      </div>
+
+                      {renderError("fullName")}
+                    </div>
+
+                    {/* Mobile + Email */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                      <div>
+
+                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                          Mobile Number *
+                        </label>
+
+                        <div className="relative">
+
+                          <Smartphone className="icon-left" />
+
+                          <input
+                            name="mobile"
+                            value={form.mobile}
+                            onChange={handleChange}
+                            className="input-field pl-11 h-14 border-gray-200 focus:ring-primary-900"
+                            placeholder="+44 7000 000000"
+                          />
+                        </div>
+
+                        {renderError("mobile")}
+                      </div>
+
+                      <div>
+
+                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                          Email Address *
+                        </label>
+
+                        <div className="relative">
+
+                          <Mail className="icon-left" />
+
+                          <input
+                            name="email"
+                            value={form.email}
+                            onChange={handleChange}
+                            className="input-field pl-11 h-14 border-gray-200 focus:ring-primary-900"
+                            placeholder="you@example.com"
+                          />
+                        </div>
+
+                        {renderError("email")}
+                      </div>
+                    </div>
+
+                    {/* Passengers */}
+                    <div>
+
+                      <label className="block text-sm font-semibold text-gray-700 mb-3">
+                        Number Of Passengers
+                      </label>
+
+                      <div className="select-wrapper">
+
+                        <select
+                          className="select-field h-14 border-gray-200 focus:ring-primary-900"
+                          value={form.passengers}
+                          onChange={(e) =>
+                            handleNestedChange(
+                              ["passengers"],
+                              Number(e.target.value)
+                            )
+                          }
+                        >
+                          {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
+                            <option
+                              key={n}
+                              value={n}
+                            >
+                              {n}
+                            </option>
+                          ))}
+                        </select>
+
+                        <span className="select-icon">
+                          ⌄
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                {/* DIVIDER */}
+                <div className="my-12 border-t border-gray-100"></div>
+
+                {/* ========================================================= */}
+                {/* LUGGAGE */}
+                {/* ========================================================= */}
+
+                <section>
+
+                  {/* Header */}
+                  <div className="flex items-center gap-4 mb-8">
+
+                    <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-primary-900 text-accent-400">
+
+                      <Briefcase className="h-6 w-6" />
+                    </div>
+
+                    <div>
+
+                      <h3 className="text-2xl font-black text-primary-900">
+                        Luggage Information
+                      </h3>
+
+                      <p className="text-gray-500 mt-1">
+                        Help us prepare the right vehicle
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                      {/* Large */}
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                          Large Bags (23kg)
+                        </label>
+                        <div className="relative">
+                          <select
+                            className="w-full h-14 px-4 pr-10 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-900 appearance-none bg-white text-gray-800 font-medium"
+                            value={form.luggage.largeBags23kg}
+                            onChange={(e) => handleNestedChange(["luggage", "largeBags23kg"], Number(e.target.value))}
+                          >
+                            {numberOptions.map((n) => <option key={n} value={n}>{n}</option>)}
+                          </select>
+                          <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                            <svg className="w-4 h-4 text-primary-900" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Small */}
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                          Small Bags (15kg)
+                        </label>
+                        <div className="relative">
+                          <select
+                            className="w-full h-14 px-4 pr-10 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-900 appearance-none bg-white text-gray-800 font-medium"
+                            value={form.luggage.smallBags15kg}
+                            onChange={(e) => handleNestedChange(["luggage", "smallBags15kg"], Number(e.target.value))}
+                          >
+                            {numberOptions.map((n) => <option key={n} value={n}>{n}</option>)}
+                          </select>
+                          <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                            <svg className="w-4 h-4 text-primary-900" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Shoulder / Handcarry */}
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                          Shoulder Bag / Handcarry
+                        </label>
+                        <div className="relative">
+                          <select
+                            className="w-full h-14 px-4 pr-10 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-900 appearance-none bg-white text-gray-800 font-medium"
+                            value={form.luggage.shoulderBags}
+                            onChange={(e) => handleNestedChange(["luggage", "shoulderBags"], Number(e.target.value))}
+                          >
+                            {numberOptions.map((n) => <option key={n} value={n}>{n}</option>)}
+                          </select>
+                          <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                            <svg className="w-4 h-4 text-primary-900" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Extra Large */}
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                          Extra Large Item
+                        </label>
+                        <div className="relative">
+                          <select
+                            className="w-full h-14 px-4 pr-10 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-900 appearance-none bg-white text-gray-800 font-medium"
+                            value={form.luggage.extraLargeItemType}
+                            onChange={(e) => handleNestedChange(["luggage", "extraLargeItemType"], e.target.value)}
+                          >
+                            <option value="none">None</option>
+                            <option value="extra_large_bag_35kg">Extra Large Bag (35kg)</option>
+                            <option value="wheelchair">Wheelchair</option>
+                            <option value="pram">Pram</option>
+                            <option value="golf_bag">Golf Bag</option>
+                            <option value="other">Other</option>
+                          </select>
+                          <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                            <svg className="w-4 h-4 text-primary-900" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </div>
+                        </div>
+
+                        {form.luggage.extraLargeItemType === "other" && (
+                          <div className="mt-4 md:col-span-2">
+                            <input
+                              className="input-field h-14 border-gray-200 focus:ring-primary-900"
+                              placeholder="Please specify"
+                              value={form.luggage.extraLargeItemNote}
+                              onChange={(e) => handleNestedChange(["luggage", "extraLargeItemNote"], e.target.value)}
+                            />
+                            {renderError("extraLargeItemNote")}
+                          </div>
+                        )}
+                      </div>
+
+                    </div>
+                  </div>
+                </section>
+
+                {/* DIVIDER */}
+                <div className="my-12 border-t border-gray-100"></div>
+
+                {/* ========================================================= */}
+                {/* FLIGHT */}
+                {/* ========================================================= */}
+
+                <section>
+
+                  {/* Header */}
+                  <div className="flex items-center gap-4 mb-8">
+
+                    <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-primary-900 text-accent-400">
+
+                      <Plane className="h-6 w-6" />
+                    </div>
+
+                    <div>
+
+                      <h3 className="text-2xl font-black text-primary-900">
+                        Flight Information
+                      </h3>
+
+                      <p className="text-gray-500 mt-1">
+                        Arrival and airport details
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                      {/* Flight */}
+                      <div>
+
+                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                          Flight Number *
+                        </label>
+
+                        <input
+                          className="input-field h-14 border-gray-200 focus:ring-primary-900"
+                          value={form.flight.flightNumber}
+                          onChange={(e) =>
+                            handleNestedChange(
+                              ["flight", "flightNumber"],
+                              e.target.value
+                            )
+                          }
+                        />
+
+                        {renderError("flightNumber")}
+                      </div>
+
+                      {/* From */}
+                      <div>
+
+                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                          Arriving From *
+                        </label>
+
+                        <input
+                          className="input-field h-14 border-gray-200 focus:ring-primary-900"
+                          value={form.flight.arrivingFrom}
+                          onChange={(e) =>
+                            handleNestedChange(
+                              ["flight", "arrivingFrom"],
+                              e.target.value
+                            )
+                          }
+                        />
+
+                        {renderError("arrivingFrom")}
+                      </div>
+                    </div>
+
+                    {/* Date */}
+                    <div>
+
+                      <label className="block text-sm font-semibold text-gray-700 mb-3">
+                        Arrival Date & Time *
+                      </label>
+
+                      <input
+                        type="datetime-local"
+                        className="input-field h-14 border-gray-200 focus:ring-primary-900"
+                        value={form.flight.arrivalDateTime}
+                        onChange={(e) =>
+                          handleNestedChange(
+                            ["flight", "arrivalDateTime"],
+                            e.target.value
+                          )
+                        }
+                      />
+
+                      {renderError("arrivalDateTime")}
+                    </div>
+
+                    {/* Meet */}
+                    <div className="rounded-2xl border border-primary-100 bg-primary-50 p-5">
+
+                      <label className="flex items-start gap-4 cursor-pointer">
+
+                        <input
+                          type="checkbox"
+                          className="mt-1 h-5 w-5 rounded border-gray-300 text-primary-900 focus:ring-primary-900"
+                          checked={form.flight.meetAndGreet}
+                          onChange={(e) =>
+                            handleNestedChange(
+                              ["flight", "meetAndGreet"],
+                              e.target.checked
+                            )
+                          }
+                        />
+
+                        <div>
+
+                          <div className="font-bold text-primary-900">
+                            Meet & Greet Service
+                          </div>
+
+                          <p className="text-gray-600 text-sm mt-1">
+                            Driver will meet you inside the
+                            airport arrivals terminal.
+                          </p>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                </section>
+
+                {/* BUTTON */}
+                <div className="pt-12">
+
+                  <button className="w-full rounded-2xl bg-primary-900 hover:bg-primary-800 text-white font-bold py-5 px-8 transition-all duration-300 shadow-card hover:shadow-premium hover:-translate-y-1">
+
+                    Continue To Payment
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
-        </form>
+
+          {/* ========================================================= */}
+          {/* SIDEBAR */}
+          {/* ========================================================= */}
+
+          <div>
+
+            <div className="sticky top-28 bg-white rounded-[32px] border border-gray-100 shadow-soft p-8">
+
+              <h3 className="text-2xl font-black text-primary-900 mb-8">
+
+                Booking Summary
+              </h3>
+
+              <div className="space-y-6">
+
+                <div className="flex items-start justify-between gap-4">
+
+                  <div>
+
+                    <p className="text-sm text-gray-500 mb-1">
+                      Vehicle
+                    </p>
+
+                    <p className="font-bold text-primary-900">
+                      {bookingData.selectedCar?.name}
+                    </p>
+                  </div>
+
+                  <Users className="h-5 w-5 text-accent-500" />
+                </div>
+
+                <div className="border-t border-gray-100"></div>
+
+                <div className="flex items-start justify-between gap-4">
+
+                  <div>
+
+                    <p className="text-sm text-gray-500 mb-1">
+                      Journey Type
+                    </p>
+
+                    <p className="font-bold text-primary-900">
+                      {bookingData.tripType === "RETURN"
+                        ? "Return Journey"
+                        : "One Way"}
+                    </p>
+                  </div>
+
+                  <Plane className="h-5 w-5 text-accent-500" />
+                </div>
+
+                <div className="border-t border-gray-100"></div>
+
+                <div className="flex items-start justify-between gap-4">
+
+                  <div>
+
+                    <p className="text-sm text-gray-500 mb-1">
+                      Total Fare
+                    </p>
+
+                    <div className="text-4xl font-black text-accent-500">
+
+                      £{bookingData.pricing?.totalFare}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Trust */}
+              <div className="mt-10 rounded-2xl bg-primary-50 border border-primary-100 p-6">
+
+                <div className="flex items-center gap-3 mb-4">
+
+                  <Shield className="h-6 w-6 text-accent-500" />
+
+                  <h4 className="font-bold text-primary-900">
+                    Safe & Secure Booking
+                  </h4>
+                </div>
+
+                <div className="space-y-3">
+
+                  {[
+                    "Professional licensed chauffeurs",
+                    "Secure payment processing",
+                    "24/7 customer support",
+                  ].map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex items-start gap-3"
+                    >
+
+                      <CheckCircle className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
+
+                      <span className="text-sm text-gray-700">
+                        {item}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
