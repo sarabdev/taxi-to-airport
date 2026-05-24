@@ -295,26 +295,40 @@ const Home = () => {
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
                       {/* DATE */}
                       <div className="relative">
+                        {!formData.pickupDate && (
+                          <span className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-sm text-gray-400 sm:text-base">
+                            Select pickup date
+                          </span>
+                        )}
+
                         <input
                           type="date"
                           name="pickupDate"
                           value={formData.pickupDate}
                           onChange={handleChange}
                           min={defaultDateTime.date}
-                          className="input-field ios-date-input min-h-12 w-full border-gray-200 text-black focus:ring-primary-900 sm:min-h-14"
+                          className={`input-field ios-date-input min-h-12 w-full border-gray-200 focus:ring-primary-900 sm:min-h-14 ${formData.pickupDate ? 'text-black' : 'text-transparent'
+                            }`}
                           required
                         />
                       </div>
 
                       {/* TIME */}
                       <div className="relative">
+                        {!formData.pickupTime && (
+                          <span className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-sm text-gray-400 sm:text-base">
+                            Select pickup time
+                          </span>
+                        )}
+
                         <input
                           type="time"
                           name="pickupTime"
                           value={formData.pickupTime}
                           onChange={handleChange}
                           step="300"
-                          className="input-field ios-date-input min-h-12 w-full border-gray-200 text-black focus:ring-primary-900 sm:min-h-14"
+                          className={`input-field ios-date-input min-h-12 w-full border-gray-200 focus:ring-primary-900 sm:min-h-14 ${formData.pickupTime ? 'text-black' : 'text-transparent'
+                            }`}
                           required
                         />
                       </div>
