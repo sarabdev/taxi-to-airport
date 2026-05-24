@@ -207,29 +207,23 @@ const Payment = () => {
 
   if (completed) {
     return (
-      <div className="min-h-screen bg-surface-light flex items-center justify-center px-4">
-
-        <div className="bg-white rounded-[36px] border border-gray-100 shadow-premium p-12 max-w-lg w-full text-center">
-
-          <div className="flex items-center justify-center w-24 h-24 rounded-full bg-green-100 mx-auto mb-8">
-
-            <CheckCircle className="h-14 w-14 text-green-600" />
+      <div className="flex min-h-screen items-center justify-center bg-surface-light px-4 py-10">
+        <div className="w-full max-w-lg rounded-[28px] border border-gray-100 bg-white p-6 text-center shadow-premium sm:rounded-[36px] sm:p-10 md:p-12">
+          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-100 sm:mb-8 sm:h-24 sm:w-24">
+            <CheckCircle className="h-12 w-12 text-green-600 sm:h-14 sm:w-14" />
           </div>
 
-          <h2 className="text-4xl font-black text-primary-900 mb-5">
-
+          <h2 className="mb-4 text-3xl font-black text-primary-900 sm:mb-5 sm:text-4xl">
             Booking Confirmed
           </h2>
 
-          <p className="text-gray-600 text-lg leading-relaxed">
-
+          <p className="text-base leading-relaxed text-gray-600 sm:text-lg">
             Payment completed successfully.
             Your airport transfer has been booked.
           </p>
 
-          <div className="mt-10 inline-flex items-center gap-2 rounded-full bg-green-50 border border-green-200 px-5 py-3 text-green-700 font-semibold">
-
-            <BadgeCheck className="h-5 w-5" />
+          <div className="mt-8 inline-flex max-w-full items-center gap-2 rounded-full border border-green-200 bg-green-50 px-4 py-3 text-sm font-semibold text-green-700 sm:mt-10 sm:px-5 sm:text-base">
+            <BadgeCheck className="h-5 w-5 shrink-0" />
 
             Redirecting shortly...
           </div>
@@ -239,59 +233,52 @@ const Payment = () => {
   }
 
   return (
-    <div className="min-h-screen bg-surface-light py-6 md:py-10">
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
+    <div className="min-h-screen overflow-hidden bg-surface-light py-6 sm:py-8 md:py-10">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* ========================================================= */}
         {/* HEADER */}
         {/* ========================================================= */}
 
-        <div className="mb-10">
-
+        <div className="mb-8 sm:mb-10">
           <button
             onClick={() => navigate("/booking/info")}
-            className="inline-flex items-center text-primary-900 hover:text-accent-500 mb-5 text-sm font-semibold transition-colors"
+            className="mb-5 inline-flex items-center text-sm font-semibold text-primary-900 transition-colors hover:text-accent-500"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
+            <ArrowLeft className="mr-2 h-4 w-4 shrink-0" />
 
-            Back To Passenger Information
+            <span className="leading-none">
+              Back To Passenger Information
+            </span>
           </button>
 
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
             <div>
-
-              <div className="inline-flex items-center gap-2 rounded-full bg-primary-50 text-primary-900 px-4 py-2 text-sm font-semibold mb-5">
-
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary-50 px-4 py-2 text-sm font-semibold text-primary-900 sm:mb-5">
                 <BadgeCheck className="h-4 w-4 text-accent-500" />
 
                 Final Step
               </div>
 
-              <h1 className="text-4xl md:text-5xl font-black text-primary-900 leading-tight">
-
+              <h1 className="text-3xl font-black leading-tight text-primary-900 sm:text-4xl md:text-5xl">
                 Secure Payment
               </h1>
 
-              <p className="text-gray-600 text-lg mt-4">
+              <p className="mt-3 text-base text-gray-600 sm:mt-4 sm:text-lg">
                 Complete your booking securely with Stripe
               </p>
             </div>
 
             {/* Total Card */}
-            <div className="bg-white rounded-[28px] border border-gray-100 shadow-soft px-8 py-6 min-w-[300px]">
-
-              <p className="text-sm text-gray-500 mb-2">
+            <div className="w-full rounded-[24px] border border-gray-100 bg-white px-5 py-5 shadow-soft sm:rounded-[28px] sm:px-8 sm:py-6 lg:w-auto lg:min-w-[300px]">
+              <p className="mb-2 text-sm text-gray-500">
                 Total Amount
               </p>
 
-              <div className="text-5xl font-black text-accent-500">
-
+              <div className="break-words text-4xl font-black text-accent-500 sm:text-5xl">
                 £{bookingData.pricing.totalFare}
               </div>
 
-              <p className="text-gray-500 mt-2">
+              <p className="mt-2 text-sm text-gray-500 sm:text-base">
                 Secure encrypted payment
               </p>
             </div>
@@ -302,35 +289,27 @@ const Payment = () => {
         {/* GRID */}
         {/* ========================================================= */}
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-3 xl:gap-8">
           {/* ========================================================= */}
           {/* PAYMENT */}
           {/* ========================================================= */}
 
           <div className="xl:col-span-2">
-
-            <div className="bg-white rounded-[36px] border border-gray-100 shadow-premium overflow-hidden">
-
+            <div className="overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-premium sm:rounded-[36px]">
               {/* Header */}
-              <div className="bg-primary-900 px-8 md:px-10 py-8">
-
-                <div className="flex items-center justify-between gap-6">
-
+              <div className="bg-primary-900 px-5 py-6 sm:px-8 sm:py-8 md:px-10">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
                   <div>
-
-                    <h2 className="text-3xl font-black text-white">
-
+                    <h2 className="text-2xl font-black text-white sm:text-3xl">
                       Payment Details
                     </h2>
 
-                    <p className="text-gray-300 mt-3 text-lg">
+                    <p className="mt-2 text-base text-gray-300 sm:mt-3 sm:text-lg">
                       Your payment is fully secured
                     </p>
                   </div>
 
-                  <div className="hidden md:flex items-center gap-2 rounded-full bg-white/10 border border-white/10 px-4 py-2 text-white text-sm font-semibold">
-
+                  <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-white">
                     <Lock className="h-4 w-4 text-accent-400" />
 
                     SSL Protected
@@ -339,26 +318,20 @@ const Payment = () => {
               </div>
 
               {/* Content */}
-              <div className="p-6 md:p-10">
-
+              <div className="p-5 sm:p-6 md:p-10">
                 {/* Card Option */}
-                <div className="rounded-[28px] border border-gray-100 bg-primary-50 p-6 mb-8">
-
+                <div className="mb-6 rounded-[24px] border border-gray-100 bg-primary-50 p-5 sm:mb-8 sm:rounded-[28px] sm:p-6">
                   <div className="flex items-center gap-4">
-
-                    <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-primary-900 text-accent-400">
-
-                      <CreditCard className="h-6 w-6" />
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary-900 text-accent-400 sm:h-14 sm:w-14">
+                      <CreditCard className="h-5 w-5 sm:h-6 sm:w-6" />
                     </div>
 
-                    <div>
-
-                      <h3 className="text-xl font-bold text-primary-900">
-
+                    <div className="min-w-0">
+                      <h3 className="text-lg font-bold text-primary-900 sm:text-xl">
                         Credit / Debit Card
                       </h3>
 
-                      <p className="text-gray-500 mt-1">
+                      <p className="mt-1 text-sm text-gray-500 sm:text-base">
                         Visa, Mastercard, American Express
                       </p>
                     </div>
@@ -368,17 +341,16 @@ const Payment = () => {
                 {/* FORM */}
                 <form
                   onSubmit={handleSubmit}
-                  className="space-y-8"
+                  className="space-y-6 sm:space-y-8"
                 >
-
                   {/* Stripe */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-4">
+                    <label className="mb-3 block text-sm font-semibold text-gray-700 sm:mb-4">
                       Card Details
                     </label>
 
-                    <div className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-                      <div className="px-5 py-5">
+                    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+                      <div className="px-4 py-5 sm:px-5">
                         <CardElement
                           options={{
                             hidePostalCode: true,
@@ -406,25 +378,20 @@ const Payment = () => {
 
                   {/* Error */}
                   {error && (
-                    <div className="rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-red-700">
-
+                    <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700 sm:px-5 sm:text-base">
                       {error}
                     </div>
                   )}
 
                   {/* Total */}
-                  <div className="rounded-[28px] border border-gray-100 bg-gray-50 p-6">
-
-                    <div className="flex items-center justify-between">
-
-                      <div>
-
-                        <p className="text-gray-500 mb-2">
+                  <div className="rounded-[24px] border border-gray-100 bg-gray-50 p-5 sm:rounded-[28px] sm:p-6">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="min-w-0">
+                        <p className="mb-2 text-gray-500">
                           Total Amount
                         </p>
 
-                        <div className="text-4xl font-black text-primary-900">
-
+                        <div className="break-words text-3xl font-black text-primary-900 sm:text-4xl">
                           £
                           {
                             bookingData.pricing
@@ -433,7 +400,7 @@ const Payment = () => {
                         </div>
                       </div>
 
-                      <Shield className="h-10 w-10 text-accent-500" />
+                      <Shield className="h-9 w-9 shrink-0 text-accent-500 sm:h-10 sm:w-10" />
                     </div>
                   </div>
 
@@ -443,7 +410,7 @@ const Payment = () => {
                     disabled={
                       processing || !stripe
                     }
-                    className="w-full rounded-2xl bg-primary-900 hover:bg-primary-800 text-white font-bold py-5 px-8 transition-all duration-300 shadow-card hover:shadow-premium hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full rounded-2xl bg-primary-900 px-6 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-primary-800 hover:shadow-premium disabled:cursor-not-allowed disabled:opacity-50 sm:px-8 sm:py-5 sm:text-base"
                   >
                     {processing
                       ? "Processing Payment..."
@@ -451,9 +418,8 @@ const Payment = () => {
                   </button>
 
                   {/* Stripe */}
-                  <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
-
-                    <Lock className="h-4 w-4" />
+                  <div className="flex flex-wrap items-center justify-center gap-2 text-center text-sm text-gray-500">
+                    <Lock className="h-4 w-4 shrink-0" />
 
                     Payments securely processed by Stripe
                   </div>
@@ -467,26 +433,20 @@ const Payment = () => {
           {/* ========================================================= */}
 
           <div>
-
-            <div className="sticky top-28 bg-white rounded-[32px] border border-gray-100 shadow-soft p-8">
-
-              <h3 className="text-2xl font-black text-primary-900 mb-8">
-
+            <div className="rounded-[28px] border border-gray-100 bg-white p-5 shadow-soft sm:rounded-[32px] sm:p-8 xl:sticky xl:top-28">
+              <h3 className="mb-6 text-2xl font-black text-primary-900 sm:mb-8">
                 Booking Summary
               </h3>
 
-              <div className="space-y-6">
-
+              <div className="space-y-5 sm:space-y-6">
                 {/* Vehicle */}
                 <div className="flex items-start justify-between gap-4">
-
-                  <div>
-
-                    <p className="text-sm text-gray-500 mb-1">
+                  <div className="min-w-0">
+                    <p className="mb-1 text-sm text-gray-500">
                       Vehicle
                     </p>
 
-                    <p className="font-bold text-primary-900">
+                    <p className="break-words font-bold text-primary-900">
                       {
                         bookingData.selectedCar
                           .name
@@ -494,19 +454,18 @@ const Payment = () => {
                     </p>
                   </div>
 
-                  <Users className="h-5 w-5 text-accent-500" />
+                  <Users className="h-5 w-5 shrink-0 text-accent-500" />
                 </div>
 
                 <div className="border-t border-gray-100"></div>
 
                 {/* From */}
                 <div>
-
-                  <p className="text-sm text-gray-500 mb-2">
+                  <p className="mb-2 text-sm text-gray-500">
                     Pickup
                   </p>
 
-                  <p className="font-semibold text-primary-900 leading-relaxed">
+                  <p className="break-words font-semibold leading-relaxed text-primary-900">
                     {bookingData.fromLocation}
                   </p>
                 </div>
@@ -515,12 +474,11 @@ const Payment = () => {
 
                 {/* To */}
                 <div>
-
-                  <p className="text-sm text-gray-500 mb-2">
+                  <p className="mb-2 text-sm text-gray-500">
                     Destination
                   </p>
 
-                  <p className="font-semibold text-primary-900 leading-relaxed">
+                  <p className="break-words font-semibold leading-relaxed text-primary-900">
                     {bookingData.toLocation}
                   </p>
                 </div>
@@ -529,10 +487,8 @@ const Payment = () => {
 
                 {/* Journey */}
                 <div className="flex items-start justify-between gap-4">
-
-                  <div>
-
-                    <p className="text-sm text-gray-500 mb-1">
+                  <div className="min-w-0">
+                    <p className="mb-1 text-sm text-gray-500">
                       Journey Type
                     </p>
 
@@ -544,17 +500,15 @@ const Payment = () => {
                     </p>
                   </div>
 
-                  <Plane className="h-5 w-5 text-accent-500" />
+                  <Plane className="h-5 w-5 shrink-0 text-accent-500" />
                 </div>
 
                 <div className="border-t border-gray-100"></div>
 
                 {/* Passengers */}
                 <div className="flex items-start justify-between gap-4">
-
-                  <div>
-
-                    <p className="text-sm text-gray-500 mb-1">
+                  <div className="min-w-0">
+                    <p className="mb-1 text-sm text-gray-500">
                       Passengers
                     </p>
 
@@ -566,17 +520,15 @@ const Payment = () => {
                     </p>
                   </div>
 
-                  <Users className="h-5 w-5 text-accent-500" />
+                  <Users className="h-5 w-5 shrink-0 text-accent-500" />
                 </div>
 
                 <div className="border-t border-gray-100"></div>
 
                 {/* Luggage */}
                 <div className="flex items-start justify-between gap-4">
-
-                  <div>
-
-                    <p className="text-sm text-gray-500 mb-1">
+                  <div className="min-w-0">
+                    <p className="mb-1 text-sm text-gray-500">
                       Luggage
                     </p>
 
@@ -590,22 +542,18 @@ const Payment = () => {
                     </p>
                   </div>
 
-                  <Briefcase className="h-5 w-5 text-accent-500" />
+                  <Briefcase className="h-5 w-5 shrink-0 text-accent-500" />
                 </div>
 
                 {/* Total */}
-                <div className="border-t border-gray-100 pt-6">
-
+                <div className="border-t border-gray-100 pt-5 sm:pt-6">
                   <div className="flex items-center justify-between">
-
                     <div>
-
-                      <p className="text-sm text-gray-500 mb-2">
+                      <p className="mb-2 text-sm text-gray-500">
                         Total Fare
                       </p>
 
-                      <div className="text-4xl font-black text-accent-500">
-
+                      <div className="text-3xl font-black text-accent-500 sm:text-4xl">
                         £
                         {
                           bookingData.pricing
@@ -618,10 +566,8 @@ const Payment = () => {
               </div>
 
               {/* Trust */}
-              <div className="mt-10 rounded-2xl bg-primary-50 border border-primary-100 p-6">
-
-                <div className="flex items-center gap-3 mb-4">
-
+              <div className="mt-8 rounded-2xl border border-primary-100 bg-primary-50 p-5 sm:mt-10 sm:p-6">
+                <div className="mb-4 flex items-center gap-3">
                   <Shield className="h-6 w-6 text-accent-500" />
 
                   <h4 className="font-bold text-primary-900">
@@ -630,7 +576,6 @@ const Payment = () => {
                 </div>
 
                 <div className="space-y-3">
-
                   {[
                     "256-bit SSL encryption",
                     "Secure Stripe payments",
@@ -641,8 +586,7 @@ const Payment = () => {
                       key={index}
                       className="flex items-start gap-3"
                     >
-
-                      <CheckCircle className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
+                      <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
 
                       <span className="text-sm text-gray-700">
                         {item}

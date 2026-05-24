@@ -35,7 +35,7 @@ const About = () => {
 
   const values = [
     {
-      icon: <Users className="h-8 w-8" />,
+      icon: <Users className="h-7 w-7 sm:h-8 sm:w-8" />,
       title: 'Customer First',
 
       description:
@@ -43,7 +43,7 @@ const About = () => {
     },
 
     {
-      icon: <Award className="h-8 w-8" />,
+      icon: <Award className="h-7 w-7 sm:h-8 sm:w-8" />,
       title: 'Premium Excellence',
 
       description:
@@ -51,7 +51,7 @@ const About = () => {
     },
 
     {
-      icon: <Globe className="h-8 w-8" />,
+      icon: <Globe className="h-7 w-7 sm:h-8 sm:w-8" />,
       title: 'Reliable Service',
 
       description:
@@ -59,7 +59,7 @@ const About = () => {
     },
 
     {
-      icon: <Heart className="h-8 w-8" />,
+      icon: <Heart className="h-7 w-7 sm:h-8 sm:w-8" />,
       title: 'Safety & Care',
 
       description:
@@ -68,37 +68,31 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-surface-light overflow-hidden">
-
+    <div className="min-h-screen overflow-hidden bg-surface-light">
       {/* ========================================================= */}
       {/* HERO */}
       {/* ========================================================= */}
 
-      <section className="relative bg-hero-gradient text-white overflow-hidden">
-
+      <section className="relative overflow-hidden bg-hero-gradient text-white">
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/40"></div>
 
         {/* Glow */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent-500/10 blur-3xl rounded-full"></div>
+        <div className="absolute right-[-180px] top-[-120px] h-[300px] w-[300px] rounded-full bg-accent-500/10 blur-3xl sm:right-[-100px] sm:h-[420px] sm:w-[420px] lg:right-0 lg:top-0 lg:h-[500px] lg:w-[500px]"></div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28">
-
+        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-28">
           <div className="max-w-4xl">
-
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 backdrop-blur-md px-5 py-2 mb-8">
+            <div className="mb-6 inline-flex max-w-full items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 backdrop-blur-md sm:mb-8 sm:px-5">
+              <BadgeCheck className="h-4 w-4 shrink-0 text-accent-400" />
 
-              <BadgeCheck className="h-4 w-4 text-accent-400" />
-
-              <span className="text-sm font-medium text-gray-200">
+              <span className="text-xs font-medium text-gray-200 sm:text-sm">
                 Trusted Airport Transportation Since 2010
               </span>
             </div>
 
             {/* Heading */}
-            <h1 className="text-5xl md:text-6xl xl:text-7xl font-black leading-tight tracking-tight mb-8">
-
+            <h1 className="mb-6 text-4xl font-black leading-tight tracking-tight sm:text-5xl md:text-6xl lg:mb-8 xl:text-7xl">
               Luxury Airport Transfers
               <span className="block text-accent-400">
                 Built On Trust
@@ -106,8 +100,7 @@ const About = () => {
             </h1>
 
             {/* Description */}
-            <p className="text-xl text-gray-300 leading-relaxed max-w-3xl">
-
+            <p className="max-w-3xl text-base leading-relaxed text-gray-300 sm:text-lg md:text-xl">
               AirportRide delivers executive airport transportation with
               professional chauffeurs, luxury vehicles, and exceptional
               customer service trusted by thousands of travelers worldwide.
@@ -120,25 +113,17 @@ const About = () => {
       {/* STATS */}
       {/* ========================================================= */}
 
-      <section className="relative -mt-16 z-20 pb-24">
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-          <div className="bg-white rounded-[32px] border border-gray-100 shadow-premium p-10 lg:p-14">
-
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-10">
-
+      <section className="relative z-20 -mt-10 pb-16 sm:-mt-12 sm:pb-20 lg:-mt-16 lg:pb-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="rounded-[24px] border border-gray-100 bg-white p-5 shadow-premium sm:rounded-[32px] sm:p-8 lg:p-14">
+            <div className="grid grid-cols-2 gap-6 sm:gap-8 lg:grid-cols-4 lg:gap-10">
               {stats.map((stat, index) => (
-                <div
-                  key={index}
-                  className="text-center"
-                >
-
-                  <div className="text-5xl font-black text-primary-900 mb-3">
+                <div key={index} className="text-center">
+                  <div className="mb-2 text-3xl font-black text-primary-900 sm:mb-3 sm:text-4xl lg:text-5xl">
                     {stat.value}
                   </div>
 
-                  <div className="text-gray-500 text-sm uppercase tracking-wide">
+                  <div className="text-xs uppercase tracking-wide text-gray-500 sm:text-sm">
                     {stat.label}
                   </div>
                 </div>
@@ -152,32 +137,25 @@ const About = () => {
       {/* OUR STORY */}
       {/* ========================================================= */}
 
-      <section className="pb-28">
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-
+      <section className="pb-16 sm:pb-20 lg:pb-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-20">
             {/* LEFT */}
             <div>
-
-              <div className="inline-flex items-center gap-2 rounded-full bg-primary-50 text-primary-900 px-5 py-2 text-sm font-semibold mb-6">
-
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-primary-50 px-4 py-2 text-sm font-semibold text-primary-900 sm:mb-6 sm:px-5">
                 <Shield className="h-4 w-4 text-accent-500" />
 
                 Our Journey
               </div>
 
-              <h2 className="text-4xl md:text-5xl font-black text-primary-900 leading-tight mb-8">
-
+              <h2 className="mb-6 text-3xl font-black leading-tight text-primary-900 sm:text-4xl md:text-5xl lg:mb-8">
                 More Than Just
                 <span className="block">
                   Transportation
                 </span>
               </h2>
 
-              <div className="space-y-6 text-lg text-gray-600 leading-relaxed">
-
+              <div className="space-y-5 text-base leading-relaxed text-gray-600 sm:space-y-6 sm:text-lg">
                 <p>
                   Founded in 2010, AirportRide started with a clear mission:
                   deliver premium airport transportation that travelers can
@@ -198,21 +176,16 @@ const About = () => {
               </div>
 
               {/* Mini Features */}
-              <div className="mt-10 space-y-4">
-
+              <div className="mt-8 space-y-4 sm:mt-10">
                 {[
                   'Professional licensed chauffeurs',
                   'Luxury executive vehicles',
                   '24/7 support & live tracking',
                 ].map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-3"
-                  >
+                  <div key={index} className="flex items-center gap-3">
+                    <CheckCircle className="h-5 w-5 shrink-0 text-accent-500" />
 
-                    <CheckCircle className="h-5 w-5 text-accent-500 shrink-0" />
-
-                    <span className="text-gray-700 font-medium">
+                    <span className="font-medium text-gray-700">
                       {item}
                     </span>
                   </div>
@@ -222,34 +195,29 @@ const About = () => {
 
             {/* RIGHT IMAGE */}
             <div className="relative">
+              <div className="absolute -inset-4 rounded-[40px] bg-accent-500/10 blur-2xl"></div>
 
-              <div className="absolute -inset-4 bg-accent-500/10 blur-2xl rounded-[40px]"></div>
-
-              <div className="relative rounded-[32px] overflow-hidden shadow-premium">
-
+              <div className="relative overflow-hidden rounded-[24px] shadow-premium sm:rounded-[32px]">
                 <img
                   src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=1200&h=900&fit=crop"
                   alt="Luxury Fleet"
-                  className="w-full h-[650px] object-cover"
+                  className="h-[360px] w-full object-cover sm:h-[480px] lg:h-[650px]"
                 />
 
                 {/* Floating Card */}
-                <div className="absolute bottom-8 left-8 right-8 bg-white/95 backdrop-blur-md rounded-2xl p-6 shadow-card">
-
-                  <div className="flex items-center justify-between">
-
+                <div className="absolute bottom-4 left-4 right-4 rounded-2xl bg-white/95 p-4 shadow-card backdrop-blur-md sm:bottom-8 sm:left-8 sm:right-8 sm:p-6">
+                  <div className="flex items-center justify-between gap-4">
                     <div>
-
-                      <p className="text-sm text-gray-500 mb-1">
+                      <p className="mb-1 text-xs text-gray-500 sm:text-sm">
                         Premium Fleet
                       </p>
 
-                      <h3 className="text-xl font-bold text-primary-900">
+                      <h3 className="text-base font-bold text-primary-900 sm:text-xl">
                         Executive Transportation
                       </h3>
                     </div>
 
-                    <Clock3 className="h-10 w-10 text-accent-500" />
+                    <Clock3 className="h-8 w-8 shrink-0 text-accent-500 sm:h-10 sm:w-10" />
                   </div>
                 </div>
               </div>
@@ -262,42 +230,34 @@ const About = () => {
       {/* VALUES */}
       {/* ========================================================= */}
 
-      <section className="pb-28">
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-          <div className="text-center max-w-3xl mx-auto mb-20">
-
-            <h2 className="text-4xl md:text-5xl font-black text-primary-900 mb-6">
-
+      <section className="pb-16 sm:pb-20 lg:pb-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto mb-12 max-w-3xl text-center sm:mb-16 lg:mb-20">
+            <h2 className="mb-4 text-3xl font-black text-primary-900 sm:mb-6 sm:text-4xl md:text-5xl">
               Our Core Values
             </h2>
 
-            <p className="text-xl text-gray-600 leading-relaxed">
-
+            <p className="text-base leading-relaxed text-gray-600 sm:text-xl">
               The principles that guide every journey, every interaction,
               and every customer experience.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
+          <div className="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2 lg:gap-8">
             {values.map((value, index) => (
               <div
                 key={index}
-                className="group bg-white rounded-[28px] border border-gray-100 p-10 shadow-soft hover:shadow-premium hover:-translate-y-2 transition-all duration-500"
+                className="group rounded-[24px] border border-gray-100 bg-white p-6 shadow-soft transition-all duration-500 hover:-translate-y-2 hover:shadow-premium sm:rounded-[28px] sm:p-8 lg:p-10"
               >
-
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-900 text-accent-400 mb-8 group-hover:scale-110 transition-transform duration-300">
-
+                <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-900 text-accent-400 transition-transform duration-300 group-hover:scale-110 sm:mb-8 sm:h-16 sm:w-16">
                   {value.icon}
                 </div>
 
-                <h3 className="text-2xl font-bold text-primary-900 mb-5">
+                <h3 className="mb-3 text-xl font-bold text-primary-900 sm:mb-5 sm:text-2xl">
                   {value.title}
                 </h3>
 
-                <p className="text-gray-600 leading-relaxed text-lg">
+                <p className="text-base leading-relaxed text-gray-600 sm:text-lg">
                   {value.description}
                 </p>
               </div>
@@ -310,47 +270,38 @@ const About = () => {
       {/* WHY CHOOSE US */}
       {/* ========================================================= */}
 
-      <section className="pb-28">
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-
+      <section className="pb-16 sm:pb-20 lg:pb-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-20">
             {/* IMAGE */}
-            <div className="relative">
+            <div className="relative order-2 lg:order-1">
+              <div className="absolute -inset-4 rounded-[40px] bg-accent-500/10 blur-2xl"></div>
 
-              <div className="absolute -inset-4 bg-accent-500/10 blur-2xl rounded-[40px]"></div>
-
-              <div className="relative rounded-[32px] overflow-hidden shadow-premium">
-
+              <div className="relative overflow-hidden rounded-[24px] shadow-premium sm:rounded-[32px]">
                 <img
                   src="https://images.unsplash.com/photo-1521791055366-0d553872125f?w=1200&h=900&fit=crop"
                   alt="Professional Chauffeur"
-                  className="w-full h-[650px] object-cover"
+                  className="h-[360px] w-full object-cover sm:h-[480px] lg:h-[650px]"
                 />
               </div>
             </div>
 
             {/* CONTENT */}
-            <div>
-
-              <div className="inline-flex items-center gap-2 rounded-full bg-primary-50 text-primary-900 px-5 py-2 text-sm font-semibold mb-6">
-
+            <div className="order-1 lg:order-2">
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-primary-50 px-4 py-2 text-sm font-semibold text-primary-900 sm:mb-6 sm:px-5">
                 <Award className="h-4 w-4 text-accent-500" />
 
                 Why Choose AirportRide
               </div>
 
-              <h2 className="text-4xl md:text-5xl font-black text-primary-900 leading-tight mb-8">
-
+              <h2 className="mb-6 text-3xl font-black leading-tight text-primary-900 sm:text-4xl md:text-5xl lg:mb-8">
                 Designed Around
                 <span className="block">
                   Your Comfort
                 </span>
               </h2>
 
-              <div className="space-y-5">
-
+              <div className="space-y-4 sm:space-y-5">
                 {[
                   'Professional licensed chauffeurs',
                   'Luxury executive fleet',
@@ -361,14 +312,10 @@ const About = () => {
                   'Easy online booking',
                   'Flexible cancellation policy',
                 ].map((feature, index) => (
-                  <div
-                    key={index}
-                    className="flex items-start gap-4"
-                  >
+                  <div key={index} className="flex items-start gap-3 sm:gap-4">
+                    <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-accent-500 sm:h-6 sm:w-6" />
 
-                    <CheckCircle className="h-6 w-6 text-accent-500 shrink-0 mt-0.5" />
-
-                    <span className="text-lg text-gray-700">
+                    <span className="text-base text-gray-700 sm:text-lg">
                       {feature}
                     </span>
                   </div>
@@ -383,38 +330,33 @@ const About = () => {
       {/* CTA */}
       {/* ========================================================= */}
 
-      <section className="relative bg-hero-gradient text-white overflow-hidden py-24">
-
+      <section className="relative overflow-hidden bg-hero-gradient py-16 text-white sm:py-20 lg:py-24">
         <div className="absolute inset-0 bg-black/30"></div>
 
-        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-accent-500/10 blur-3xl rounded-full"></div>
+        <div className="absolute right-[-140px] top-[-120px] h-[280px] w-[280px] rounded-full bg-accent-500/10 blur-3xl sm:right-0 sm:top-0 sm:h-[400px] sm:w-[400px]"></div>
 
-        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 backdrop-blur-md px-5 py-2 text-sm font-semibold mb-8">
-
-            <BadgeCheck className="h-4 w-4 text-accent-400" />
+        <div className="relative mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
+          <div className="mb-6 inline-flex max-w-full items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold backdrop-blur-md sm:mb-8 sm:px-5">
+            <BadgeCheck className="h-4 w-4 shrink-0 text-accent-400" />
 
             Trusted By Thousands Of Travelers
           </div>
 
-          <h2 className="text-4xl md:text-5xl font-black mb-6 leading-tight">
-
+          <h2 className="mb-4 text-3xl font-black leading-tight sm:mb-6 sm:text-4xl md:text-5xl">
             Experience The
             <span className="block text-accent-400">
               AirportRide Difference
             </span>
           </h2>
 
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-10">
-
+          <p className="mx-auto mb-8 max-w-3xl text-base leading-relaxed text-gray-300 sm:mb-10 sm:text-xl">
             Book your next airport transfer with confidence and enjoy luxury
             transportation designed around comfort, punctuality, and reliability.
           </p>
 
           <a
             href="/booking"
-            className="inline-flex items-center justify-center rounded-2xl bg-accent-500 hover:bg-accent-400 text-primary-950 font-bold px-10 py-5 transition-all duration-300 shadow-premium hover:-translate-y-1"
+            className="inline-flex w-full items-center justify-center rounded-2xl bg-accent-500 px-6 py-4 text-sm font-bold text-primary-950 shadow-premium transition-all duration-300 hover:-translate-y-1 hover:bg-accent-400 sm:w-auto sm:px-10 sm:py-5 sm:text-base"
           >
             Book Your Ride Today
 

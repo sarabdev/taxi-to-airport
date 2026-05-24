@@ -53,37 +53,31 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-surface-light overflow-hidden">
-
+    <div className="min-h-screen overflow-hidden bg-surface-light">
       {/* ========================================================= */}
       {/* HERO */}
       {/* ========================================================= */}
 
-      <section className="relative bg-hero-gradient text-white overflow-hidden">
-
+      <section className="relative overflow-hidden bg-hero-gradient text-white">
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/40"></div>
 
         {/* Glow */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent-500/10 blur-3xl rounded-full"></div>
+        <div className="absolute right-[-180px] top-[-120px] h-[300px] w-[300px] rounded-full bg-accent-500/10 blur-3xl sm:right-[-100px] sm:h-[420px] sm:w-[420px] lg:right-0 lg:top-0 lg:h-[500px] lg:w-[500px]"></div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28">
-
+        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-28">
           <div className="max-w-4xl">
-
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 backdrop-blur-md px-5 py-2 mb-8">
+            <div className="mb-6 inline-flex max-w-full items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 backdrop-blur-md sm:mb-8 sm:px-5">
+              <BadgeCheck className="h-4 w-4 shrink-0 text-accent-400" />
 
-              <BadgeCheck className="h-4 w-4 text-accent-400" />
-
-              <span className="text-sm font-medium text-gray-200">
+              <span className="text-xs font-medium text-gray-200 sm:text-sm">
                 Available 24/7 For Support & Bookings
               </span>
             </div>
 
             {/* Heading */}
-            <h1 className="text-5xl md:text-6xl xl:text-7xl font-black leading-tight tracking-tight mb-8">
-
+            <h1 className="mb-6 text-4xl font-black leading-tight tracking-tight sm:text-5xl md:text-6xl lg:mb-8 xl:text-7xl">
               Get In Touch
               <span className="block text-accent-400">
                 With AirportRide
@@ -91,8 +85,7 @@ const Contact = () => {
             </h1>
 
             {/* Description */}
-            <p className="text-xl text-gray-300 leading-relaxed max-w-3xl">
-
+            <p className="max-w-3xl text-base leading-relaxed text-gray-300 sm:text-lg md:text-xl">
               Need help with a booking, airport transfer, or special request?
               Our team is available around the clock to assist you.
             </p>
@@ -104,18 +97,14 @@ const Contact = () => {
       {/* CONTACT SECTION */}
       {/* ========================================================= */}
 
-      <section className="relative -mt-16 z-20 pb-28">
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
+      <section className="relative z-20 -mt-10 pb-16 sm:-mt-12 sm:pb-20 lg:-mt-16 lg:pb-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
             {/* ========================================================= */}
             {/* CONTACT INFO */}
             {/* ========================================================= */}
 
-            <div className="space-y-6">
-
+            <div className="space-y-5 sm:space-y-6">
               {[
                 {
                   icon: Phone,
@@ -147,27 +136,23 @@ const Contact = () => {
               ].map((item, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-[28px] border border-gray-100 p-8 shadow-soft hover:shadow-premium transition-all duration-300"
+                  className="rounded-[24px] border border-gray-100 bg-white p-5 shadow-soft transition-all duration-300 hover:shadow-premium sm:rounded-[28px] sm:p-8"
                 >
-
-                  <div className="flex items-start gap-5">
-
-                    <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-primary-900 text-accent-400 shrink-0">
-
-                      <item.icon className="h-6 w-6" />
+                  <div className="flex items-start gap-4 sm:gap-5">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary-900 text-accent-400 sm:h-14 sm:w-14">
+                      <item.icon className="h-5 w-5 sm:h-6 sm:w-6" />
                     </div>
 
-                    <div>
-
-                      <h3 className="text-xl font-bold text-primary-900 mb-3">
+                    <div className="min-w-0">
+                      <h3 className="mb-2 text-lg font-bold text-primary-900 sm:mb-3 sm:text-xl">
                         {item.title}
                       </h3>
 
-                      <p className="text-gray-700 leading-relaxed">
+                      <p className="break-words leading-relaxed text-gray-700">
                         {item.value1}
                       </p>
 
-                      <p className="text-gray-500 mt-1">
+                      <p className="mt-1 break-words text-gray-500">
                         {item.value2}
                       </p>
                     </div>
@@ -176,31 +161,24 @@ const Contact = () => {
               ))}
 
               {/* Trust Box */}
-              <div className="bg-primary-900 text-white rounded-[28px] p-8 shadow-premium">
+              <div className="rounded-[24px] bg-primary-900 p-5 text-white shadow-premium sm:rounded-[28px] sm:p-8">
+                <div className="mb-5 flex items-center gap-3">
+                  <Shield className="h-6 w-6 text-accent-400 sm:h-7 sm:w-7" />
 
-                <div className="flex items-center gap-3 mb-5">
-
-                  <Shield className="h-7 w-7 text-accent-400" />
-
-                  <h3 className="text-2xl font-black">
+                  <h3 className="text-xl font-black sm:text-2xl">
                     Why Choose Us
                   </h3>
                 </div>
 
                 <div className="space-y-4">
-
                   {[
                     'Professional licensed chauffeurs',
                     'Luxury executive vehicles',
                     '24/7 support available',
                     'Fixed transparent pricing',
                   ].map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex items-start gap-3"
-                    >
-
-                      <CheckCircle className="h-5 w-5 text-accent-400 shrink-0 mt-0.5" />
+                    <div key={index} className="flex items-start gap-3">
+                      <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-accent-400" />
 
                       <span className="text-gray-300">
                         {item}
@@ -216,42 +194,31 @@ const Contact = () => {
             {/* ========================================================= */}
 
             <div className="lg:col-span-2">
-
-              <div className="bg-white rounded-[32px] border border-gray-100 shadow-premium overflow-hidden">
-
+              <div className="overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-premium sm:rounded-[32px]">
                 {/* Header */}
-                <div className="bg-primary-900 px-8 py-6">
-
-                  <h2 className="text-3xl font-bold text-white">
+                <div className="bg-primary-900 px-5 py-5 sm:px-8 sm:py-6">
+                  <h2 className="text-2xl font-bold text-white sm:text-3xl">
                     Send Us A Message
                   </h2>
 
-                  <p className="text-gray-300 mt-2">
+                  <p className="mt-2 text-sm text-gray-300 sm:text-base">
                     We usually respond within a few hours.
                   </p>
                 </div>
 
                 {/* Form */}
-                <div className="p-8 lg:p-10">
-
+                <div className="p-5 sm:p-8 lg:p-10">
                   {submitted && (
-                    <div className="mb-8 rounded-2xl border border-green-200 bg-green-50 px-5 py-4 text-green-800">
-
+                    <div className="mb-6 rounded-2xl border border-green-200 bg-green-50 px-4 py-4 text-sm text-green-800 sm:mb-8 sm:px-5 sm:text-base">
                       Thank you for your message! We'll get back to you soon.
                     </div>
                   )}
 
-                  <form
-                    onSubmit={handleSubmit}
-                    className="space-y-7"
-                  >
-
+                  <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-7">
                     {/* Row 1 */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
+                    <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
                       <div>
-
-                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                        <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                           Full Name *
                         </label>
 
@@ -260,15 +227,14 @@ const Contact = () => {
                           name="name"
                           value={formData.name}
                           onChange={handleChange}
-                          className="input-field h-14 border-gray-200 focus:ring-primary-900"
+                          className="input-field h-12 border-gray-200 focus:ring-primary-900 sm:h-14"
                           required
                           placeholder="John Doe"
                         />
                       </div>
 
                       <div>
-
-                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                        <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                           Email Address *
                         </label>
 
@@ -277,7 +243,7 @@ const Contact = () => {
                           name="email"
                           value={formData.email}
                           onChange={handleChange}
-                          className="input-field h-14 border-gray-200 focus:ring-primary-900"
+                          className="input-field h-12 border-gray-200 focus:ring-primary-900 sm:h-14"
                           required
                           placeholder="john@example.com"
                         />
@@ -285,11 +251,9 @@ const Contact = () => {
                     </div>
 
                     {/* Row 2 */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
+                    <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
                       <div>
-
-                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                        <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                           Phone Number
                         </label>
 
@@ -298,14 +262,13 @@ const Contact = () => {
                           name="phone"
                           value={formData.phone}
                           onChange={handleChange}
-                          className="input-field h-14 border-gray-200 focus:ring-primary-900"
+                          className="input-field h-12 border-gray-200 focus:ring-primary-900 sm:h-14"
                           placeholder="+1 (555) 123-4567"
                         />
                       </div>
 
                       <div>
-
-                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                        <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                           Subject *
                         </label>
 
@@ -313,7 +276,7 @@ const Contact = () => {
                           name="subject"
                           value={formData.subject}
                           onChange={handleChange}
-                          className="select-field h-14 border-gray-200 focus:ring-primary-900"
+                          className="select-field h-12 border-gray-200 focus:ring-primary-900 sm:h-14"
                           required
                         >
                           <option value="">
@@ -345,8 +308,7 @@ const Contact = () => {
 
                     {/* Message */}
                     <div>
-
-                      <label className="block text-sm font-semibold text-gray-700 mb-3">
+                      <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                         Message *
                       </label>
 
@@ -355,7 +317,7 @@ const Contact = () => {
                         value={formData.message}
                         onChange={handleChange}
                         rows="7"
-                        className="input-field border-gray-200 focus:ring-primary-900 resize-none"
+                        className="input-field min-h-[180px] resize-none border-gray-200 focus:ring-primary-900"
                         required
                         placeholder="Tell us how we can help you..."
                       ></textarea>
@@ -364,7 +326,7 @@ const Contact = () => {
                     {/* Submit */}
                     <button
                       type="submit"
-                      className="w-full rounded-2xl bg-primary-900 hover:bg-primary-800 text-white font-bold py-5 px-8 transition-all duration-300 shadow-card hover:shadow-premium hover:-translate-y-1 flex items-center justify-center"
+                      className="flex w-full items-center justify-center rounded-2xl bg-primary-900 px-6 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-primary-800 hover:shadow-premium sm:px-8 sm:py-5 sm:text-base"
                     >
                       Send Message
 
@@ -382,40 +344,34 @@ const Contact = () => {
       {/* MAP */}
       {/* ========================================================= */}
 
-      <section className="pb-28">
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-          <div className="bg-white rounded-[32px] border border-gray-100 shadow-premium overflow-hidden">
-
+      <section className="pb-16 sm:pb-20 lg:pb-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-premium sm:rounded-[32px]">
             {/* Header */}
-            <div className="px-8 py-8 border-b border-gray-100">
-
-              <h2 className="text-3xl font-black text-primary-900 mb-3">
+            <div className="border-b border-gray-100 px-5 py-6 sm:px-8 sm:py-8">
+              <h2 className="mb-2 text-2xl font-black text-primary-900 sm:mb-3 sm:text-3xl">
                 Visit Our Office
               </h2>
 
-              <p className="text-gray-600 text-lg">
+              <p className="text-base text-gray-600 sm:text-lg">
                 Located in the heart of New York City.
               </p>
             </div>
 
             {/* Placeholder */}
-            <div className="h-[450px] bg-gradient-to-r from-primary-100 to-primary-200 flex items-center justify-center">
+            <div className="flex h-[320px] items-center justify-center bg-gradient-to-r from-primary-100 to-primary-200 px-5 text-center sm:h-[380px] lg:h-[450px]">
+              <div>
+                <MapPin className="mx-auto mb-5 h-12 w-12 text-primary-900 sm:mb-6 sm:h-16 sm:w-16" />
 
-              <div className="text-center">
-
-                <MapPin className="h-16 w-16 mx-auto mb-6 text-primary-900" />
-
-                <h3 className="text-2xl font-bold text-primary-900 mb-3">
+                <h3 className="mb-2 text-xl font-bold text-primary-900 sm:mb-3 sm:text-2xl">
                   Interactive Map
                 </h3>
 
-                <p className="text-gray-700 text-lg">
+                <p className="text-base text-gray-700 sm:text-lg">
                   123 Business Avenue, Suite 100
                 </p>
 
-                <p className="text-gray-500 mt-2">
+                <p className="mt-2 text-gray-500">
                   New York, NY 10001
                 </p>
               </div>
@@ -428,24 +384,19 @@ const Contact = () => {
       {/* FAQ */}
       {/* ========================================================= */}
 
-      <section className="pb-28">
-
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-
-          <div className="text-center mb-16">
-
-            <h2 className="text-4xl md:text-5xl font-black text-primary-900 mb-6">
-
+      <section className="pb-16 sm:pb-20 lg:pb-28">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-10 text-center sm:mb-16">
+            <h2 className="mb-4 text-3xl font-black text-primary-900 sm:mb-6 sm:text-4xl md:text-5xl">
               Frequently Asked Questions
             </h2>
 
-            <p className="text-xl text-gray-600">
+            <p className="text-base text-gray-600 sm:text-xl">
               Quick answers to common questions.
             </p>
           </div>
 
-          <div className="space-y-6">
-
+          <div className="space-y-4 sm:space-y-6">
             {[
               {
                 q: 'How do I book a ride?',
@@ -474,14 +425,13 @@ const Contact = () => {
             ].map((faq, index) => (
               <div
                 key={index}
-                className="bg-white rounded-[24px] border border-gray-100 p-8 shadow-soft hover:shadow-premium transition-all duration-300"
+                className="rounded-[20px] border border-gray-100 bg-white p-5 shadow-soft transition-all duration-300 hover:shadow-premium sm:rounded-[24px] sm:p-8"
               >
-
-                <h3 className="text-xl font-bold text-primary-900 mb-4">
+                <h3 className="mb-3 text-lg font-bold text-primary-900 sm:mb-4 sm:text-xl">
                   {faq.q}
                 </h3>
 
-                <p className="text-gray-600 leading-relaxed text-lg">
+                <p className="text-base leading-relaxed text-gray-600 sm:text-lg">
                   {faq.a}
                 </p>
               </div>
@@ -494,38 +444,33 @@ const Contact = () => {
       {/* CTA */}
       {/* ========================================================= */}
 
-      <section className="relative bg-hero-gradient text-white overflow-hidden py-24">
-
+      <section className="relative overflow-hidden bg-hero-gradient py-16 text-white sm:py-20 lg:py-24">
         <div className="absolute inset-0 bg-black/30"></div>
 
-        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-accent-500/10 blur-3xl rounded-full"></div>
+        <div className="absolute right-[-140px] top-[-120px] h-[280px] w-[280px] rounded-full bg-accent-500/10 blur-3xl sm:right-0 sm:top-0 sm:h-[400px] sm:w-[400px]"></div>
 
-        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 backdrop-blur-md px-5 py-2 text-sm font-semibold mb-8">
-
-            <BadgeCheck className="h-4 w-4 text-accent-400" />
+        <div className="relative mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
+          <div className="mb-6 inline-flex max-w-full items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold backdrop-blur-md sm:mb-8 sm:px-5">
+            <BadgeCheck className="h-4 w-4 shrink-0 text-accent-400" />
 
             Trusted By Thousands Of Travelers
           </div>
 
-          <h2 className="text-4xl md:text-5xl font-black mb-6 leading-tight">
-
+          <h2 className="mb-4 text-3xl font-black leading-tight sm:mb-6 sm:text-4xl md:text-5xl">
             Ready To Book
             <span className="block text-accent-400">
               Your Airport Transfer?
             </span>
           </h2>
 
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-10">
-
+          <p className="mx-auto mb-8 max-w-3xl text-base leading-relaxed text-gray-300 sm:mb-10 sm:text-xl">
             Experience luxury airport transportation with professional
             chauffeurs and premium service.
           </p>
 
           <a
             href="/booking"
-            className="inline-flex items-center justify-center rounded-2xl bg-accent-500 hover:bg-accent-400 text-primary-950 font-bold px-10 py-5 transition-all duration-300 shadow-premium hover:-translate-y-1"
+            className="inline-flex w-full items-center justify-center rounded-2xl bg-accent-500 px-6 py-4 text-sm font-bold text-primary-950 shadow-premium transition-all duration-300 hover:-translate-y-1 hover:bg-accent-400 sm:w-auto sm:px-10 sm:py-5 sm:text-base"
           >
             Book Your Ride
 

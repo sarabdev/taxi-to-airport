@@ -7,7 +7,6 @@ import {
   Smartphone,
   Briefcase,
   Plane,
-  Calendar,
   Users,
   CheckCircle,
   Shield,
@@ -162,7 +161,7 @@ const UserInfo = () => {
 
   const renderError = (field) =>
     errors[field] ? (
-      <p className="text-sm text-red-600 mt-2">
+      <p className="mt-2 text-sm text-red-600">
         {errors[field]}
       </p>
     ) : null;
@@ -172,66 +171,58 @@ const UserInfo = () => {
   if (!bookingData) return null;
 
   return (
-    <div className="min-h-screen bg-surface-light py-6 md:py-10">
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
+    <div className="min-h-screen overflow-hidden bg-surface-light py-6 sm:py-8 md:py-10">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* ========================================================= */}
         {/* HEADER */}
         {/* ========================================================= */}
 
-        <div className="mb-10">
-
+        <div className="mb-8 sm:mb-10">
           <button
             onClick={() => navigate("/booking/cars")}
-            className="inline-flex items-center text-primary-900 hover:text-accent-500 mb-5 text-sm font-semibold transition-colors"
+            className="mb-5 inline-flex items-center text-sm font-semibold text-primary-900 transition-colors hover:text-accent-500"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
+            <ArrowLeft className="mr-2 h-4 w-4 shrink-0" />
 
-            Back To Vehicle Selection
+            <span className="leading-none">
+              Back To Vehicle Selection
+            </span>
           </button>
 
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
             <div>
-
-              <div className="inline-flex items-center gap-2 rounded-full bg-primary-50 text-primary-900 px-4 py-2 text-sm font-semibold mb-5">
-
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary-50 px-4 py-2 text-sm font-semibold text-primary-900 sm:mb-5">
                 <BadgeCheck className="h-4 w-4 text-accent-500" />
 
                 Step 3 Of 4
               </div>
 
-              <h1 className="text-4xl md:text-5xl font-black text-primary-900 leading-tight">
-
+              <h1 className="text-3xl font-black leading-tight text-primary-900 sm:text-4xl md:text-5xl">
                 Passenger Information
               </h1>
 
-              <p className="text-gray-600 text-lg mt-4">
+              <p className="mt-3 text-base text-gray-600 sm:mt-4 sm:text-lg">
                 Complete your booking details
               </p>
             </div>
 
             {/* Summary */}
-            <div className="bg-white rounded-[28px] border border-gray-100 shadow-soft px-8 py-6 min-w-[300px]">
-
-              <p className="text-sm text-gray-500 mb-2">
+            <div className="w-full rounded-[24px] border border-gray-100 bg-white px-5 py-5 shadow-soft sm:rounded-[28px] sm:px-8 sm:py-6 lg:w-auto lg:min-w-[300px]">
+              <p className="mb-2 text-sm text-gray-500">
                 Selected Vehicle
               </p>
 
-              <h3 className="text-2xl font-black text-primary-900">
-
+              <h3 className="break-words text-xl font-black text-primary-900 sm:text-2xl">
                 {bookingData.selectedCar?.name}
               </h3>
 
-              <p className="text-gray-500 mt-2">
+              <p className="mt-2 text-sm text-gray-500 sm:text-base">
                 {bookingData.tripType === "RETURN"
                   ? "Return Journey"
                   : "One Way Journey"}
               </p>
 
               <div className="mt-4 text-3xl font-black text-accent-500">
-
                 £{bookingData.pricing?.totalFare}
               </div>
             </div>
@@ -242,30 +233,26 @@ const UserInfo = () => {
         {/* MAIN GRID */}
         {/* ========================================================= */}
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-3 xl:gap-8">
           {/* ========================================================= */}
           {/* FORM */}
           {/* ========================================================= */}
 
           <div className="xl:col-span-2">
-
             <form
               onSubmit={handleSubmit}
-              className="bg-white rounded-[36px] border border-gray-100 shadow-premium overflow-hidden"
+              className="overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-premium sm:rounded-[36px]"
             >
-
               {/* ========================================================= */}
               {/* TOP HEADER */}
               {/* ========================================================= */}
 
-              <div className="bg-primary-900 px-8 md:px-10 py-8">
-
-                <h2 className="text-3xl font-black text-white">
+              <div className="bg-primary-900 px-5 py-6 sm:px-8 sm:py-8 md:px-10">
+                <h2 className="text-2xl font-black text-white sm:text-3xl">
                   Booking Information
                 </h2>
 
-                <p className="text-gray-300 mt-3 text-lg">
+                <p className="mt-2 text-base text-gray-300 sm:mt-3 sm:text-lg">
                   Passenger, luggage and flight details
                 </p>
               </div>
@@ -274,52 +261,44 @@ const UserInfo = () => {
               {/* CONTENT */}
               {/* ========================================================= */}
 
-              <div className="p-6 md:p-10">
-
+              <div className="p-5 sm:p-6 md:p-10">
                 {/* ========================================================= */}
                 {/* PASSENGER */}
                 {/* ========================================================= */}
 
                 <section>
-
                   {/* Section Header */}
-                  <div className="flex items-center gap-4 mb-8">
-
-                    <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-primary-900 text-accent-400">
-
-                      <User className="h-6 w-6" />
+                  <div className="mb-6 flex items-start gap-4 sm:mb-8 sm:items-center">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary-900 text-accent-400 sm:h-14 sm:w-14">
+                      <User className="h-5 w-5 sm:h-6 sm:w-6" />
                     </div>
 
-                    <div>
-
-                      <h3 className="text-2xl font-black text-primary-900">
+                    <div className="min-w-0">
+                      <h3 className="text-xl font-black text-primary-900 sm:text-2xl">
                         Passenger Details
                       </h3>
 
-                      <p className="text-gray-500 mt-1">
+                      <p className="mt-1 text-sm text-gray-500 sm:text-base">
                         Main passenger information
                       </p>
                     </div>
                   </div>
 
-                  <div className="space-y-6">
-
+                  <div className="space-y-5 sm:space-y-6">
                     {/* Name */}
                     <div>
-
-                      <label className="block text-sm font-semibold text-gray-700 mb-3">
+                      <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                         Full Name *
                       </label>
 
                       <div className="relative">
-
                         <User className="icon-left" />
 
                         <input
                           name="fullName"
                           value={form.fullName}
                           onChange={handleChange}
-                          className="input-field pl-11 h-14 border-gray-200 focus:ring-primary-900"
+                          className="input-field h-12 border-gray-200 pl-11 focus:ring-primary-900 sm:h-14"
                           placeholder="John Doe"
                         />
                       </div>
@@ -328,23 +307,20 @@ const UserInfo = () => {
                     </div>
 
                     {/* Mobile + Email */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
+                    <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
                       <div>
-
-                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                        <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                           Mobile Number *
                         </label>
 
                         <div className="relative">
-
                           <Smartphone className="icon-left" />
 
                           <input
                             name="mobile"
                             value={form.mobile}
                             onChange={handleChange}
-                            className="input-field pl-11 h-14 border-gray-200 focus:ring-primary-900"
+                            className="input-field h-12 border-gray-200 pl-11 focus:ring-primary-900 sm:h-14"
                             placeholder="+44 7000 000000"
                           />
                         </div>
@@ -353,20 +329,18 @@ const UserInfo = () => {
                       </div>
 
                       <div>
-
-                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                        <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                           Email Address *
                         </label>
 
                         <div className="relative">
-
                           <Mail className="icon-left" />
 
                           <input
                             name="email"
                             value={form.email}
                             onChange={handleChange}
-                            className="input-field pl-11 h-14 border-gray-200 focus:ring-primary-900"
+                            className="input-field h-12 border-gray-200 pl-11 focus:ring-primary-900 sm:h-14"
                             placeholder="you@example.com"
                           />
                         </div>
@@ -377,15 +351,13 @@ const UserInfo = () => {
 
                     {/* Passengers */}
                     <div>
-
-                      <label className="block text-sm font-semibold text-gray-700 mb-3">
+                      <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                         Number Of Passengers
                       </label>
 
                       <div className="select-wrapper">
-
                         <select
-                          className="select-field h-14 border-gray-200 focus:ring-primary-900"
+                          className="select-field h-12 border-gray-200 focus:ring-primary-900 sm:h-14"
                           value={form.passengers}
                           onChange={(e) =>
                             handleNestedChange(
@@ -413,54 +385,69 @@ const UserInfo = () => {
                 </section>
 
                 {/* DIVIDER */}
-                <div className="my-12 border-t border-gray-100"></div>
+                <div className="my-8 border-t border-gray-100 sm:my-10 md:my-12"></div>
 
                 {/* ========================================================= */}
                 {/* LUGGAGE */}
                 {/* ========================================================= */}
 
                 <section>
-
                   {/* Header */}
-                  <div className="flex items-center gap-4 mb-8">
-
-                    <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-primary-900 text-accent-400">
-
-                      <Briefcase className="h-6 w-6" />
+                  <div className="mb-6 flex items-start gap-4 sm:mb-8 sm:items-center">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary-900 text-accent-400 sm:h-14 sm:w-14">
+                      <Briefcase className="h-5 w-5 sm:h-6 sm:w-6" />
                     </div>
 
-                    <div>
-
-                      <h3 className="text-2xl font-black text-primary-900">
+                    <div className="min-w-0">
+                      <h3 className="text-xl font-black text-primary-900 sm:text-2xl">
                         Luggage Information
                       </h3>
 
-                      <p className="text-gray-500 mt-1">
+                      <p className="mt-1 text-sm text-gray-500 sm:text-base">
                         Help us prepare the right vehicle
                       </p>
                     </div>
                   </div>
 
-                  <div className="space-y-6">
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
+                  <div className="space-y-5 sm:space-y-6">
+                    <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
                       {/* Large */}
                       <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                        <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                           Large Bags (23kg)
                         </label>
+
                         <div className="relative">
                           <select
-                            className="w-full h-14 px-4 pr-10 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-900 appearance-none bg-white text-gray-800 font-medium"
+                            className="h-12 w-full appearance-none rounded-xl border border-gray-200 bg-white px-4 pr-10 font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-900 sm:h-14"
                             value={form.luggage.largeBags23kg}
-                            onChange={(e) => handleNestedChange(["luggage", "largeBags23kg"], Number(e.target.value))}
+                            onChange={(e) =>
+                              handleNestedChange(
+                                ["luggage", "largeBags23kg"],
+                                Number(e.target.value)
+                              )
+                            }
                           >
-                            {numberOptions.map((n) => <option key={n} value={n}>{n}</option>)}
+                            {numberOptions.map((n) => (
+                              <option key={n} value={n}>
+                                {n}
+                              </option>
+                            ))}
                           </select>
+
                           <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                            <svg className="w-4 h-4 text-primary-900" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                            <svg
+                              className="h-4 w-4 text-primary-900"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2.5"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M19 9l-7 7-7-7"
+                              />
                             </svg>
                           </div>
                         </div>
@@ -468,20 +455,41 @@ const UserInfo = () => {
 
                       {/* Small */}
                       <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                        <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                           Small Bags (15kg)
                         </label>
+
                         <div className="relative">
                           <select
-                            className="w-full h-14 px-4 pr-10 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-900 appearance-none bg-white text-gray-800 font-medium"
+                            className="h-12 w-full appearance-none rounded-xl border border-gray-200 bg-white px-4 pr-10 font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-900 sm:h-14"
                             value={form.luggage.smallBags15kg}
-                            onChange={(e) => handleNestedChange(["luggage", "smallBags15kg"], Number(e.target.value))}
+                            onChange={(e) =>
+                              handleNestedChange(
+                                ["luggage", "smallBags15kg"],
+                                Number(e.target.value)
+                              )
+                            }
                           >
-                            {numberOptions.map((n) => <option key={n} value={n}>{n}</option>)}
+                            {numberOptions.map((n) => (
+                              <option key={n} value={n}>
+                                {n}
+                              </option>
+                            ))}
                           </select>
+
                           <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                            <svg className="w-4 h-4 text-primary-900" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                            <svg
+                              className="h-4 w-4 text-primary-900"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2.5"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M19 9l-7 7-7-7"
+                              />
                             </svg>
                           </div>
                         </div>
@@ -489,20 +497,41 @@ const UserInfo = () => {
 
                       {/* Shoulder / Handcarry */}
                       <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                        <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                           Shoulder Bag / Handcarry
                         </label>
+
                         <div className="relative">
                           <select
-                            className="w-full h-14 px-4 pr-10 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-900 appearance-none bg-white text-gray-800 font-medium"
+                            className="h-12 w-full appearance-none rounded-xl border border-gray-200 bg-white px-4 pr-10 font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-900 sm:h-14"
                             value={form.luggage.shoulderBags}
-                            onChange={(e) => handleNestedChange(["luggage", "shoulderBags"], Number(e.target.value))}
+                            onChange={(e) =>
+                              handleNestedChange(
+                                ["luggage", "shoulderBags"],
+                                Number(e.target.value)
+                              )
+                            }
                           >
-                            {numberOptions.map((n) => <option key={n} value={n}>{n}</option>)}
+                            {numberOptions.map((n) => (
+                              <option key={n} value={n}>
+                                {n}
+                              </option>
+                            ))}
                           </select>
+
                           <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                            <svg className="w-4 h-4 text-primary-900" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                            <svg
+                              className="h-4 w-4 text-primary-900"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2.5"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M19 9l-7 7-7-7"
+                              />
                             </svg>
                           </div>
                         </div>
@@ -510,88 +539,104 @@ const UserInfo = () => {
 
                       {/* Extra Large */}
                       <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                        <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                           Extra Large Item
                         </label>
+
                         <div className="relative">
                           <select
-                            className="w-full h-14 px-4 pr-10 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-900 appearance-none bg-white text-gray-800 font-medium"
+                            className="h-12 w-full appearance-none rounded-xl border border-gray-200 bg-white px-4 pr-10 font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-900 sm:h-14"
                             value={form.luggage.extraLargeItemType}
-                            onChange={(e) => handleNestedChange(["luggage", "extraLargeItemType"], e.target.value)}
+                            onChange={(e) =>
+                              handleNestedChange(
+                                ["luggage", "extraLargeItemType"],
+                                e.target.value
+                              )
+                            }
                           >
                             <option value="none">None</option>
-                            <option value="extra_large_bag_35kg">Extra Large Bag (35kg)</option>
+                            <option value="extra_large_bag_35kg">
+                              Extra Large Bag (35kg)
+                            </option>
                             <option value="wheelchair">Wheelchair</option>
                             <option value="pram">Pram</option>
                             <option value="golf_bag">Golf Bag</option>
                             <option value="other">Other</option>
                           </select>
+
                           <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                            <svg className="w-4 h-4 text-primary-900" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                            <svg
+                              className="h-4 w-4 text-primary-900"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2.5"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M19 9l-7 7-7-7"
+                              />
                             </svg>
                           </div>
                         </div>
 
                         {form.luggage.extraLargeItemType === "other" && (
-                          <div className="mt-4 md:col-span-2">
+                          <div className="mt-4">
                             <input
-                              className="input-field h-14 border-gray-200 focus:ring-primary-900"
+                              className="input-field h-12 border-gray-200 focus:ring-primary-900 sm:h-14"
                               placeholder="Please specify"
                               value={form.luggage.extraLargeItemNote}
-                              onChange={(e) => handleNestedChange(["luggage", "extraLargeItemNote"], e.target.value)}
+                              onChange={(e) =>
+                                handleNestedChange(
+                                  ["luggage", "extraLargeItemNote"],
+                                  e.target.value
+                                )
+                              }
                             />
                             {renderError("extraLargeItemNote")}
                           </div>
                         )}
                       </div>
-
                     </div>
                   </div>
                 </section>
 
                 {/* DIVIDER */}
-                <div className="my-12 border-t border-gray-100"></div>
+                <div className="my-8 border-t border-gray-100 sm:my-10 md:my-12"></div>
 
                 {/* ========================================================= */}
                 {/* FLIGHT */}
                 {/* ========================================================= */}
 
                 <section>
-
                   {/* Header */}
-                  <div className="flex items-center gap-4 mb-8">
-
-                    <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-primary-900 text-accent-400">
-
-                      <Plane className="h-6 w-6" />
+                  <div className="mb-6 flex items-start gap-4 sm:mb-8 sm:items-center">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary-900 text-accent-400 sm:h-14 sm:w-14">
+                      <Plane className="h-5 w-5 sm:h-6 sm:w-6" />
                     </div>
 
-                    <div>
-
-                      <h3 className="text-2xl font-black text-primary-900">
+                    <div className="min-w-0">
+                      <h3 className="text-xl font-black text-primary-900 sm:text-2xl">
                         Flight Information
                       </h3>
 
-                      <p className="text-gray-500 mt-1">
+                      <p className="mt-1 text-sm text-gray-500 sm:text-base">
                         Arrival and airport details
                       </p>
                     </div>
                   </div>
 
-                  <div className="space-y-6">
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
+                  <div className="space-y-5 sm:space-y-6">
+                    <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
                       {/* Flight */}
                       <div>
-
-                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                        <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                           Flight Number *
                         </label>
 
                         <input
-                          className="input-field h-14 border-gray-200 focus:ring-primary-900"
+                          className="input-field h-12 border-gray-200 focus:ring-primary-900 sm:h-14"
                           value={form.flight.flightNumber}
                           onChange={(e) =>
                             handleNestedChange(
@@ -606,13 +651,12 @@ const UserInfo = () => {
 
                       {/* From */}
                       <div>
-
-                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                        <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                           Arriving From *
                         </label>
 
                         <input
-                          className="input-field h-14 border-gray-200 focus:ring-primary-900"
+                          className="input-field h-12 border-gray-200 focus:ring-primary-900 sm:h-14"
                           value={form.flight.arrivingFrom}
                           onChange={(e) =>
                             handleNestedChange(
@@ -628,14 +672,13 @@ const UserInfo = () => {
 
                     {/* Date */}
                     <div>
-
-                      <label className="block text-sm font-semibold text-gray-700 mb-3">
+                      <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                         Arrival Date & Time *
                       </label>
 
                       <input
                         type="datetime-local"
-                        className="input-field h-14 border-gray-200 focus:ring-primary-900"
+                        className="input-field h-12 border-gray-200 focus:ring-primary-900 sm:h-14"
                         value={form.flight.arrivalDateTime}
                         onChange={(e) =>
                           handleNestedChange(
@@ -649,13 +692,11 @@ const UserInfo = () => {
                     </div>
 
                     {/* Meet */}
-                    <div className="rounded-2xl border border-primary-100 bg-primary-50 p-5">
-
-                      <label className="flex items-start gap-4 cursor-pointer">
-
+                    <div className="rounded-2xl border border-primary-100 bg-primary-50 p-4 sm:p-5">
+                      <label className="flex cursor-pointer items-start gap-3 sm:gap-4">
                         <input
                           type="checkbox"
-                          className="mt-1 h-5 w-5 rounded border-gray-300 text-primary-900 focus:ring-primary-900"
+                          className="mt-1 h-5 w-5 shrink-0 rounded border-gray-300 text-primary-900 focus:ring-primary-900"
                           checked={form.flight.meetAndGreet}
                           onChange={(e) =>
                             handleNestedChange(
@@ -666,12 +707,11 @@ const UserInfo = () => {
                         />
 
                         <div>
-
                           <div className="font-bold text-primary-900">
                             Meet & Greet Service
                           </div>
 
-                          <p className="text-gray-600 text-sm mt-1">
+                          <p className="mt-1 text-sm text-gray-600">
                             Driver will meet you inside the
                             airport arrivals terminal.
                           </p>
@@ -682,10 +722,8 @@ const UserInfo = () => {
                 </section>
 
                 {/* BUTTON */}
-                <div className="pt-12">
-
-                  <button className="w-full rounded-2xl bg-primary-900 hover:bg-primary-800 text-white font-bold py-5 px-8 transition-all duration-300 shadow-card hover:shadow-premium hover:-translate-y-1">
-
+                <div className="pt-8 sm:pt-10 md:pt-12">
+                  <button className="w-full rounded-2xl bg-primary-900 px-6 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-primary-800 hover:shadow-premium sm:px-8 sm:py-5 sm:text-base">
                     Continue To Payment
                   </button>
                 </div>
@@ -698,39 +736,31 @@ const UserInfo = () => {
           {/* ========================================================= */}
 
           <div>
-
-            <div className="sticky top-28 bg-white rounded-[32px] border border-gray-100 shadow-soft p-8">
-
-              <h3 className="text-2xl font-black text-primary-900 mb-8">
-
+            <div className="rounded-[28px] border border-gray-100 bg-white p-5 shadow-soft sm:rounded-[32px] sm:p-8 xl:sticky xl:top-28">
+              <h3 className="mb-6 text-2xl font-black text-primary-900 sm:mb-8">
                 Booking Summary
               </h3>
 
-              <div className="space-y-6">
-
+              <div className="space-y-5 sm:space-y-6">
                 <div className="flex items-start justify-between gap-4">
-
-                  <div>
-
-                    <p className="text-sm text-gray-500 mb-1">
+                  <div className="min-w-0">
+                    <p className="mb-1 text-sm text-gray-500">
                       Vehicle
                     </p>
 
-                    <p className="font-bold text-primary-900">
+                    <p className="break-words font-bold text-primary-900">
                       {bookingData.selectedCar?.name}
                     </p>
                   </div>
 
-                  <Users className="h-5 w-5 text-accent-500" />
+                  <Users className="h-5 w-5 shrink-0 text-accent-500" />
                 </div>
 
                 <div className="border-t border-gray-100"></div>
 
                 <div className="flex items-start justify-between gap-4">
-
-                  <div>
-
-                    <p className="text-sm text-gray-500 mb-1">
+                  <div className="min-w-0">
+                    <p className="mb-1 text-sm text-gray-500">
                       Journey Type
                     </p>
 
@@ -741,21 +771,18 @@ const UserInfo = () => {
                     </p>
                   </div>
 
-                  <Plane className="h-5 w-5 text-accent-500" />
+                  <Plane className="h-5 w-5 shrink-0 text-accent-500" />
                 </div>
 
                 <div className="border-t border-gray-100"></div>
 
                 <div className="flex items-start justify-between gap-4">
-
-                  <div>
-
-                    <p className="text-sm text-gray-500 mb-1">
+                  <div className="min-w-0">
+                    <p className="mb-1 text-sm text-gray-500">
                       Total Fare
                     </p>
 
-                    <div className="text-4xl font-black text-accent-500">
-
+                    <div className="break-words text-3xl font-black text-accent-500 sm:text-4xl">
                       £{bookingData.pricing?.totalFare}
                     </div>
                   </div>
@@ -763,10 +790,8 @@ const UserInfo = () => {
               </div>
 
               {/* Trust */}
-              <div className="mt-10 rounded-2xl bg-primary-50 border border-primary-100 p-6">
-
-                <div className="flex items-center gap-3 mb-4">
-
+              <div className="mt-8 rounded-2xl border border-primary-100 bg-primary-50 p-5 sm:mt-10 sm:p-6">
+                <div className="mb-4 flex items-center gap-3">
                   <Shield className="h-6 w-6 text-accent-500" />
 
                   <h4 className="font-bold text-primary-900">
@@ -775,7 +800,6 @@ const UserInfo = () => {
                 </div>
 
                 <div className="space-y-3">
-
                   {[
                     "Professional licensed chauffeurs",
                     "Secure payment processing",
@@ -785,8 +809,7 @@ const UserInfo = () => {
                       key={index}
                       className="flex items-start gap-3"
                     >
-
-                      <CheckCircle className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
+                      <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
 
                       <span className="text-sm text-gray-700">
                         {item}

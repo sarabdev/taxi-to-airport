@@ -23,6 +23,7 @@ import { airports } from '../data/airports';
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
 const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_MAPS_KEY;
+
 const getLocalDateTime = () => {
   const now = new Date();
 
@@ -47,12 +48,12 @@ const getLocalDateTime = () => {
 };
 
 const defaultDateTime = getLocalDateTime();
+
 const Home = () => {
   const navigate = useNavigate();
 
   const toInputRef = useRef(null);
   const fromInputRef = useRef(null);
-
 
   const [loading, setLoading] = useState(false);
 
@@ -203,56 +204,53 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-surface-light overflow-hidden">
-
+    <div className="min-h-screen overflow-hidden bg-surface-light">
       {/* ========================================================= */}
       {/* HERO + BOOKING SECTION */}
       {/* ========================================================= */}
 
-      <section className="relative bg-hero-gradient text-white overflow-hidden">
+      <section className="relative overflow-hidden bg-hero-gradient text-white">
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/50"></div>
 
         {/* Glow */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-accent-500/10 blur-3xl rounded-full"></div>
+        <div className="absolute right-[-180px] top-[-120px] h-[320px] w-[320px] rounded-full bg-accent-500/10 blur-3xl sm:right-[-120px] sm:h-[480px] sm:w-[480px] lg:right-0 lg:top-0 lg:h-[600px] lg:w-[600px]"></div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
-          <div className="grid lg:grid-cols-2 gap-10 items-center">
-
+        <div className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-24">
+          <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-10">
             {/* LEFT SIDE - FORM */}
-            <div className="relative z-10">
-              <div className="flex flex-wrap items-center gap-4 mb-6">
-                <div className="flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-md border border-white/10 px-4 py-2">
-                  <BadgeCheck className="h-4 w-4 text-accent-400" />
-                  <span className="text-sm text-white font-medium">
+            <div className="relative z-10 w-full">
+              <div className="mb-5 flex flex-wrap items-center gap-3 sm:mb-6 sm:gap-4">
+                <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-2 backdrop-blur-md sm:px-4">
+                  <BadgeCheck className="h-4 w-4 shrink-0 text-accent-400" />
+                  <span className="text-xs font-medium text-white sm:text-sm">
                     Trusted By 10,000+ Travelers
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-md border border-white/10 px-4 py-2">
-                  <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
-                  <span className="text-sm text-white font-medium">
+                <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-2 backdrop-blur-md sm:px-4">
+                  <Star className="h-4 w-4 shrink-0 fill-yellow-400 text-yellow-400" />
+                  <span className="text-xs font-medium text-white sm:text-sm">
                     4.9 Google Rating
                   </span>
                 </div>
               </div>
 
-              <div className="bg-white rounded-[32px] shadow-premium border border-gray-100 overflow-hidden">
-                <div className="bg-primary-900 px-8 py-6">
-                  <h2 className="text-3xl font-bold text-white">
+              <div className="overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-premium sm:rounded-[32px]">
+                <div className="bg-primary-900 px-5 py-5 sm:px-8 sm:py-6">
+                  <h2 className="text-2xl font-bold text-white sm:text-3xl">
                     Book Your Airport Transfer
                   </h2>
 
-                  <p className="text-gray-300 mt-2">
+                  <p className="mt-2 text-sm text-gray-300 sm:text-base">
                     Fast, secure, and fixed-price bookings
                   </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="p-8 lg:p-10 space-y-7">
-
+                <form onSubmit={handleSubmit} className="space-y-5 p-5 sm:space-y-7 sm:p-8 lg:p-10">
                   {/* AIRPORT */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-3">
+                    <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                       Pickup Location
                     </label>
                     <input
@@ -262,7 +260,7 @@ const Home = () => {
                       value={formData.fromLocation}
                       onChange={handleChange}
                       placeholder="Enter pickup address"
-                      className="input-field text-black h-14 border-gray-200 focus:ring-primary-900"
+                      className="input-field h-12 border-gray-200 text-black focus:ring-primary-900 sm:h-14"
                       autoComplete="off"
                       required
                     />
@@ -270,8 +268,7 @@ const Home = () => {
 
                   {/* DESTINATION */}
                   <div>
-
-                    <label className="block text-sm font-semibold text-gray-700 mb-3">
+                    <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                       Destination
                     </label>
 
@@ -282,7 +279,7 @@ const Home = () => {
                       value={formData.toLocation}
                       onChange={handleChange}
                       placeholder="Enter your destination"
-                      className="input-field text-black h-14 border-gray-200 focus:ring-primary-900"
+                      className="input-field h-12 border-gray-200 text-black focus:ring-primary-900 sm:h-14"
                       autoComplete="off"
                       required
                     />
@@ -290,74 +287,64 @@ const Home = () => {
 
                   {/* DATE & TIME */}
                   <div>
-
-                    <label className="block text-sm font-semibold text-gray-700 mb-3">
-
-                      <Calendar className="inline h-4 w-4 mr-2 text-black" />
-
+                    <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
+                      <Calendar className="mr-2 inline h-4 w-4 text-black" />
                       Pickup Date & Time
                     </label>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
                       {/* DATE */}
                       <div className="relative">
-
                         <input
                           type="date"
                           name="pickupDate"
                           value={formData.pickupDate}
                           onChange={handleChange}
                           min={defaultDateTime.date}
-                          className="input-field text-black h-14 border-gray-200 focus:ring-primary-900 w-full"
+                          className="input-field ios-date-input min-h-12 w-full border-gray-200 text-black focus:ring-primary-900 sm:min-h-14"
                           required
                         />
                       </div>
 
                       {/* TIME */}
                       <div className="relative">
-
                         <input
                           type="time"
                           name="pickupTime"
                           value={formData.pickupTime}
                           onChange={handleChange}
                           step="300"
-                          className="input-field h-14 text-black border-gray-200 focus:ring-primary-900 w-full"
+                          className="input-field ios-date-input min-h-12 w-full border-gray-200 text-black focus:ring-primary-900 sm:min-h-14"
                           required
                         />
                       </div>
                     </div>
 
-                    <p className="text-xs text-gray-500 mt-3">
+                    <p className="mt-2 text-xs text-gray-500 sm:mt-3">
                       Your local device time is automatically selected.
                     </p>
                   </div>
 
                   {/* FEATURES */}
-                  <div className="grid grid-cols-3 gap-4">
-
-                    <div className="rounded-2xl bg-gray-50 border border-gray-100 p-4 text-center">
-
-                      <Clock className="h-5 w-5 text-accent-500 mx-auto mb-2" />
+                  <div className="grid grid-cols-1 gap-3 xs:grid-cols-3 sm:grid-cols-3 sm:gap-4">
+                    <div className="rounded-2xl border border-gray-100 bg-gray-50 p-4 text-center">
+                      <Clock className="mx-auto mb-2 h-5 w-5 text-accent-500" />
 
                       <p className="text-xs font-semibold text-gray-700">
                         24/7 Service
                       </p>
                     </div>
 
-                    <div className="rounded-2xl bg-gray-50 border border-gray-100 p-4 text-center">
-
-                      <Shield className="h-5 w-5 text-accent-500 mx-auto mb-2" />
+                    <div className="rounded-2xl border border-gray-100 bg-gray-50 p-4 text-center">
+                      <Shield className="mx-auto mb-2 h-5 w-5 text-accent-500" />
 
                       <p className="text-xs font-semibold text-gray-700">
                         Safe Travel
                       </p>
                     </div>
 
-                    <div className="rounded-2xl bg-gray-50 border border-gray-100 p-4 text-center">
-
-                      <CarFront className="h-5 w-5 text-accent-500 mx-auto mb-2" />
+                    <div className="rounded-2xl border border-gray-100 bg-gray-50 p-4 text-center">
+                      <CarFront className="mx-auto mb-2 h-5 w-5 text-accent-500" />
 
                       <p className="text-xs font-semibold text-gray-700">
                         Luxury Fleet
@@ -369,7 +356,7 @@ const Home = () => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full rounded-2xl bg-primary-900 hover:bg-primary-800 text-white font-bold py-5 px-8 transition-all duration-300 shadow-card hover:shadow-premium hover:-translate-y-1 flex items-center justify-center"
+                    className="flex w-full items-center justify-center rounded-2xl bg-primary-900 px-5 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-primary-800 hover:shadow-premium disabled:cursor-not-allowed disabled:opacity-70 sm:px-8 sm:py-5 sm:text-base"
                   >
                     {loading ? (
                       'Checking Availability...'
@@ -386,10 +373,10 @@ const Home = () => {
             </div>
 
             {/* RIGHT SIDE - SLIDER */}
-            <div className="relative">
+            <div className="relative w-full lg:block">
               <div className="absolute -inset-4 rounded-[40px] bg-accent-500/10 blur-2xl"></div>
 
-              <div className="relative bg-white/10 backdrop-blur-md border border-white/10 rounded-[32px] p-4 shadow-premium">
+              <div className="relative rounded-[24px] border border-white/10 bg-white/10 p-3 shadow-premium backdrop-blur-md sm:rounded-[32px] sm:p-4">
                 <Swiper
                   modules={[Autoplay, Pagination]}
                   autoplay={{
@@ -400,7 +387,7 @@ const Home = () => {
                     clickable: true,
                   }}
                   loop
-                  className="h-[620px] rounded-2xl"
+                  className="h-[360px] rounded-2xl sm:h-[460px] lg:h-[620px]"
                 >
                   {sliderImages.map((slide, index) => (
                     <SwiperSlide key={index}>
@@ -408,52 +395,52 @@ const Home = () => {
                         <img
                           src={slide.image}
                           alt={slide.title}
-                          className="w-full h-full object-cover rounded-2xl"
+                          className="h-full w-full rounded-2xl object-cover"
                         />
 
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent rounded-2xl"></div>
+                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/80 via-black/25 to-transparent"></div>
 
-                        <div className="absolute bottom-0 left-0 right-0 p-8">
-                          <div className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-md border border-white/10 px-4 py-2 mb-5">
-                            <Plane className="h-4 w-4 text-accent-400" />
+                        <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-8">
+                          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-2 backdrop-blur-md sm:mb-5 sm:px-4">
+                            <Plane className="h-4 w-4 shrink-0 text-accent-400" />
 
-                            <span className="text-sm text-white font-medium">
+                            <span className="text-xs font-medium text-white sm:text-sm">
                               Premium Airport Transportation
                             </span>
                           </div>
 
-                          <h2 className="text-4xl md:text-5xl font-black text-white leading-tight mb-4">
+                          <h2 className="mb-3 text-2xl font-black leading-tight text-white sm:text-4xl md:text-5xl lg:mb-4">
                             {slide.title}
                           </h2>
 
-                          <p className="text-xl text-gray-200 leading-relaxed">
+                          <p className="text-base leading-relaxed text-gray-200 sm:text-xl">
                             {slide.subtitle}
                           </p>
 
-                          <div className="grid grid-cols-3 gap-5 mt-8">
+                          <div className="mt-6 grid grid-cols-3 gap-3 sm:mt-8 sm:gap-5">
                             <div>
-                              <div className="text-3xl font-black text-white">
+                              <div className="text-xl font-black text-white sm:text-3xl">
                                 10K+
                               </div>
-                              <p className="text-gray-300 text-sm mt-1">
+                              <p className="mt-1 text-xs text-gray-300 sm:text-sm">
                                 Travelers
                               </p>
                             </div>
 
                             <div>
-                              <div className="text-3xl font-black text-white">
+                              <div className="text-xl font-black text-white sm:text-3xl">
                                 24/7
                               </div>
-                              <p className="text-gray-300 text-sm mt-1">
+                              <p className="mt-1 text-xs text-gray-300 sm:text-sm">
                                 Support
                               </p>
                             </div>
 
                             <div>
-                              <div className="text-3xl font-black text-white">
+                              <div className="text-xl font-black text-white sm:text-3xl">
                                 99%
                               </div>
-                              <p className="text-gray-300 text-sm mt-1">
+                              <p className="mt-1 text-xs text-gray-300 sm:text-sm">
                                 On-Time
                               </p>
                             </div>
@@ -468,62 +455,51 @@ const Home = () => {
           </div>
         </div>
       </section>
+
       {/* ========================================================= */}
       {/* TRUST & REVIEWS */}
       {/* ========================================================= */}
 
-      <section className="pb-24">
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-          <div className="bg-white rounded-[32px] border border-gray-100 shadow-premium overflow-hidden">
-
+      <section className="pb-16 pt-8 sm:pb-20 lg:pb-24 lg:pt-0">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-premium sm:rounded-[32px]">
             {/* HEADER */}
-            <div className="px-8 lg:px-12 pt-10 pb-8 border-b border-gray-100">
-
-              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-
+            <div className="border-b border-gray-100 px-5 pb-7 pt-8 sm:px-8 sm:pb-8 sm:pt-10 lg:px-12">
+              <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                 <div>
-
-                  <div className="inline-flex items-center gap-2 rounded-full bg-primary-50 text-primary-900 px-4 py-2 text-sm font-semibold mb-5">
-
+                  <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary-50 px-4 py-2 text-sm font-semibold text-primary-900 sm:mb-5">
                     <BadgeCheck className="h-4 w-4 text-accent-500" />
 
                     Trusted By Thousands Of Travelers
                   </div>
 
-                  <h2 className="text-4xl md:text-5xl font-black text-primary-900 leading-tight">
-
+                  <h2 className="text-3xl font-black leading-tight text-primary-900 sm:text-4xl md:text-5xl">
                     Real Customer Reviews
                   </h2>
 
-                  <p className="text-xl text-gray-600 mt-5 max-w-2xl leading-relaxed">
-
+                  <p className="mt-4 max-w-2xl text-base leading-relaxed text-gray-600 sm:mt-5 sm:text-xl">
                     Verified experiences from travelers who trust AirportRide
                     for reliable and luxury airport transportation.
                   </p>
                 </div>
 
                 {/* OVERALL RATING */}
-                <div className="bg-primary-900 rounded-[28px] px-8 py-7 text-white min-w-[240px] shadow-card">
-
-                  <div className="flex items-center justify-center gap-1 mb-4">
-
+                <div className="w-full rounded-[24px] bg-primary-900 px-6 py-6 text-white shadow-card sm:w-auto sm:min-w-[240px] sm:rounded-[28px] sm:px-8 sm:py-7">
+                  <div className="mb-4 flex items-center justify-center gap-1">
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className="h-5 w-5 text-accent-400 fill-accent-400"
+                        className="h-5 w-5 fill-accent-400 text-accent-400"
                       />
                     ))}
                   </div>
 
                   <div className="text-center">
-
-                    <div className="text-5xl font-black">
+                    <div className="text-4xl font-black sm:text-5xl">
                       4.9
                     </div>
 
-                    <p className="text-gray-300 mt-2 text-sm">
+                    <p className="mt-2 text-sm text-gray-300">
                       Average Customer Rating
                     </p>
                   </div>
@@ -532,83 +508,72 @@ const Home = () => {
             </div>
 
             {/* REVIEW PLATFORMS */}
-            <div className="grid lg:grid-cols-2">
-
+            <div className="grid grid-cols-1 lg:grid-cols-2">
               {/* GOOGLE */}
               <a
                 href="#"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative p-8 lg:p-10 border-b lg:border-b-0 lg:border-r border-gray-100 hover:bg-gray-50 transition-all duration-300"
+                className="group relative border-b border-gray-100 p-5 transition-all duration-300 hover:bg-gray-50 sm:p-8 lg:border-b-0 lg:border-r lg:p-10"
               >
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-50/0 via-blue-50/40 to-blue-50/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
 
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-50/0 via-blue-50/40 to-blue-50/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                <div className="relative flex items-start gap-6">
-
-                  <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-50 border border-blue-100 shrink-0">
-
+                <div className="relative flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-blue-100 bg-blue-50 sm:h-16 sm:w-16">
                     <img
                       src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
                       alt="Google Reviews"
-                      className="w-8 h-8"
+                      className="h-7 w-7 sm:h-8 sm:w-8"
                     />
                   </div>
 
-                  <div className="flex-1">
-
-                    <div className="flex items-center justify-between gap-4 mb-4">
-
+                  <div className="min-w-0 flex-1">
+                    <div className="mb-4 flex items-start justify-between gap-4">
                       <div>
-
-                        <h3 className="text-2xl font-black text-primary-900">
+                        <h3 className="text-xl font-black text-primary-900 sm:text-2xl">
                           Google Reviews
                         </h3>
 
-                        <p className="text-gray-500 mt-1">
+                        <p className="mt-1 text-sm text-gray-500 sm:text-base">
                           Based on verified customer experiences
                         </p>
                       </div>
 
-                      <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-primary-900 group-hover:translate-x-1 transition-all duration-300" />
+                      <ArrowRight className="h-5 w-5 shrink-0 text-gray-400 transition-all duration-300 group-hover:translate-x-1 group-hover:text-primary-900" />
                     </div>
 
-                    <div className="flex items-center gap-2 mb-5">
-
+                    <div className="mb-5 flex flex-wrap items-center gap-2">
                       <div className="flex items-center gap-1">
                         {[...Array(5)].map((_, i) => (
                           <Star
                             key={i}
-                            className="h-5 w-5 text-yellow-400 fill-yellow-400"
+                            className="h-4 w-4 fill-yellow-400 text-yellow-400 sm:h-5 sm:w-5"
                           />
                         ))}
                       </div>
 
-                      <span className="text-lg font-bold text-primary-900 ml-2">
+                      <span className="text-base font-bold text-primary-900 sm:ml-2 sm:text-lg">
                         4.9/5
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-8">
-
+                    <div className="grid grid-cols-2 gap-5 sm:flex sm:items-center sm:gap-8">
                       <div>
-
-                        <div className="text-2xl font-black text-primary-900">
+                        <div className="text-xl font-black text-primary-900 sm:text-2xl">
                           2,000+
                         </div>
 
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className="mt-1 text-sm text-gray-500">
                           Verified Reviews
                         </p>
                       </div>
 
                       <div>
-
-                        <div className="text-2xl font-black text-primary-900">
+                        <div className="text-xl font-black text-primary-900 sm:text-2xl">
                           99%
                         </div>
 
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className="mt-1 text-sm text-gray-500">
                           Satisfaction Rate
                         </p>
                       </div>
@@ -622,71 +587,62 @@ const Home = () => {
                 href="#"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative p-8 lg:p-10 hover:bg-gray-50 transition-all duration-300"
+                className="group relative p-5 transition-all duration-300 hover:bg-gray-50 sm:p-8 lg:p-10"
               >
+                <div className="absolute inset-0 bg-gradient-to-r from-green-50/0 via-green-50/40 to-green-50/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
 
-                <div className="absolute inset-0 bg-gradient-to-r from-green-50/0 via-green-50/40 to-green-50/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                <div className="relative flex items-start gap-6">
-
-                  <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-green-500 text-white text-3xl font-black shrink-0 shadow-soft">
+                <div className="relative flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-green-500 text-2xl font-black text-white shadow-soft sm:h-16 sm:w-16 sm:text-3xl">
                     ★
                   </div>
 
-                  <div className="flex-1">
-
-                    <div className="flex items-center justify-between gap-4 mb-4">
-
+                  <div className="min-w-0 flex-1">
+                    <div className="mb-4 flex items-start justify-between gap-4">
                       <div>
-
-                        <h3 className="text-2xl font-black text-primary-900">
+                        <h3 className="text-xl font-black text-primary-900 sm:text-2xl">
                           Trustpilot
                         </h3>
 
-                        <p className="text-gray-500 mt-1">
+                        <p className="mt-1 text-sm text-gray-500 sm:text-base">
                           Independent customer review platform
                         </p>
                       </div>
 
-                      <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-primary-900 group-hover:translate-x-1 transition-all duration-300" />
+                      <ArrowRight className="h-5 w-5 shrink-0 text-gray-400 transition-all duration-300 group-hover:translate-x-1 group-hover:text-primary-900" />
                     </div>
 
-                    <div className="flex items-center gap-2 mb-5">
-
+                    <div className="mb-5 flex flex-wrap items-center gap-2">
                       <div className="flex items-center gap-1">
                         {[...Array(5)].map((_, i) => (
                           <Star
                             key={i}
-                            className="h-5 w-5 text-green-500 fill-green-500"
+                            className="h-4 w-4 fill-green-500 text-green-500 sm:h-5 sm:w-5"
                           />
                         ))}
                       </div>
 
-                      <span className="text-lg font-bold text-primary-900 ml-2">
+                      <span className="text-base font-bold text-primary-900 sm:ml-2 sm:text-lg">
                         Excellent
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-8">
-
+                    <div className="grid grid-cols-2 gap-5 sm:flex sm:items-center sm:gap-8">
                       <div>
-
-                        <div className="text-2xl font-black text-primary-900">
+                        <div className="text-xl font-black text-primary-900 sm:text-2xl">
                           1,500+
                         </div>
 
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className="mt-1 text-sm text-gray-500">
                           Trusted Reviews
                         </p>
                       </div>
 
                       <div>
-
-                        <div className="text-2xl font-black text-primary-900">
+                        <div className="text-xl font-black text-primary-900 sm:text-2xl">
                           24/7
                         </div>
 
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className="mt-1 text-sm text-gray-500">
                           Customer Support
                         </p>
                       </div>
@@ -697,64 +653,59 @@ const Home = () => {
             </div>
 
             {/* BOTTOM STATS */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 px-8 py-10 border-t border-gray-100 text-center bg-gray-50/70">
-
+            <div className="grid grid-cols-1 gap-7 border-t border-gray-100 bg-gray-50/70 px-5 py-8 text-center sm:grid-cols-2 sm:px-8 sm:py-10 lg:grid-cols-4 lg:gap-10">
               <div>
-
-                <div className="flex justify-center mb-4">
+                <div className="mb-3 flex justify-center sm:mb-4">
                   <Users className="h-7 w-7 text-accent-500" />
                 </div>
 
-                <h3 className="text-3xl font-black text-primary-900">
+                <h3 className="text-2xl font-black text-primary-900 sm:text-3xl">
                   10K+
                 </h3>
 
-                <p className="text-gray-500 mt-1">
+                <p className="mt-1 text-gray-500">
                   Happy Travelers
                 </p>
               </div>
 
               <div>
-
-                <div className="flex justify-center mb-4">
+                <div className="mb-3 flex justify-center sm:mb-4">
                   <Shield className="h-7 w-7 text-accent-500" />
                 </div>
 
-                <h3 className="text-3xl font-black text-primary-900">
+                <h3 className="text-2xl font-black text-primary-900 sm:text-3xl">
                   Licensed
                 </h3>
 
-                <p className="text-gray-500 mt-1">
+                <p className="mt-1 text-gray-500">
                   Fully Insured
                 </p>
               </div>
 
               <div>
-
-                <div className="flex justify-center mb-4">
+                <div className="mb-3 flex justify-center sm:mb-4">
                   <Clock className="h-7 w-7 text-accent-500" />
                 </div>
 
-                <h3 className="text-3xl font-black text-primary-900">
+                <h3 className="text-2xl font-black text-primary-900 sm:text-3xl">
                   24/7
                 </h3>
 
-                <p className="text-gray-500 mt-1">
+                <p className="mt-1 text-gray-500">
                   Customer Support
                 </p>
               </div>
 
               <div>
-
-                <div className="flex justify-center mb-4">
+                <div className="mb-3 flex justify-center sm:mb-4">
                   <CheckCircle className="h-7 w-7 text-accent-500" />
                 </div>
 
-                <h3 className="text-3xl font-black text-primary-900">
+                <h3 className="text-2xl font-black text-primary-900 sm:text-3xl">
                   99%
                 </h3>
 
-                <p className="text-gray-500 mt-1">
+                <p className="mt-1 text-gray-500">
                   On-Time Pickup
                 </p>
               </div>
@@ -767,58 +718,48 @@ const Home = () => {
       {/* REWARDS SECTION */}
       {/* ========================================================= */}
 
-      <section className="pb-28">
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
+      <section className="pb-16 sm:pb-20 lg:pb-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="relative">
-
             {/* BACKGROUND SHAPES */}
-            <div className="absolute -top-8 -left-8 w-72 h-72 bg-purple-200/60 rounded-[40px] blur-sm"></div>
+            <div className="absolute -left-8 -top-8 h-40 w-40 rounded-[40px] bg-purple-200/60 blur-sm sm:h-72 sm:w-72"></div>
 
-            <div className="absolute -bottom-8 -right-8 w-72 h-72 bg-emerald-200/60 rounded-[40px] blur-sm"></div>
+            <div className="absolute -bottom-8 -right-8 h-40 w-40 rounded-[40px] bg-emerald-200/60 blur-sm sm:h-72 sm:w-72"></div>
 
             {/* MAIN CARD */}
-            <div className="relative bg-white rounded-[32px] shadow-[0_20px_60px_rgba(0,0,0,0.12)] border border-gray-100 p-6 lg:p-8">
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
+            <div className="relative rounded-[24px] border border-gray-100 bg-white p-4 shadow-[0_20px_60px_rgba(0,0,0,0.12)] sm:rounded-[32px] sm:p-6 lg:p-8">
+              <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-6">
                 {/* ========================================================= */}
                 {/* LEFT CARD */}
                 {/* ========================================================= */}
 
-                <div className="relative overflow-hidden rounded-[28px] min-h-[340px] group">
-
+                <div className="group relative min-h-[300px] overflow-hidden rounded-[24px] sm:min-h-[340px] sm:rounded-[28px]">
                   <img
                     src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=1600&auto=format&fit=crop"
                     alt="Rewards"
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
 
                   {/* DARK OVERLAY */}
                   <div className="absolute inset-0 bg-black/50"></div>
 
                   {/* CONTENT */}
-                  <div className="relative h-full flex flex-col justify-end p-8">
-
+                  <div className="relative flex h-full flex-col justify-end p-5 sm:p-8">
                     <div className="max-w-md">
-
-                      <h3 className="text-4xl font-black text-white leading-tight mb-5">
-
+                      <h3 className="mb-4 text-3xl font-black leading-tight text-white sm:mb-5 sm:text-4xl">
                         Welcome{' '}
 
-                        <span className="bg-accent-500 hover:bg-accent-400 text-primary-950 px-4 py-1 rounded-2xl">
+                        <span className="rounded-2xl bg-accent-500 px-3 py-1 text-primary-950 hover:bg-accent-400 sm:px-4">
                           Rewards
                         </span>
                       </h3>
 
-                      <p className="text-lg text-gray-200 leading-relaxed mb-8">
+                      <p className="mb-6 text-base leading-relaxed text-gray-200 sm:mb-8 sm:text-lg">
                         Turn rides into rewards. Earn cashback and exclusive perks
                         every time you travel with us.
                       </p>
 
-                      <button className="inline-flex items-center justify-center rounded-2xl bg-primary-900 hover:bg-primary-800 text-white font-bold py-5 px-8 transition-all duration-300 shadow-card hover:shadow-premium hover:-translate-y-1">
-
+                      <button className="inline-flex w-full items-center justify-center rounded-2xl bg-primary-900 px-6 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-primary-800 hover:shadow-premium sm:w-auto sm:px-8 sm:py-5 sm:text-base">
                         Start Earning
 
                         <ArrowRight className="ml-3 h-5 w-5" />
@@ -831,33 +772,29 @@ const Home = () => {
                 {/* RIGHT CARD */}
                 {/* ========================================================= */}
 
-                <div className="relative overflow-hidden rounded-[28px] min-h-[340px] group">
-
+                <div className="group relative min-h-[300px] overflow-hidden rounded-[24px] sm:min-h-[340px] sm:rounded-[28px]">
                   <img
                     src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1600&auto=format&fit=crop"
                     alt="Refer Friends"
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
 
                   {/* DARK OVERLAY */}
                   <div className="absolute inset-0 bg-black/55"></div>
 
                   {/* CONTENT */}
-                  <div className="relative h-full flex flex-col justify-end p-8">
-
+                  <div className="relative flex h-full flex-col justify-end p-5 sm:p-8">
                     <div className="max-w-md">
-
-                      <h3 className="text-4xl font-black text-white leading-tight mb-5">
+                      <h3 className="mb-4 text-3xl font-black leading-tight text-white sm:mb-5 sm:text-4xl">
                         Refer & Earn
                       </h3>
 
-                      <p className="text-lg text-gray-200 leading-relaxed mb-8">
+                      <p className="mb-6 text-base leading-relaxed text-gray-200 sm:mb-8 sm:text-lg">
                         Invite friends and family to enjoy hassle-free airport
                         transfers and receive rewards for every referral.
                       </p>
 
-                      <button className="inline-flex items-center justify-center rounded-2xl bg-primary-900 hover:bg-primary-800 text-white font-bold py-5 px-8 transition-all duration-300 shadow-card hover:shadow-premium hover:-translate-y-1">
-
+                      <button className="inline-flex w-full items-center justify-center rounded-2xl bg-primary-900 px-6 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-primary-800 hover:shadow-premium sm:w-auto sm:px-8 sm:py-5 sm:text-base">
                         Invite Friends
 
                         <ArrowRight className="ml-3 h-5 w-5" />
@@ -875,24 +812,20 @@ const Home = () => {
       {/* FEATURES */}
       {/* ========================================================= */}
 
-      <section className="pb-28">
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-          <div className="text-center max-w-3xl mx-auto mb-20">
-
-            <h2 className="text-4xl md:text-5xl font-black text-primary-900 mb-6">
+      <section className="pb-16 sm:pb-20 lg:pb-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto mb-12 max-w-3xl text-center sm:mb-16 lg:mb-20">
+            <h2 className="mb-4 text-3xl font-black text-primary-900 sm:mb-6 sm:text-4xl md:text-5xl">
               Why Travelers Choose Us
             </h2>
 
-            <p className="text-xl text-gray-600 leading-relaxed">
+            <p className="text-base leading-relaxed text-gray-600 sm:text-xl">
               Experience premium airport transportation designed for comfort,
               punctuality, and complete peace of mind.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
-
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 xl:grid-cols-4 xl:gap-8">
             {[
               {
                 icon: CheckCircle,
@@ -920,18 +853,17 @@ const Home = () => {
             ].map((feature, index) => (
               <div
                 key={index}
-                className="group bg-white rounded-[28px] p-8 border border-gray-100 shadow-soft hover:shadow-premium transition-all duration-500 hover:-translate-y-2"
+                className="group rounded-[24px] border border-gray-100 bg-white p-6 shadow-soft transition-all duration-500 hover:-translate-y-2 hover:shadow-premium sm:rounded-[28px] sm:p-8"
               >
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-900 text-accent-400 mb-6 group-hover:scale-110 transition-transform duration-300">
-
-                  <feature.icon className="h-8 w-8" />
+                <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-900 text-accent-400 transition-transform duration-300 group-hover:scale-110 sm:mb-6 sm:h-16 sm:w-16">
+                  <feature.icon className="h-7 w-7 sm:h-8 sm:w-8" />
                 </div>
 
-                <h3 className="text-2xl font-bold text-primary-900 mb-4">
+                <h3 className="mb-3 text-xl font-bold text-primary-900 sm:mb-4 sm:text-2xl">
                   {feature.title}
                 </h3>
 
-                <p className="text-gray-600 leading-relaxed">
+                <p className="leading-relaxed text-gray-600">
                   {feature.desc}
                 </p>
               </div>
@@ -944,30 +876,25 @@ const Home = () => {
       {/* TESTIMONIALS */}
       {/* ========================================================= */}
 
-      <section className="pb-28">
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-          <div className="text-center max-w-3xl mx-auto mb-20">
-
-            <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 text-blue-700 px-5 py-2 font-semibold text-sm mb-6">
-
+      <section className="pb-16 sm:pb-20 lg:pb-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto mb-12 max-w-3xl text-center sm:mb-16 lg:mb-20">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-blue-50 px-5 py-2 text-sm font-semibold text-blue-700 sm:mb-6">
               <BadgeCheck className="h-4 w-4" />
 
               Verified Google Reviews
             </div>
 
-            <h2 className="text-4xl md:text-5xl font-black text-primary-900 mb-6">
+            <h2 className="mb-4 text-3xl font-black text-primary-900 sm:mb-6 sm:text-4xl md:text-5xl">
               Trusted By Thousands Of Travelers
             </h2>
 
-            <p className="text-xl text-gray-600">
+            <p className="text-base text-gray-600 sm:text-xl">
               Real customer experiences from verified Google reviews.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
+          <div className="grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-3 lg:gap-8">
             {[
               {
                 name: 'Michael Carter',
@@ -989,25 +916,22 @@ const Home = () => {
             ].map((item, index) => (
               <div
                 key={index}
-                className="bg-white rounded-[28px] p-8 border border-gray-100 shadow-soft hover:shadow-premium transition-all duration-300"
+                className="rounded-[24px] border border-gray-100 bg-white p-6 shadow-soft transition-all duration-300 hover:shadow-premium sm:rounded-[28px] sm:p-8"
               >
-                <Quote className="h-10 w-10 text-accent-400 mb-6" />
+                <Quote className="mb-5 h-9 w-9 text-accent-400 sm:mb-6 sm:h-10 sm:w-10" />
 
-                <p className="text-gray-700 leading-relaxed text-lg mb-8">
+                <p className="mb-6 text-base leading-relaxed text-gray-700 sm:mb-8 sm:text-lg">
                   "{item.review}"
                 </p>
 
                 <div className="border-t border-gray-100 pt-6">
-
-                  <div className="flex items-center justify-between">
-
+                  <div className="flex items-center justify-between gap-4">
                     <div>
-
                       <h4 className="font-bold text-primary-900">
                         {item.name}
                       </h4>
 
-                      <p className="text-sm text-gray-500 mt-1">
+                      <p className="mt-1 text-sm text-gray-500">
                         Verified Google Review
                       </p>
                     </div>
@@ -1015,15 +939,15 @@ const Home = () => {
                     <img
                       src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
                       alt="Google"
-                      className="w-5 h-5"
+                      className="h-5 w-5 shrink-0"
                     />
                   </div>
 
-                  <div className="flex mt-4">
+                  <div className="mt-4 flex">
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className="h-4 w-4 text-yellow-400 fill-yellow-400"
+                        className="h-4 w-4 fill-yellow-400 text-yellow-400"
                       />
                     ))}
                   </div>
@@ -1038,15 +962,13 @@ const Home = () => {
       {/* FINAL CTA */}
       {/* ========================================================= */}
 
-      <section className="bg-hero-gradient text-white py-24">
-
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-
-          <h2 className="text-4xl md:text-5xl font-black mb-6">
+      <section className="bg-hero-gradient py-16 text-white sm:py-20 lg:py-24">
+        <div className="mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
+          <h2 className="mb-4 text-3xl font-black sm:mb-6 sm:text-4xl md:text-5xl">
             Ready To Travel In Comfort?
           </h2>
 
-          <p className="text-xl text-gray-300 mb-10 max-w-3xl mx-auto">
+          <p className="mx-auto mb-8 max-w-3xl text-base text-gray-300 sm:mb-10 sm:text-xl">
             Book your premium airport transfer today and experience luxury
             transportation with fixed pricing and professional service.
           </p>
@@ -1058,7 +980,7 @@ const Home = () => {
                 behavior: 'smooth',
               })
             }
-            className="inline-flex items-center justify-center rounded-2xl bg-accent-500 hover:bg-accent-400 text-primary-950 font-bold px-10 py-5 transition-all duration-300 shadow-premium hover:-translate-y-1"
+            className="inline-flex w-full items-center justify-center rounded-2xl bg-accent-500 px-6 py-4 text-sm font-bold text-primary-950 shadow-premium transition-all duration-300 hover:-translate-y-1 hover:bg-accent-400 sm:w-auto sm:px-10 sm:py-5 sm:text-base"
           >
             Book Your Ride Now
 

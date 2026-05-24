@@ -11,9 +11,10 @@ import UserInfo from './pages/UserInfo';
 function App() {
   return (
     <Router>
-      <div className="flex flex-col min-h-screen">
+      <div className="flex min-h-screen w-full flex-col overflow-x-hidden bg-gray-50">
         <Navbar />
-        <main className="flex-grow">
+
+        <main className="w-full flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
@@ -24,6 +25,7 @@ function App() {
             <Route path="/booking/payment" element={<Payment />} />
           </Routes>
         </main>
+
         <Footer />
       </div>
     </Router>
