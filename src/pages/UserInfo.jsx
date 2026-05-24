@@ -677,16 +677,20 @@ const UserInfo = () => {
                       </label>
 
                       <div className="relative">
-                        {!form.flight.arrivalDateTime && (
-                          <span className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-sm text-gray-400 sm:text-base">
-                            Select arrival date & time
-                          </span>
-                        )}
+                        {/* Visible custom field */}
+                        <div
+                          className={`input-field flex min-h-12 w-full items-center border-gray-200 sm:min-h-14 ${form.flight.arrivalDateTime ? "text-black" : "text-gray-400"
+                            }`}
+                        >
+                          {form.flight.arrivalDateTime
+                            ? form.flight.arrivalDateTime.replace("T", " ")
+                            : "Select arrival date & time"}
+                        </div>
 
+                        {/* Real native datetime picker */}
                         <input
                           type="datetime-local"
-                          className={`input-field ios-date-input min-h-12 w-full border-gray-200 focus:ring-primary-900 sm:min-h-14 ${form.flight.arrivalDateTime ? "text-black" : "text-transparent"
-                            }`}
+                          className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
                           value={form.flight.arrivalDateTime}
                           onChange={(e) =>
                             handleNestedChange(
