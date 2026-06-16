@@ -126,13 +126,22 @@ const Payment = () => {
 
             pickupLocation: bookingData.fromLocation,
             dropoffLocation: bookingData.toLocation,
+            pickupDate: bookingData.pickupDate,
+            pickupTime: bookingData.pickupTime,
+            returnTrip:
+              bookingData.tripType === "RETURN"
+                ? bookingData.returnTrip
+                : null,
 
             carId: bookingData.selectedCar._id,
             distanceMiles:
               bookingData.pricing.distanceMiles,
+            returnDistanceMiles:
+              bookingData.pricing.returnDistanceMiles ||
+              bookingData.pricing.distanceMiles,
 
             isReturnTrip:
-              bookingData.isReturnTrip,
+              bookingData.tripType === "RETURN",
 
             couponCode:
               bookingData.pricing?.appliedCoupon ||
@@ -190,7 +199,7 @@ const Payment = () => {
           navigate("/");
         }, 3000);
       }
-    } catch (err) {
+    } catch {
       setError(
         "Payment failed. Please try again."
       );
@@ -504,6 +513,47 @@ const Payment = () => {
                 </div>
 
                 <div className="border-t border-gray-100"></div>
+
+                {bookingData.tripType === "RETURN" && bookingData.returnTrip && (
+                  <>
+                    <div>
+                      <p className="mb-2 text-sm text-gray-500">
+                        Return Pickup
+                      </p>
+
+                      <p className="break-words font-semibold leading-relaxed text-primary-900">
+                        {bookingData.returnTrip.pickupLocation}
+                      </p>
+                    </div>
+
+                    <div className="border-t border-gray-100"></div>
+
+                    <div>
+                      <p className="mb-2 text-sm text-gray-500">
+                        Return Dropoff
+                      </p>
+
+                      <p className="break-words font-semibold leading-relaxed text-primary-900">
+                        {bookingData.returnTrip.dropoffLocation}
+                      </p>
+                    </div>
+
+                    <div className="border-t border-gray-100"></div>
+
+                    <div>
+                      <p className="mb-2 text-sm text-gray-500">
+                        Return Date & Time
+                      </p>
+
+                      <p className="break-words font-semibold leading-relaxed text-primary-900">
+                        {bookingData.returnTrip.pickupDate}{" "}
+                        {bookingData.returnTrip.pickupTime}
+                      </p>
+                    </div>
+
+                    <div className="border-t border-gray-100"></div>
+                  </>
+                )}
 
                 {/* Passengers */}
                 <div className="flex items-start justify-between gap-4">

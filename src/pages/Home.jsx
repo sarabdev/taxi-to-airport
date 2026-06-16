@@ -19,8 +19,6 @@ import {
   BadgeCheck,
 } from 'lucide-react';
 
-import { airports } from '../data/airports';
-
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
 const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_MAPS_KEY;
 

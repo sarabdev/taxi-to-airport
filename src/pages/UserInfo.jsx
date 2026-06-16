@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -12,13 +12,28 @@ import {
   Shield,
   ArrowLeft,
   BadgeCheck,
+  MapPin,
+  Calendar,
+  Loader2,
 } from "lucide-react";
+
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
+const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_MAPS_KEY;
 
 const initialForm = {
   fullName: "",
   email: "",
   mobile: "",
   passengers: 1,
+
+  returnTrip: {
+    pickupLocation: "",
+    pickupPlaceId: "",
+    dropoffLocation: "",
+    dropoffPlaceId: "",
+    pickupDate: "",
+    pickupTime: "",
+  },
 
   luggage: {
     largeBags23kg: 0,
@@ -39,11 +54,34 @@ const initialForm = {
 const UserInfo = () => {
   const navigate = useNavigate();
 
+  const returnPickupRef = useRef(null);
+  const returnDropoffRef = useRef(null);
+
   const [form, setForm] = useState(initialForm);
 
   const [errors, setErrors] = useState({});
 
   const [bookingData, setBookingData] = useState(null);
+
+  const [pricingLoading, setPricingLoading] = useState(false);
+
+  const [pricingError, setPricingError] = useState("");
+
+  const bookingDataRef = useRef(null);
+
+  useEffect(() => {
+    bookingDataRef.current = bookingData;
+  }, [bookingData]);
+
+  const handleReturnTripChange = useCallback((updates) => {
+    setForm((prev) => ({
+      ...prev,
+      returnTrip: {
+        ...prev.returnTrip,
+        ...updates,
+      },
+    }));
+  }, []);
 
   /* ========================================================= */
   /* LOAD */
@@ -64,12 +102,199 @@ const UserInfo = () => {
       return;
     }
 
-    setBookingData(parsed);
+    const defaultReturnTrip = {
+      pickupLocation:
+        parsed.returnTrip?.pickupLocation || parsed.toLocation || "",
+      pickupPlaceId:
+        parsed.returnTrip?.pickupPlaceId || parsed.toPlaceId || "",
+      dropoffLocation:
+        parsed.returnTrip?.dropoffLocation || parsed.fromLocation || "",
+      dropoffPlaceId:
+        parsed.returnTrip?.dropoffPlaceId || parsed.fromPlaceId || "",
+      pickupDate:
+        parsed.returnTrip?.pickupDate || parsed.returnDate || "",
+      pickupTime:
+        parsed.returnTrip?.pickupTime || parsed.returnTime || "",
+    };
 
-    if (parsed.user) {
-      setForm(parsed.user);
-    }
+    const nextForm = {
+      ...initialForm,
+      ...(parsed.user || {}),
+      returnTrip: defaultReturnTrip,
+    };
+
+    setForm(nextForm);
+
+    setBookingData({
+      ...parsed,
+      returnTrip: defaultReturnTrip,
+      isReturnTrip: parsed.tripType === "RETURN",
+    });
   }, [navigate]);
+
+  useEffect(() => {
+    if (!GOOGLE_KEY || bookingData?.tripType !== "RETURN") {
+      return;
+    }
+
+    const initAutocomplete = () => {
+      if (returnPickupRef.current) {
+        const pickupAuto = new window.google.maps.places.Autocomplete(
+          returnPickupRef.current
+        );
+
+        pickupAuto.addListener("place_changed", () => {
+          const place = pickupAuto.getPlace();
+
+          handleReturnTripChange({
+            pickupLocation: place.formatted_address || "",
+            pickupPlaceId: place.place_id || "",
+          });
+        });
+      }
+
+      if (returnDropoffRef.current) {
+        const dropoffAuto = new window.google.maps.places.Autocomplete(
+          returnDropoffRef.current
+        );
+
+        dropoffAuto.addListener("place_changed", () => {
+          const place = dropoffAuto.getPlace();
+
+          handleReturnTripChange({
+            dropoffLocation: place.formatted_address || "",
+            dropoffPlaceId: place.place_id || "",
+          });
+        });
+      }
+    };
+
+    if (!window.google) {
+      const existingScript = document.querySelector(
+        `script[src*="maps.googleapis.com/maps/api/js"]`
+      );
+
+      if (existingScript) {
+        existingScript.addEventListener("load", initAutocomplete, {
+          once: true,
+        });
+      } else {
+        const script = document.createElement("script");
+
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_KEY}&libraries=places`;
+        script.async = true;
+        script.onload = initAutocomplete;
+
+        document.body.appendChild(script);
+      }
+    } else {
+      initAutocomplete();
+    }
+  }, [bookingData?.tripType, handleReturnTripChange]);
+
+  useEffect(() => {
+    const currentBooking = bookingDataRef.current;
+
+    if (!currentBooking || currentBooking.tripType !== "RETURN") return;
+
+    const { pickupPlaceId, dropoffPlaceId } = form.returnTrip;
+
+    if (!pickupPlaceId || !dropoffPlaceId) return;
+
+    const controller = new AbortController();
+
+    async function refreshReturnPricing() {
+      setPricingLoading(true);
+      setPricingError("");
+
+      try {
+        const res = await fetch(`${API_BASE}/api/cars/public`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fromPlaceId: pickupPlaceId,
+            toPlaceId: dropoffPlaceId,
+          }),
+          signal: controller.signal,
+        });
+
+        if (!res.ok) {
+          throw new Error("Unable to update return fare");
+        }
+
+        const result = await res.json();
+        const returnCar = (result.cars || []).find(
+          (car) => car._id === currentBooking.selectedCar?._id
+        );
+
+        if (!returnCar?.pricing) {
+          throw new Error("Selected vehicle is not available for this return route");
+        }
+
+        const outboundOriginal = Number(
+          currentBooking.selectedCar?.pricing?.originalOneWayFare ||
+            currentBooking.selectedCar?.pricing?.oneWayFare ||
+            currentBooking.pricing?.oneWayFare ||
+            0
+        );
+
+        const returnOriginal = Number(
+          returnCar.pricing.originalOneWayFare ||
+            returnCar.pricing.oneWayFare ||
+            0
+        );
+
+        const discountRate =
+          Number(currentBooking.selectedCar?.pricing?.returnDiscountAmount || 0) /
+          Number(currentBooking.selectedCar?.pricing?.originalRoundTripFare || 1);
+
+        const originalRoundTripFare = Number(
+          (outboundOriginal + returnOriginal).toFixed(2)
+        );
+
+        const returnDiscountAmount = Number(
+          (originalRoundTripFare * discountRate).toFixed(2)
+        );
+
+        const totalFare = Number(
+          Math.max(0, originalRoundTripFare - returnDiscountAmount).toFixed(2)
+        );
+
+        const updatedBooking = {
+          ...currentBooking,
+          returnTrip: form.returnTrip,
+          isReturnTrip: true,
+          pricing: {
+            ...currentBooking.pricing,
+            returnDistanceMiles: result.distanceMiles,
+            returnOneWayFare: returnCar.pricing.oneWayFare,
+            originalRoundTripFare,
+            returnDiscountAmount,
+            totalFare,
+            type: "RETURN",
+          },
+        };
+
+        bookingDataRef.current = updatedBooking;
+        setBookingData(updatedBooking);
+        localStorage.setItem("bookingData", JSON.stringify(updatedBooking));
+      } catch (err) {
+        if (err.name !== "AbortError") {
+          setPricingError(err.message || "Unable to update return fare");
+        }
+      } finally {
+        setPricingLoading(false);
+      }
+    }
+
+    refreshReturnPricing();
+
+    return () => controller.abort();
+  }, [
+    form.returnTrip,
+  ]);
 
   /* ========================================================= */
   /* HELPERS */
@@ -100,6 +325,24 @@ const UserInfo = () => {
     });
   };
 
+  const handleArrivalDateTimeChange = (part, value) => {
+    setForm((prev) => {
+      const [currentDate = "", currentTime = ""] =
+        prev.flight.arrivalDateTime?.split("T") || [];
+
+      const nextDate = part === "date" ? value : currentDate;
+      const nextTime = part === "time" ? value : currentTime;
+
+      return {
+        ...prev,
+        flight: {
+          ...prev.flight,
+          arrivalDateTime: nextDate || nextTime ? `${nextDate}T${nextTime}` : "",
+        },
+      };
+    });
+  };
+
   const validate = () => {
     const err = {};
 
@@ -115,7 +358,10 @@ const UserInfo = () => {
     if (!form.flight.arrivingFrom.trim())
       err.arrivingFrom = "Required";
 
-    if (!form.flight.arrivalDateTime)
+    const [arrivalDate = "", arrivalTime = ""] =
+      form.flight.arrivalDateTime?.split("T") || [];
+
+    if (!arrivalDate || !arrivalTime)
       err.arrivalDateTime = "Required";
 
     if (
@@ -123,6 +369,28 @@ const UserInfo = () => {
       !form.luggage.extraLargeItemNote.trim()
     ) {
       err.extraLargeItemNote = "Please specify the item";
+    }
+
+    if (bookingData?.tripType === "RETURN") {
+      if (!form.returnTrip.pickupLocation.trim()) {
+        err.returnPickupLocation = "Required";
+      }
+
+      if (!form.returnTrip.dropoffLocation.trim()) {
+        err.returnDropoffLocation = "Required";
+      }
+
+      if (!form.returnTrip.pickupPlaceId || !form.returnTrip.dropoffPlaceId) {
+        err.returnRoute = "Please choose return locations from the address suggestions";
+      }
+
+      if (!form.returnTrip.pickupDate) {
+        err.returnPickupDate = "Required";
+      }
+
+      if (!form.returnTrip.pickupTime) {
+        err.returnPickupTime = "Required";
+      }
     }
 
     if (
@@ -144,15 +412,16 @@ const UserInfo = () => {
 
     if (Object.keys(err).length) return;
 
-    const existing = JSON.parse(
-      localStorage.getItem("bookingData") || "{}"
-    );
+    const existing = JSON.parse(localStorage.getItem("bookingData") || "{}");
+    const { returnTrip, ...userForm } = form;
 
     localStorage.setItem(
       "bookingData",
       JSON.stringify({
         ...existing,
-        user: form,
+        returnTrip,
+        isReturnTrip: existing.tripType === "RETURN",
+        user: userForm,
       })
     );
 
@@ -383,6 +652,160 @@ const UserInfo = () => {
                     </div>
                   </div>
                 </section>
+
+                {bookingData.tripType === "RETURN" && (
+                  <>
+                    <div className="my-8 border-t border-gray-100 sm:my-10 md:my-12"></div>
+
+                    <section>
+                      <div className="mb-6 flex items-start gap-4 sm:mb-8 sm:items-center">
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary-900 text-accent-400 sm:h-14 sm:w-14">
+                          <MapPin className="h-5 w-5 sm:h-6 sm:w-6" />
+                        </div>
+
+                        <div className="min-w-0">
+                          <h3 className="text-xl font-black text-primary-900 sm:text-2xl">
+                            Return Journey
+                          </h3>
+
+                          <p className="mt-1 text-sm text-gray-500 sm:text-base">
+                            Return route is pre-filled from your destination back to pickup
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-5 sm:space-y-6">
+                        <div>
+                          <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
+                            Return Pickup Location *
+                          </label>
+
+                          <div className="relative">
+                            <MapPin className="icon-left" />
+
+                            <input
+                              ref={returnPickupRef}
+                              value={form.returnTrip.pickupLocation}
+                              onChange={(e) =>
+                                handleReturnTripChange({
+                                  pickupLocation: e.target.value,
+                                  pickupPlaceId: "",
+                                })
+                              }
+                              className="input-field h-12 border-gray-200 pl-11 focus:ring-primary-900 sm:h-14"
+                              placeholder="Return pickup address"
+                              autoComplete="off"
+                            />
+                          </div>
+
+                          {renderError("returnPickupLocation")}
+                        </div>
+
+                        <div>
+                          <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
+                            Return Dropoff Location *
+                          </label>
+
+                          <div className="relative">
+                            <MapPin className="icon-left" />
+
+                            <input
+                              ref={returnDropoffRef}
+                              value={form.returnTrip.dropoffLocation}
+                              onChange={(e) =>
+                                handleReturnTripChange({
+                                  dropoffLocation: e.target.value,
+                                  dropoffPlaceId: "",
+                                })
+                              }
+                              className="input-field h-12 border-gray-200 pl-11 focus:ring-primary-900 sm:h-14"
+                              placeholder="Return dropoff address"
+                              autoComplete="off"
+                            />
+                          </div>
+
+                          {renderError("returnDropoffLocation")}
+                          {renderError("returnRoute")}
+                        </div>
+
+                        <div>
+                          <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
+                            <Calendar className="mr-2 inline h-4 w-4 text-primary-900" />
+                            Return Date & Time *
+                          </label>
+
+                          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+                            <div className="relative">
+                              {!form.returnTrip.pickupDate && (
+                                <span className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-sm text-gray-400 sm:text-base">
+                                  Return date
+                                </span>
+                              )}
+
+                              <input
+                                type="date"
+                                value={form.returnTrip.pickupDate}
+                                onChange={(e) =>
+                                  handleReturnTripChange({
+                                    pickupDate: e.target.value,
+                                  })
+                                }
+                                min={bookingData.pickupDate}
+                                className={`input-field ios-date-input min-h-12 w-full border-gray-200 focus:ring-primary-900 sm:min-h-14 ${
+                                  form.returnTrip.pickupDate
+                                    ? "text-black"
+                                    : "text-transparent"
+                                }`}
+                              />
+                            </div>
+
+                            <div className="relative">
+                              {!form.returnTrip.pickupTime && (
+                                <span className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-sm text-gray-400 sm:text-base">
+                                  Return time
+                                </span>
+                              )}
+
+                              <input
+                                type="time"
+                                value={form.returnTrip.pickupTime}
+                                onChange={(e) =>
+                                  handleReturnTripChange({
+                                    pickupTime: e.target.value,
+                                  })
+                                }
+                                step="300"
+                                className={`input-field ios-date-input min-h-12 w-full border-gray-200 focus:ring-primary-900 sm:min-h-14 ${
+                                  form.returnTrip.pickupTime
+                                    ? "text-black"
+                                    : "text-transparent"
+                                }`}
+                              />
+                            </div>
+                          </div>
+
+                          {renderError("returnPickupDate")}
+                          {renderError("returnPickupTime")}
+                        </div>
+
+                        <div className="rounded-2xl border border-primary-100 bg-primary-50 p-4 text-sm font-semibold text-primary-900 sm:p-5">
+                          {pricingLoading ? (
+                            <span className="inline-flex items-center gap-2">
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                              Updating return fare...
+                            </span>
+                          ) : pricingError ? (
+                            <span className="text-red-600">{pricingError}</span>
+                          ) : (
+                            <span>
+                              Updated total fare: Â£{bookingData.pricing?.totalFare}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </section>
+                  </>
+                )}
 
                 {/* DIVIDER */}
                 <div className="my-8 border-t border-gray-100 sm:my-10 md:my-12"></div>
@@ -673,32 +1096,53 @@ const UserInfo = () => {
                     {/* Date */}
                     <div>
                       <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
+                        <Calendar className="mr-2 inline h-4 w-4 text-primary-900" />
                         Arrival Date & Time *
                       </label>
 
-                      <div className="relative">
-                        {/* Visible custom field */}
-                        <div
-                          className={`input-field flex min-h-12 w-full items-center border-gray-200 sm:min-h-14 ${form.flight.arrivalDateTime ? "text-black" : "text-gray-400"
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+                        <div className="relative">
+                          {!form.flight.arrivalDateTime?.split("T")[0] && (
+                            <span className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-sm text-gray-400 sm:text-base">
+                              Arrival date
+                            </span>
+                          )}
+
+                          <input
+                            type="date"
+                            className={`input-field ios-date-input min-h-12 w-full border-gray-200 focus:ring-primary-900 sm:min-h-14 ${
+                              form.flight.arrivalDateTime?.split("T")[0]
+                                ? "text-black"
+                                : "text-transparent"
                             }`}
-                        >
-                          {form.flight.arrivalDateTime
-                            ? form.flight.arrivalDateTime.replace("T", " ")
-                            : "Select arrival date & time"}
+                            value={form.flight.arrivalDateTime?.split("T")[0] || ""}
+                            onChange={(e) =>
+                              handleArrivalDateTimeChange("date", e.target.value)
+                            }
+                          />
                         </div>
 
-                        {/* Real native datetime picker */}
-                        <input
-                          type="datetime-local"
-                          className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
-                          value={form.flight.arrivalDateTime}
-                          onChange={(e) =>
-                            handleNestedChange(
-                              ["flight", "arrivalDateTime"],
-                              e.target.value
-                            )
-                          }
-                        />
+                        <div className="relative">
+                          {!form.flight.arrivalDateTime?.split("T")[1] && (
+                            <span className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-sm text-gray-400 sm:text-base">
+                              Arrival time
+                            </span>
+                          )}
+
+                          <input
+                            type="time"
+                            className={`input-field ios-date-input min-h-12 w-full border-gray-200 focus:ring-primary-900 sm:min-h-14 ${
+                              form.flight.arrivalDateTime?.split("T")[1]
+                                ? "text-black"
+                                : "text-transparent"
+                            }`}
+                            value={form.flight.arrivalDateTime?.split("T")[1] || ""}
+                            onChange={(e) =>
+                              handleArrivalDateTimeChange("time", e.target.value)
+                            }
+                            step="300"
+                          />
+                        </div>
                       </div>
 
                       {renderError("arrivalDateTime")}
@@ -736,7 +1180,10 @@ const UserInfo = () => {
 
                 {/* BUTTON */}
                 <div className="pt-8 sm:pt-10 md:pt-12">
-                  <button className="w-full rounded-2xl bg-primary-900 px-6 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-primary-800 hover:shadow-premium sm:px-8 sm:py-5 sm:text-base">
+                  <button
+                    disabled={pricingLoading}
+                    className="w-full rounded-2xl bg-primary-900 px-6 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-primary-800 hover:shadow-premium disabled:cursor-not-allowed disabled:opacity-60 sm:px-8 sm:py-5 sm:text-base"
+                  >
                     Continue To Payment
                   </button>
                 </div>
@@ -770,6 +1217,32 @@ const UserInfo = () => {
                 </div>
 
                 <div className="border-t border-gray-100"></div>
+
+                {bookingData.tripType === "RETURN" && (
+                  <>
+                    <div>
+                      <p className="mb-2 text-sm text-gray-500">
+                        Return Pickup
+                      </p>
+
+                      <p className="break-words font-semibold leading-relaxed text-primary-900">
+                        {form.returnTrip.pickupLocation}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="mb-2 text-sm text-gray-500">
+                        Return Dropoff
+                      </p>
+
+                      <p className="break-words font-semibold leading-relaxed text-primary-900">
+                        {form.returnTrip.dropoffLocation}
+                      </p>
+                    </div>
+
+                    <div className="border-t border-gray-100"></div>
+                  </>
+                )}
 
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
