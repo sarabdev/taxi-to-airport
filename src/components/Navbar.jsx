@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Car, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import airportLogo from '../assets/my-airport-logo.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,8 +46,12 @@ const Navbar = () => {
               to="/"
               className="group flex min-w-0 items-center gap-2 sm:gap-3"
             >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary-900 shadow-soft transition-transform duration-300 group-hover:scale-105 sm:h-11 sm:w-11">
-                <Car className="h-5 w-5 text-accent-400 sm:h-6 sm:w-6" />
+              <div className="flex h-11 w-16 shrink-0 items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-105 sm:h-12 sm:w-20">
+                <img
+                  src={airportLogo}
+                  alt="AirportRide taxi logo"
+                  className="h-full w-full scale-[1.65] object-contain"
+                />
               </div>
 
               <div className="flex min-w-0 flex-col leading-tight">

@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
 
 import {
-  Car,
   Mail,
   Phone,
-  MapPin,
   Facebook,
   Twitter,
   Instagram,
@@ -14,6 +12,7 @@ import {
   Clock3,
   BadgeCheck,
 } from 'lucide-react';
+import airportLogo from '../assets/my-airport-logo.png';
 
 const Footer = () => {
   return (
@@ -37,8 +36,12 @@ const Footer = () => {
               to="/"
               className="group mb-5 flex items-center gap-3 sm:mb-6"
             >
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/10 backdrop-blur-md transition-transform duration-300 group-hover:scale-105 sm:h-12 sm:w-12">
-                <Car className="h-5 w-5 text-accent-400 sm:h-6 sm:w-6" />
+              <div className="flex h-12 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white transition-transform duration-300 group-hover:scale-105 sm:h-14 sm:w-24">
+                <img
+                  src={airportLogo}
+                  alt="AirportRide taxi logo"
+                  className="h-full w-full scale-[1.65] object-contain"
+                />
               </div>
 
               <div className="min-w-0">
@@ -235,30 +238,12 @@ const Footer = () => {
                 </div>
 
                 <div className="min-w-0">
-                  <p className="break-words font-semibold text-white">
-                    info@airportride.com
-                  </p>
-
-                  <p className="mt-1 break-words text-sm text-gray-500">
-                    support@airportride.com
-                  </p>
-                </div>
-              </div>
-
-              {/* Address */}
-              <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 sm:h-11 sm:w-11">
-                  <MapPin className="h-5 w-5 text-accent-400" />
-                </div>
-
-                <div className="min-w-0">
-                  <p className="break-words font-semibold leading-relaxed text-white">
-                    123 Business Avenue
-                    <br />
-                    Suite 100
-                    <br />
-                    New York, NY 10001
-                  </p>
+                  <a
+                    href="mailto:support@myairporttaxis.uk"
+                    className="whitespace-nowrap text-sm font-semibold tracking-tight text-white transition-colors duration-300 hover:text-accent-400"
+                  >
+                    support@myairporttaxis.uk
+                  </a>
                 </div>
               </div>
             </div>

@@ -73,10 +73,13 @@ const Payment = () => {
     setError(null);
 
     try {
-      /* 1️⃣ Create payment intent */
-      const intentRes = await fetch(
-        `${API_BASE}/api/payments/create-intent`,
-        {
+      let paymentIntentId = bookingData.paymentIntentId;
+
+      if (!paymentIntentId) {
+        /* 1️⃣ Create payment intent */
+        const intentRes = await fetch(
+          `${API_BASE}/api/payments/create-intent`,
+          {
           method: "POST",
 
           headers: {
@@ -84,35 +87,81 @@ const Payment = () => {
           },
 
           body: JSON.stringify({
-            amount: bookingData.pricing.totalFare,
-            currency: "gbp",
+            carId: bookingData.selectedCar._id,
+            fromPlaceId: bookingData.fromPlaceId,
+            toPlaceId: bookingData.toPlaceId,
+            returnFromPlaceId:
+              bookingData.tripType === "RETURN"
+                ? bookingData.returnTrip?.pickupPlaceId
+                : "",
+            returnToPlaceId:
+              bookingData.tripType === "RETURN"
+                ? bookingData.returnTrip?.dropoffPlaceId
+                : "",
+            isReturnTrip: bookingData.tripType === "RETURN",
+            couponCode: bookingData.pricing?.appliedCoupon || null,
           }),
+          }
+        );
+
+        const intentData = await intentRes.json();
+        if (!intentRes.ok) {
+          throw new Error(intentData.message || "Unable to confirm fare");
         }
-      );
 
-      const { clientSecret } = await intentRes.json();
-
-      /* 2️⃣ Confirm card payment */
-      const result = await stripe.confirmCardPayment(
-        clientSecret,
-        {
-          payment_method: {
-            card: elements.getElement(CardElement),
-          },
+        const authoritativeTotal = Number(intentData.pricing.totalFare);
+        if (
+          Math.abs(
+            Number(bookingData.pricing.totalFare) - authoritativeTotal
+          ) >= 0.01
+        ) {
+          const updatedBooking = {
+            ...bookingData,
+            pricing: {
+              ...bookingData.pricing,
+              ...intentData.pricing.breakdown,
+              totalFare: authoritativeTotal,
+              appliedCoupon: intentData.pricing.appliedCoupon,
+            },
+          };
+          setBookingData(updatedBooking);
+          localStorage.setItem("bookingData", JSON.stringify(updatedBooking));
+          setError(
+            "Your fare was updated using the latest city rate. Please review the total and click Pay again."
+          );
+          return;
         }
-      );
 
-      if (result.error) {
-        setError(result.error.message);
+        /* 2️⃣ Confirm card payment */
+        const result = await stripe.confirmCardPayment(
+          intentData.clientSecret,
+          {
+            payment_method: {
+              card: elements.getElement(CardElement),
+            },
+          }
+        );
 
-        setProcessing(false);
+        if (result.error) {
+          setError(result.error.message);
 
-        return;
+          setProcessing(false);
+
+          return;
+        }
+
+        if (result.paymentIntent.status !== "succeeded") {
+          throw new Error("Payment was not completed. Please try again.");
+        }
+
+        paymentIntentId = result.paymentIntent.id;
+        const paidBooking = { ...bookingData, paymentIntentId };
+        setBookingData(paidBooking);
+        localStorage.setItem("bookingData", JSON.stringify(paidBooking));
       }
 
       /* 3️⃣ Create booking AFTER payment success */
-      if (result.paymentIntent.status === "succeeded") {
-        await fetch(`${API_BASE}/api/bookings`, {
+      const bookingRes = await fetch(`${API_BASE}/api/bookings`, {
           method: "POST",
 
           headers: {
@@ -125,7 +174,9 @@ const Payment = () => {
             customerPhone: bookingData.user.mobile,
 
             pickupLocation: bookingData.fromLocation,
+            pickupPlaceId: bookingData.fromPlaceId,
             dropoffLocation: bookingData.toLocation,
+            dropoffPlaceId: bookingData.toPlaceId,
             pickupDate: bookingData.pickupDate,
             pickupTime: bookingData.pickupTime,
             returnTrip:
@@ -134,11 +185,7 @@ const Payment = () => {
                 : null,
 
             carId: bookingData.selectedCar._id,
-            distanceMiles:
-              bookingData.pricing.distanceMiles,
-            returnDistanceMiles:
-              bookingData.pricing.returnDistanceMiles ||
-              bookingData.pricing.distanceMiles,
+            paymentIntentId,
 
             isReturnTrip:
               bookingData.tripType === "RETURN",
@@ -189,20 +236,24 @@ const Payment = () => {
                   .meetAndGreet,
             },
           }),
-        });
+      });
 
-        setCompleted(true);
-
-        setTimeout(() => {
-          localStorage.removeItem("bookingData");
-
-          navigate("/");
-        }, 3000);
+      const bookingResult = await bookingRes.json();
+      if (!bookingRes.ok) {
+        throw new Error(
+          bookingResult.message || "Unable to confirm your booking"
+        );
       }
-    } catch {
-      setError(
-        "Payment failed. Please try again."
-      );
+
+      setCompleted(true);
+
+      setTimeout(() => {
+        localStorage.removeItem("bookingData");
+
+        navigate("/");
+      }, 3000);
+    } catch (error) {
+      setError(error.message || "Payment failed. Please try again.");
     } finally {
       setProcessing(false);
     }

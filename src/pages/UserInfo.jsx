@@ -14,11 +14,19 @@ import {
   BadgeCheck,
   MapPin,
   Calendar,
+  Clock,
+  ChevronDown,
   Loader2,
 } from "lucide-react";
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
 const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_MAPS_KEY;
+
+const TIME_OPTIONS = Array.from({ length: 24 * 12 }, (_, index) => {
+  const hours = Math.floor(index / 12);
+  const minutes = (index % 12) * 5;
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+});
 
 const initialForm = {
   fullName: "",
@@ -208,14 +216,19 @@ const UserInfo = () => {
       setPricingError("");
 
       try {
-        const res = await fetch(`${API_BASE}/api/cars/public`, {
+        const res = await fetch(`${API_BASE}/api/pricing/calculate`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            fromPlaceId: pickupPlaceId,
-            toPlaceId: dropoffPlaceId,
+            carId: currentBooking.selectedCar?._id,
+            fromPlaceId: currentBooking.fromPlaceId,
+            toPlaceId: currentBooking.toPlaceId,
+            returnFromPlaceId: pickupPlaceId,
+            returnToPlaceId: dropoffPlaceId,
+            isReturnTrip: true,
+            couponCode: currentBooking.pricing?.appliedCoupon || null,
           }),
           signal: controller.signal,
         });
@@ -225,41 +238,11 @@ const UserInfo = () => {
         }
 
         const result = await res.json();
-        const returnCar = (result.cars || []).find(
-          (car) => car._id === currentBooking.selectedCar?._id
-        );
-
-        if (!returnCar?.pricing) {
-          throw new Error("Selected vehicle is not available for this return route");
-        }
-
-        const outboundOriginal = Number(
-          currentBooking.selectedCar?.pricing?.originalOneWayFare ||
-            currentBooking.selectedCar?.pricing?.oneWayFare ||
-            currentBooking.pricing?.oneWayFare ||
-            0
-        );
-
-        const returnOriginal = Number(
-          returnCar.pricing.originalOneWayFare ||
-            returnCar.pricing.oneWayFare ||
-            0
-        );
-
-        const discountRate =
-          Number(currentBooking.selectedCar?.pricing?.returnDiscountAmount || 0) /
-          Number(currentBooking.selectedCar?.pricing?.originalRoundTripFare || 1);
-
         const originalRoundTripFare = Number(
-          (outboundOriginal + returnOriginal).toFixed(2)
-        );
-
-        const returnDiscountAmount = Number(
-          (originalRoundTripFare * discountRate).toFixed(2)
-        );
-
-        const totalFare = Number(
-          Math.max(0, originalRoundTripFare - returnDiscountAmount).toFixed(2)
+          (
+            result.breakdown.baseFare +
+            result.breakdown.returnBaseFare
+          ).toFixed(2)
         );
 
         const updatedBooking = {
@@ -268,11 +251,11 @@ const UserInfo = () => {
           isReturnTrip: true,
           pricing: {
             ...currentBooking.pricing,
-            returnDistanceMiles: result.distanceMiles,
-            returnOneWayFare: returnCar.pricing.oneWayFare,
+            ...result.breakdown,
             originalRoundTripFare,
-            returnDiscountAmount,
-            totalFare,
+            returnDiscountAmount: result.breakdown.carDiscountAmount,
+            totalFare: result.totalFare,
+            appliedCoupon: result.appliedCoupon,
             type: "RETURN",
           },
         };
@@ -736,12 +719,6 @@ const UserInfo = () => {
 
                           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
                             <div className="relative">
-                              {!form.returnTrip.pickupDate && (
-                                <span className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-sm text-gray-400 sm:text-base">
-                                  Return date
-                                </span>
-                              )}
-
                               <input
                                 type="date"
                                 value={form.returnTrip.pickupDate}
@@ -750,38 +727,29 @@ const UserInfo = () => {
                                     pickupDate: e.target.value,
                                   })
                                 }
+                                onClick={(e) => e.currentTarget.showPicker?.()}
                                 min={bookingData.pickupDate}
-                                className={`input-field ios-date-input min-h-12 w-full border-gray-200 focus:ring-primary-900 sm:min-h-14 ${
+                                className={`peer input-field ios-date-input min-h-12 w-full cursor-pointer border-gray-200 focus:ring-primary-900 sm:min-h-14 ${
                                   form.returnTrip.pickupDate
                                     ? "text-black"
-                                    : "text-transparent"
+                                    : "text-transparent focus:text-gray-400"
                                 }`}
                               />
-                            </div>
 
-                            <div className="relative">
-                              {!form.returnTrip.pickupTime && (
-                                <span className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-sm text-gray-400 sm:text-base">
-                                  Return time
+                              {!form.returnTrip.pickupDate && (
+                                <span className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-sm text-gray-400 peer-focus:hidden sm:text-base">
+                                  Return date
                                 </span>
                               )}
-
-                              <input
-                                type="time"
-                                value={form.returnTrip.pickupTime}
-                                onChange={(e) =>
-                                  handleReturnTripChange({
-                                    pickupTime: e.target.value,
-                                  })
-                                }
-                                step="300"
-                                className={`input-field ios-date-input min-h-12 w-full border-gray-200 focus:ring-primary-900 sm:min-h-14 ${
-                                  form.returnTrip.pickupTime
-                                    ? "text-black"
-                                    : "text-transparent"
-                                }`}
-                              />
                             </div>
+
+                            <TimeSelect
+                              value={form.returnTrip.pickupTime}
+                              placeholder="Return time"
+                              onChange={(pickupTime) =>
+                                handleReturnTripChange({ pickupTime })
+                              }
+                            />
                           </div>
 
                           {renderError("returnPickupDate")}
@@ -798,7 +766,7 @@ const UserInfo = () => {
                             <span className="text-red-600">{pricingError}</span>
                           ) : (
                             <span>
-                              Updated total fare: Â£{bookingData.pricing?.totalFare}
+                              Updated total fare: £{bookingData.pricing?.totalFare}
                             </span>
                           )}
                         </div>
@@ -1102,47 +1070,34 @@ const UserInfo = () => {
 
                       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
                         <div className="relative">
-                          {!form.flight.arrivalDateTime?.split("T")[0] && (
-                            <span className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-sm text-gray-400 sm:text-base">
-                              Arrival date
-                            </span>
-                          )}
-
                           <input
                             type="date"
-                            className={`input-field ios-date-input min-h-12 w-full border-gray-200 focus:ring-primary-900 sm:min-h-14 ${
+                            className={`peer input-field ios-date-input min-h-12 w-full cursor-pointer border-gray-200 focus:ring-primary-900 sm:min-h-14 ${
                               form.flight.arrivalDateTime?.split("T")[0]
                                 ? "text-black"
-                                : "text-transparent"
+                                : "text-transparent focus:text-gray-400"
                             }`}
                             value={form.flight.arrivalDateTime?.split("T")[0] || ""}
                             onChange={(e) =>
                               handleArrivalDateTimeChange("date", e.target.value)
                             }
+                            onClick={(e) => e.currentTarget.showPicker?.()}
                           />
-                        </div>
 
-                        <div className="relative">
-                          {!form.flight.arrivalDateTime?.split("T")[1] && (
-                            <span className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-sm text-gray-400 sm:text-base">
-                              Arrival time
+                          {!form.flight.arrivalDateTime?.split("T")[0] && (
+                            <span className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-sm text-gray-400 peer-focus:hidden sm:text-base">
+                              Arrival date
                             </span>
                           )}
-
-                          <input
-                            type="time"
-                            className={`input-field ios-date-input min-h-12 w-full border-gray-200 focus:ring-primary-900 sm:min-h-14 ${
-                              form.flight.arrivalDateTime?.split("T")[1]
-                                ? "text-black"
-                                : "text-transparent"
-                            }`}
-                            value={form.flight.arrivalDateTime?.split("T")[1] || ""}
-                            onChange={(e) =>
-                              handleArrivalDateTimeChange("time", e.target.value)
-                            }
-                            step="300"
-                          />
                         </div>
+
+                        <TimeSelect
+                          value={form.flight.arrivalDateTime?.split("T")[1] || ""}
+                          placeholder="Arrival time"
+                          onChange={(value) =>
+                            handleArrivalDateTimeChange("time", value)
+                          }
+                        />
                       </div>
 
                       {renderError("arrivalDateTime")}
@@ -1311,5 +1266,33 @@ const UserInfo = () => {
     </div>
   );
 };
+
+function TimeSelect({ value, onChange, placeholder }) {
+  return (
+    <div className="relative">
+      <Clock className="pointer-events-none absolute left-4 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-gray-400 sm:h-5 sm:w-5" />
+
+      <select
+        aria-label={placeholder}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className={`input-field min-h-12 w-full cursor-pointer appearance-none border-gray-200 bg-white pl-11 pr-11 focus:ring-primary-900 sm:min-h-14 ${
+          value ? "text-gray-900" : "text-gray-400"
+        }`}
+      >
+        <option value="" disabled>
+          {placeholder}
+        </option>
+        {TIME_OPTIONS.map((time) => (
+          <option key={time} value={time} className="text-gray-900">
+            {time}
+          </option>
+        ))}
+      </select>
+
+      <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+    </div>
+  );
+}
 
 export default UserInfo;

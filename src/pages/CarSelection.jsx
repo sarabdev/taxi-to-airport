@@ -13,11 +13,11 @@ import {
 /* ========================================================= */
 
 import saloonCar from "../assets/cars/saloon_car.webp";
-import executiveCar from "../assets/cars/executive_car.webp";
+import executiveCar from "../assets/cars/executive_saloon.png";
 import estateCar from "../assets/cars/estate_car.webp";
-import peopleCarrier from "../assets/cars/people_carrier.webp";
-import executivePeopleCarrier from "../assets/cars/executive_people_carrier.webp";
-import minibus8 from "../assets/cars/8_seater_minibus.webp";
+import peopleCarrier from "../assets/cars/people_carrier_doc.png";
+import executivePeopleCarrier from "../assets/cars/executive_people_car.png";
+import minibus16 from "../assets/cars/minibus_16.png";
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
 
@@ -36,7 +36,7 @@ const vehicleImages = {
 
   executivepeoplecarrier: executivePeopleCarrier,
 
-  minibus: minibus8,
+  minibus: minibus16,
 };
 
 /* ========================================================= */
@@ -58,7 +58,7 @@ const vehicleDetails = [
   {
     key: "executive",
 
-    title: "Executive Car",
+    title: "Executive Saloon",
 
     description:
       "Mercedes E-Class or similar. These can accommodate up to 3 passengers plus 3 standard suitcases (23kg max), or 4 passengers plus hand luggage.",
@@ -91,7 +91,7 @@ const vehicleDetails = [
   {
     key: "executivepeoplecarrier",
 
-    title: "Executive People Carrier",
+    title: "Executive People Car",
 
     description:
       "Mercedes V-Class or similar. These can accommodate up to 5 passengers plus 5 standard suitcases (23kg max), or 6 passengers plus hand luggage.",
@@ -102,10 +102,10 @@ const vehicleDetails = [
   {
     key: "minibus",
 
-    title: "8 Seater Minibus",
+    title: "Mini Bus Up to 16 Passengers",
 
     description:
-      "VW Transporter or similar. These can accommodate 8 passengers plus up to 8 standard suitcases (23kg max).",
+      "Mercedes Sprinter or similar. These can accommodate up to 16 passengers, subject to luggage requirements.",
 
     image: vehicleImages.minibus,
   },
