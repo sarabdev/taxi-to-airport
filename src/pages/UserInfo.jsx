@@ -28,6 +28,21 @@ const TIME_OPTIONS = Array.from({ length: 24 * 12 }, (_, index) => {
   return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
 });
 
+const addDaysToDate = (dateString, days) => {
+  const [year, month, day] = (dateString || "").split("-").map(Number);
+
+  if (!year || !month || !day) return "";
+
+  const date = new Date(year, month - 1, day);
+  date.setDate(date.getDate() + days);
+
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0"),
+  ].join("-");
+};
+
 const initialForm = {
   fullName: "",
   email: "",
@@ -110,6 +125,13 @@ const UserInfo = () => {
       return;
     }
 
+    const defaultReturnDate = addDaysToDate(parsed.pickupDate, 1);
+    const defaultArrivalDateTime =
+      parsed.user?.flight?.arrivalDateTime ||
+      (parsed.pickupDate && parsed.pickupTime
+        ? `${parsed.pickupDate}T${parsed.pickupTime}`
+        : "");
+
     const defaultReturnTrip = {
       pickupLocation:
         parsed.returnTrip?.pickupLocation || parsed.toLocation || "",
@@ -120,15 +142,20 @@ const UserInfo = () => {
       dropoffPlaceId:
         parsed.returnTrip?.dropoffPlaceId || parsed.fromPlaceId || "",
       pickupDate:
-        parsed.returnTrip?.pickupDate || parsed.returnDate || "",
+        parsed.returnTrip?.pickupDate || parsed.returnDate || defaultReturnDate,
       pickupTime:
-        parsed.returnTrip?.pickupTime || parsed.returnTime || "",
+        parsed.returnTrip?.pickupTime || parsed.returnTime || parsed.pickupTime || "",
     };
 
     const nextForm = {
       ...initialForm,
       ...(parsed.user || {}),
       returnTrip: defaultReturnTrip,
+      flight: {
+        ...initialForm.flight,
+        ...(parsed.user?.flight || {}),
+        arrivalDateTime: defaultArrivalDateTime,
+      },
     };
 
     setForm(nextForm);
@@ -728,7 +755,7 @@ const UserInfo = () => {
                                   })
                                 }
                                 onClick={(e) => e.currentTarget.showPicker?.()}
-                                min={bookingData.pickupDate}
+                                min={addDaysToDate(bookingData.pickupDate, 1)}
                                 className={`peer input-field ios-date-input min-h-12 w-full cursor-pointer border-gray-200 focus:ring-primary-900 sm:min-h-14 ${
                                   form.returnTrip.pickupDate
                                     ? "text-black"
@@ -756,7 +783,7 @@ const UserInfo = () => {
                           {renderError("returnPickupTime")}
                         </div>
 
-                        <div className="rounded-2xl border border-primary-100 bg-primary-50 p-4 text-sm font-semibold text-primary-900 sm:p-5">
+                        <div className="rounded-2xl border border-accent-400 bg-accent-100 p-4 text-sm font-bold text-primary-900 shadow-sm sm:p-5">
                           {pricingLoading ? (
                             <span className="inline-flex items-center gap-2">
                               <Loader2 className="h-4 w-4 animate-spin" />
@@ -766,7 +793,7 @@ const UserInfo = () => {
                             <span className="text-red-600">{pricingError}</span>
                           ) : (
                             <span>
-                              Updated total fare: £{bookingData.pricing?.totalFare}
+                              Updated total fare: &pound;{bookingData.pricing?.totalFare}
                             </span>
                           )}
                         </div>
@@ -1078,6 +1105,7 @@ const UserInfo = () => {
                                 : "text-transparent focus:text-gray-400"
                             }`}
                             value={form.flight.arrivalDateTime?.split("T")[0] || ""}
+                            min={bookingData.pickupDate}
                             onChange={(e) =>
                               handleArrivalDateTimeChange("date", e.target.value)
                             }
