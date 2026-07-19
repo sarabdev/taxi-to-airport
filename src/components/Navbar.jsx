@@ -49,14 +49,14 @@ const Navbar = () => {
               <div className="flex h-11 w-16 shrink-0 items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-105 sm:h-12 sm:w-20">
                 <img
                   src={airportLogo}
-                  alt="MY AIRPORT TAXIS logo"
+                  alt="MYAIRPORTTAXIS logo"
                   className="h-full w-full scale-[1.65] object-contain"
                 />
               </div>
 
               <div className="flex min-w-0 flex-col leading-tight">
                 <span className="truncate text-xl font-extrabold tracking-tight text-primary-900 sm:text-2xl">
-                  MY AIRPORT TAXIS
+                  MYAIRPORTTAXIS
                 </span>
 
                 <span className="hidden truncate text-[10px] uppercase tracking-[0.16em] text-gray-500 xs:block sm:text-[11px] sm:tracking-[0.2em]">

@@ -101,7 +101,7 @@ const About = () => {
 
             {/* Description */}
             <p className="max-w-3xl text-base leading-relaxed text-gray-300 sm:text-lg md:text-xl">
-              MY AIRPORT TAXIS delivers executive airport transportation with
+              MYAIRPORTTAXIS delivers executive airport transportation with
               professional chauffeurs, luxury vehicles, and exceptional
               customer service trusted by thousands of travelers worldwide.
             </p>
@@ -157,7 +157,7 @@ const About = () => {
 
               <div className="space-y-5 text-base leading-relaxed text-gray-600 sm:space-y-6 sm:text-lg">
                 <p>
-                  Founded in 2010, MY AIRPORT TAXIS started with a clear mission:
+                  Founded in 2010, MYAIRPORTTAXIS started with a clear mission:
                   deliver premium airport transportation that travelers can
                   genuinely rely on.
                 </p>
@@ -291,7 +291,7 @@ const About = () => {
               <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-primary-50 px-4 py-2 text-sm font-semibold text-primary-900 sm:mb-6 sm:px-5">
                 <Award className="h-4 w-4 text-accent-500" />
 
-                Why Choose MY AIRPORT TAXIS
+                Why Choose MYAIRPORTTAXIS
               </div>
 
               <h2 className="mb-6 text-3xl font-black leading-tight text-primary-900 sm:text-4xl md:text-5xl lg:mb-8">
@@ -345,7 +345,7 @@ const About = () => {
           <h2 className="mb-4 text-3xl font-black leading-tight sm:mb-6 sm:text-4xl md:text-5xl">
             Experience The
             <span className="block text-accent-400">
-              MY AIRPORT TAXIS Difference
+              MYAIRPORTTAXIS Difference
             </span>
           </h2>
 

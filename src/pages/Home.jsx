@@ -492,7 +492,7 @@ const Home = () => {
                   </h2>
 
                   <p className="mt-4 max-w-2xl text-base leading-relaxed text-gray-600 sm:mt-5 sm:text-xl">
-                    Verified experiences from travelers who trust MY AIRPORT TAXIS
+                    Verified experiences from travelers who trust MYAIRPORTTAXIS
                     for reliable and luxury airport transportation.
                   </p>
                 </div>

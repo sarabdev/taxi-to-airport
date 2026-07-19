@@ -104,7 +104,7 @@ const Contact = () => {
             <h1 className="mb-6 text-4xl font-black leading-tight tracking-tight sm:text-5xl md:text-6xl lg:mb-8 xl:text-7xl">
               Get In Touch
               <span className="block text-accent-400">
-                With MY AIRPORT TAXIS
+                With MYAIRPORTTAXIS
               </span>
             </h1>
 
