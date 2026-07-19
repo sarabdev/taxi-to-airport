@@ -25,7 +25,7 @@ const Footer = () => {
 
       <div className="relative mx-auto max-w-7xl px-4 pb-8 pt-14 sm:px-6 sm:pb-10 sm:pt-16 lg:px-8 lg:pt-20">
         {/* TOP SECTION */}
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-12 xl:grid-cols-4 xl:gap-14">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-12 xl:grid-cols-[1.5fr_0.75fr_1fr_1.2fr] xl:gap-10">
           {/* ========================================================= */}
           {/* COMPANY */}
           {/* ========================================================= */}
@@ -45,7 +45,7 @@ const Footer = () => {
               </div>
 
               <div className="min-w-0">
-                <h2 className="text-xl font-black tracking-tight text-white sm:text-2xl">
+                <h2 className="whitespace-nowrap text-xl font-black tracking-tight text-white sm:text-2xl">
                   MYAIRPORTTAXIS
                 </h2>
 
