@@ -783,7 +783,7 @@ const UserInfo = () => {
                           {renderError("returnPickupTime")}
                         </div>
 
-                        <div className="rounded-2xl border border-accent-400 bg-accent-100 p-4 text-sm font-bold text-primary-900 shadow-sm sm:p-5">
+                        <div className="rounded-2xl border border-accent-500 bg-accent-500 p-4 text-sm font-bold text-primary-950 shadow-sm sm:p-5">
                           {pricingLoading ? (
                             <span className="inline-flex items-center gap-2">
                               <Loader2 className="h-4 w-4 animate-spin" />

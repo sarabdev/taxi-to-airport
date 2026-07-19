@@ -12,6 +12,8 @@ import {
   Shield,
 } from 'lucide-react';
 
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -22,6 +24,8 @@ const Contact = () => {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,16 +36,28 @@ const Contact = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log('Contact form submitted:', formData);
+    setSubmitting(true);
+    setSubmitError('');
 
-    setSubmitted(true);
+    try {
+      const response = await fetch(`${API_BASE}/api/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-    setTimeout(() => {
-      setSubmitted(false);
+      const result = await response.json().catch(() => ({}));
 
+      if (!response.ok) {
+        throw new Error(result.message || 'Unable to send your message.');
+      }
+
+      setSubmitted(true);
       setFormData({
         name: '',
         email: '',
@@ -49,7 +65,15 @@ const Contact = () => {
         subject: '',
         message: '',
       });
-    }, 3000);
+
+      setTimeout(() => setSubmitted(false), 5000);
+    } catch (error) {
+      setSubmitError(
+        error.message || 'Unable to send your message. Please try again.',
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -80,7 +104,7 @@ const Contact = () => {
             <h1 className="mb-6 text-4xl font-black leading-tight tracking-tight sm:text-5xl md:text-6xl lg:mb-8 xl:text-7xl">
               Get In Touch
               <span className="block text-accent-400">
-                With AirportRide
+                With MY AIRPORT TAXIS
               </span>
             </h1>
 
@@ -109,15 +133,15 @@ const Contact = () => {
                 {
                   icon: Phone,
                   title: 'Phone',
-                  value1: '+1 (555) 123-4567',
+                  value1: '+447899001900',
                   value2: '24/7 Customer Support',
                 },
 
                 {
                   icon: Mail,
                   title: 'Email',
-                  value1: 'info@airportride.com',
-                  value2: 'support@airportride.com',
+                  value1: 'support@myairporttaxis.uk',
+                  value2: 'We usually reply within a few hours',
                 },
 
                 {
@@ -211,6 +235,15 @@ const Contact = () => {
                   {submitted && (
                     <div className="mb-6 rounded-2xl border border-green-200 bg-green-50 px-4 py-4 text-sm text-green-800 sm:mb-8 sm:px-5 sm:text-base">
                       Thank you for your message! We'll get back to you soon.
+                    </div>
+                  )}
+
+                  {submitError && (
+                    <div
+                      role="alert"
+                      className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-800 sm:mb-8 sm:px-5 sm:text-base"
+                    >
+                      {submitError}
                     </div>
                   )}
 
@@ -326,9 +359,10 @@ const Contact = () => {
                     {/* Submit */}
                     <button
                       type="submit"
-                      className="flex w-full items-center justify-center rounded-2xl bg-primary-900 px-6 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-primary-800 hover:shadow-premium sm:px-8 sm:py-5 sm:text-base"
+                      disabled={submitting}
+                      className="flex w-full items-center justify-center rounded-2xl bg-primary-900 px-6 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-primary-800 hover:shadow-premium disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 sm:px-8 sm:py-5 sm:text-base"
                     >
-                      Send Message
+                      {submitting ? 'Sending...' : 'Send Message'}
 
                       <Send className="ml-3 h-5 w-5" />
                     </button>

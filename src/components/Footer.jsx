@@ -39,14 +39,14 @@ const Footer = () => {
               <div className="flex h-12 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white transition-transform duration-300 group-hover:scale-105 sm:h-14 sm:w-24">
                 <img
                   src={airportLogo}
-                  alt="AirportRide taxi logo"
+                  alt="MY AIRPORT TAXIS logo"
                   className="h-full w-full scale-[1.65] object-contain"
                 />
               </div>
 
               <div className="min-w-0">
                 <h2 className="text-xl font-black tracking-tight text-white sm:text-2xl">
-                  AirportRide
+                  MY AIRPORT TAXIS
                 </h2>
 
                 <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-gray-500 sm:text-xs">
@@ -221,9 +221,12 @@ const Footer = () => {
                 </div>
 
                 <div className="min-w-0">
-                  <p className="break-words font-semibold text-white">
-                    +1 (555) 123-4567
-                  </p>
+                  <a
+                    href="tel:+447899001900"
+                    className="break-words font-semibold text-white transition-colors duration-300 hover:text-accent-400"
+                  >
+                    +447899001900
+                  </a>
 
                   <p className="mt-1 text-sm text-gray-500">
                     Available 24/7
@@ -257,7 +260,7 @@ const Footer = () => {
         <div className="mt-10 border-t border-white/10 pt-6 sm:mt-14 sm:pt-8 lg:mt-16">
           <div className="flex flex-col items-center justify-between gap-5 lg:flex-row lg:gap-6">
             <p className="text-center text-sm text-gray-500 lg:text-left">
-              © {new Date().getFullYear()} AirportRide. All rights reserved.
+              © {new Date().getFullYear()} MY AIRPORT TAXIS. All rights reserved.
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-sm text-gray-500 sm:gap-x-6">
