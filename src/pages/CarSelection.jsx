@@ -265,13 +265,13 @@ const CarSelection = () => {
   if (!bookingData || loading) return null;
 
   return (
-    <div className="min-h-screen bg-surface-light py-6 pb-36 sm:py-8 sm:pb-36 md:py-10 lg:pb-40">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-surface-light pb-36 pt-4 sm:py-8 sm:pb-36 md:py-10 lg:pb-40">
+      <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">
         {/* ========================================================= */}
         {/* HEADER */}
         {/* ========================================================= */}
 
-        <div className="mb-8 md:mb-12">
+        <div className="mb-5 sm:mb-8 md:mb-12">
           <button
             onClick={() => navigate("/")}
             className="mb-5 inline-flex items-center text-sm font-semibold text-primary-900 transition-colors hover:text-accent-500"
@@ -281,11 +281,11 @@ const CarSelection = () => {
             Back
           </button>
 
-          <h1 className="text-3xl font-black leading-tight text-primary-900 sm:text-4xl md:text-5xl">
+          <h1 className="text-2xl font-black leading-tight text-primary-900 sm:text-4xl md:text-5xl">
             Select Your Vehicle
           </h1>
 
-          <p className="mt-3 max-w-3xl text-base text-gray-600 sm:text-lg">
+          <p className="mt-2 max-w-3xl text-sm text-gray-600 sm:mt-3 sm:text-lg">
             Choose from our premium fleet of airport transfer vehicles
           </p>
         </div>
@@ -294,7 +294,7 @@ const CarSelection = () => {
         {/* VEHICLES */}
         {/* ========================================================= */}
 
-        <div className="mb-14 grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2 xl:mb-20 xl:grid-cols-3">
+        <div className="mb-12 grid grid-cols-2 gap-2.5 sm:mb-14 sm:gap-6 md:grid-cols-2 xl:mb-20 xl:grid-cols-3">
           {availableCars.map((car) => {
             const {
               oneWayFare,
@@ -308,45 +308,45 @@ const CarSelection = () => {
             return (
               <div
                 key={car._id}
-                className={`relative overflow-hidden rounded-[24px] border bg-white p-5 shadow-soft transition-all duration-300 hover:shadow-premium sm:rounded-[28px] sm:p-6 ${isSelected
+                className={`relative overflow-hidden rounded-2xl border bg-white p-2.5 shadow-soft transition-all duration-300 hover:shadow-premium sm:rounded-[28px] sm:p-6 ${isSelected
                     ? "border-primary-900 ring-2 ring-primary-900"
                     : "border-gray-100"
                   }`}
               >
                 {isSelected && (
-                  <div className="absolute right-4 top-4 rounded-full bg-primary-900 px-3 py-1 text-xs font-semibold text-white">
+                  <div className="absolute right-2 top-2 z-10 rounded-full bg-primary-900 px-2 py-0.5 text-[9px] font-semibold text-white sm:right-4 sm:top-4 sm:px-3 sm:py-1 sm:text-xs">
                     Selected
                   </div>
                 )}
 
                 {/* IMAGE */}
-                <div className="mb-5 flex min-h-[110px] items-center justify-center sm:mb-6 sm:min-h-[120px]">
+                <div className="mb-2 flex min-h-[62px] items-center justify-center sm:mb-6 sm:min-h-[120px]">
                   <img
                     src={getVehicleImage(car.name)}
                     alt={car.name}
-                    className="h-[85px] w-full max-w-[200px] object-contain sm:h-[95px] sm:max-w-[220px] md:h-[110px]"
+                    className="h-[58px] w-full max-w-[125px] object-contain sm:h-[95px] sm:max-w-[220px] md:h-[110px]"
                   />
                 </div>
 
                 {/* NAME */}
-                <h3 className="mb-4 text-center text-xl font-black text-primary-900 sm:text-2xl">
+                <h3 className="mb-2 flex min-h-[36px] items-center justify-center text-center text-sm font-black leading-[18px] text-primary-900 sm:mb-4 sm:min-h-0 sm:text-2xl sm:leading-normal">
                   {car.name}
                 </h3>
 
                 {/* CAPACITY */}
-                <div className="mb-5 flex items-center justify-center gap-6 text-gray-600 sm:gap-8">
-                  <div className="flex items-center gap-2">
-                    <Users className="h-5 w-5 text-accent-500" />
+                <div className="mb-2.5 flex items-center justify-center gap-3 text-gray-600 sm:mb-5 sm:gap-8">
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <Users className="h-3.5 w-3.5 text-accent-500 sm:h-5 sm:w-5" />
 
-                    <span className="font-semibold">
+                    <span className="text-xs font-semibold sm:text-base">
                       {car.capacity?.passengers ?? 0}
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <Briefcase className="h-5 w-5 text-accent-500" />
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <Briefcase className="h-3.5 w-3.5 text-accent-500 sm:h-5 sm:w-5" />
 
-                    <span className="font-semibold">
+                    <span className="text-xs font-semibold sm:text-base">
                       {car.capacity?.luggage ?? 0}
                     </span>
                   </div>
@@ -354,7 +354,7 @@ const CarSelection = () => {
 
                 {/* FEATURES */}
                 {car.features?.length > 0 && (
-                  <div className="mb-6 flex flex-wrap justify-center gap-2">
+                  <div className="mb-6 hidden flex-wrap justify-center gap-2 sm:flex">
                     {car.features.map((feature, i) => (
                       <span
                         key={i}
@@ -367,25 +367,25 @@ const CarSelection = () => {
                 )}
 
                 {/* PRICE BUTTONS */}
-                <div className="grid grid-cols-1 gap-3 xs:grid-cols-2 sm:grid-cols-2">
+                <div className="grid grid-cols-2 gap-1.5 sm:gap-3">
                   <button
                     onClick={() => handleSelectOneWay(car)}
-                    className={`rounded-2xl border-2 p-4 transition-all duration-300 ${isSelected && tripType === "ONE_WAY"
+                    className={`min-w-0 rounded-xl border-2 px-1 py-2 transition-all duration-300 sm:rounded-2xl sm:p-4 ${isSelected && tripType === "ONE_WAY"
                         ? "border-primary-900 bg-primary-900 text-white"
                         : "border-primary-100 bg-primary-50 hover:border-primary-900"
                       }`}
                   >
                     {originalOneWayFare && (
-                      <div className="mb-1 text-xs line-through opacity-70">
+                      <div className="mb-0.5 text-[9px] line-through opacity-70 sm:mb-1 sm:text-xs">
                         £{originalOneWayFare}
                       </div>
                     )}
 
-                    <div className="text-xl font-black sm:text-2xl">
+                    <div className="truncate text-sm font-black sm:text-2xl">
                       £{oneWayFare}
                     </div>
 
-                    <div className="mt-1 text-xs uppercase tracking-wide">
+                    <div className="mt-0.5 text-[8px] font-semibold uppercase tracking-tight sm:mt-1 sm:text-xs sm:tracking-wide">
                       One Way
                     </div>
                   </button>
@@ -393,7 +393,7 @@ const CarSelection = () => {
                   <button
                     disabled={!car.supportsReturnTrip}
                     onClick={() => handleSelectReturn(car)}
-                    className={`rounded-2xl border-2 p-4 transition-all duration-300 ${!car.supportsReturnTrip
+                    className={`min-w-0 rounded-xl border-2 px-1 py-2 transition-all duration-300 sm:rounded-2xl sm:p-4 ${!car.supportsReturnTrip
                         ? "cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400"
                         : isSelected && tripType === "RETURN"
                           ? "border-accent-500 bg-accent-500 text-primary-950"
@@ -401,18 +401,18 @@ const CarSelection = () => {
                       }`}
                   >
                     {originalRoundTripFare && (
-                      <div className="mb-1 text-xs line-through opacity-70">
+                      <div className="mb-0.5 text-[9px] line-through opacity-70 sm:mb-1 sm:text-xs">
                         £{originalRoundTripFare}
                       </div>
                     )}
 
-                    <div className="text-xl font-black sm:text-2xl">
+                    <div className="truncate text-sm font-black sm:text-2xl">
                       {car.supportsReturnTrip
                         ? `£${roundTripFare}`
                         : "--"}
                     </div>
 
-                    <div className="mt-1 text-xs uppercase tracking-wide">
+                    <div className="mt-0.5 text-[8px] font-semibold uppercase tracking-tight sm:mt-1 sm:text-xs sm:tracking-wide">
                       Return
                     </div>
                   </button>
