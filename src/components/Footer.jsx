@@ -264,26 +264,20 @@ const Footer = () => {
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-sm text-gray-500 sm:gap-x-6">
-              <a
-                href="#"
+              <Link
+                to="/privacy"
                 className="transition-colors duration-300 hover:text-white"
               >
                 Privacy Policy
-              </a>
+              </Link>
 
-              <a
-                href="#"
+              <Link
+                to="/terms"
                 className="transition-colors duration-300 hover:text-white"
               >
-                Terms of Service
-              </a>
+                Terms of Use
+              </Link>
 
-              <a
-                href="#"
-                className="transition-colors duration-300 hover:text-white"
-              >
-                Cookies
-              </a>
             </div>
           </div>
         </div>

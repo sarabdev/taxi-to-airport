@@ -13,6 +13,8 @@ import Contact from './pages/Contact';
 import CarSelection from './pages/CarSelection';
 import Payment from './pages/Payment';
 import UserInfo from './pages/UserInfo';
+import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -45,6 +47,8 @@ function App() {
             <Route path="/booking/cars" element={<CarSelection />} />
             <Route path="/booking/info" element={<UserInfo />} />
             <Route path="/booking/payment" element={<Payment />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
           </Routes>
         </main>
 

@@ -17,6 +17,10 @@ import {
   Users,
   CarFront,
   BadgeCheck,
+  Gift,
+  Mail,
+  Share2,
+  X,
 } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
@@ -54,6 +58,7 @@ const Home = () => {
   const fromInputRef = useRef(null);
 
   const [loading, setLoading] = useState(false);
+  const [activePromo, setActivePromo] = useState(null);
 
   const [formData, setFormData] = useState({
     fromType: 'airport',
@@ -72,6 +77,25 @@ const Home = () => {
     returnDate: '',
     returnTime: '',
   });
+
+  useEffect(() => {
+    if (!activePromo) return undefined;
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setActivePromo(null);
+      }
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activePromo]);
 
   /* ========================================================= */
   /* GOOGLE AUTOCOMPLETE */
@@ -773,7 +797,11 @@ const Home = () => {
                         every time you travel with us.
                       </p>
 
-                      <button className="inline-flex w-full items-center justify-center rounded-2xl bg-primary-900 px-6 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-primary-800 hover:shadow-premium sm:w-auto sm:px-8 sm:py-5 sm:text-base">
+                      <button
+                        type="button"
+                        onClick={() => setActivePromo('rewards')}
+                        className="inline-flex w-full items-center justify-center rounded-2xl bg-primary-900 px-6 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-primary-800 hover:shadow-premium sm:w-auto sm:px-8 sm:py-5 sm:text-base"
+                      >
                         Start Earning
 
                         <ArrowRight className="ml-3 h-5 w-5" />
@@ -808,7 +836,11 @@ const Home = () => {
                         transfers and receive rewards for every referral.
                       </p>
 
-                      <button className="inline-flex w-full items-center justify-center rounded-2xl bg-primary-900 px-6 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-primary-800 hover:shadow-premium sm:w-auto sm:px-8 sm:py-5 sm:text-base">
+                      <button
+                        type="button"
+                        onClick={() => setActivePromo('referral')}
+                        className="inline-flex w-full items-center justify-center rounded-2xl bg-primary-900 px-6 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-primary-800 hover:shadow-premium sm:w-auto sm:px-8 sm:py-5 sm:text-base"
+                      >
                         Invite Friends
 
                         <ArrowRight className="ml-3 h-5 w-5" />
@@ -1002,6 +1034,103 @@ const Home = () => {
           </button>
         </div>
       </section>
+
+      {activePromo && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-primary-950/75 p-4 backdrop-blur-sm sm:p-6"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              setActivePromo(null);
+            }
+          }}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="promo-dialog-title"
+            className="relative w-full max-w-md overflow-hidden rounded-[24px] border border-white/10 bg-white shadow-premium sm:rounded-[28px]"
+          >
+            <div className="bg-hero-gradient px-5 pb-5 pt-5 text-white sm:px-6 sm:pb-6 sm:pt-6">
+              <button
+                type="button"
+                onClick={() => setActivePromo(null)}
+                aria-label="Close popup"
+                className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/10 text-white transition-colors hover:bg-white/20 sm:right-5 sm:top-5"
+              >
+                <X className="h-5 w-5" />
+              </button>
+
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-500 text-primary-950 shadow-card">
+                {activePromo === 'rewards' ? (
+                  <Gift className="h-6 w-6" />
+                ) : (
+                  <Share2 className="h-6 w-6" />
+                )}
+              </div>
+
+              <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-accent-400">
+                {activePromo === 'rewards' ? 'Rewards support' : 'Refer & Earn'}
+              </p>
+
+              <h2 id="promo-dialog-title" className="pr-10 text-xl font-black leading-tight sm:text-2xl">
+                {activePromo === 'rewards'
+                  ? 'Check your journey rewards'
+                  : 'Get your personal referral code'}
+              </h2>
+            </div>
+
+            <div className="p-5 sm:p-6">
+              {activePromo === 'rewards' ? (
+                <>
+                  <p className="text-sm leading-6 text-gray-600">
+                    After your journey is complete, email our support team to check your available rewards.
+                  </p>
+
+                  <div className="my-4 rounded-2xl border border-gray-100 bg-gray-50 p-4">
+                    <p className="mb-2 text-sm font-bold text-primary-900">Please include:</p>
+                    <ul className="space-y-1 text-sm leading-6 text-gray-600">
+                      <li>• Your booking reference</li>
+                      <li>• The email used for your booking</li>
+                      <li>• Your completed journey date</li>
+                    </ul>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="text-sm leading-6 text-gray-600">
+                    Email support to request your referral code, then share it with friends or family.
+                  </p>
+
+                  <div className="my-4 rounded-2xl border border-gray-100 bg-gray-50 p-4 text-sm leading-6 text-gray-600">
+                    Ask your friend to quote the code when contacting support about their booking. Rewards are confirmed after their completed journey.
+                  </div>
+                </>
+              )}
+
+              <a
+                href={
+                  activePromo === 'rewards'
+                    ? 'mailto:support@myairporttaxis.uk?subject=Rewards%20enquiry&body=Hello%20My%20Airport%20Taxis%2C%0A%0AI%20would%20like%20to%20check%20the%20rewards%20available%20for%20my%20completed%20journey.%0A%0ABooking%20reference%3A%0AEmail%20used%20for%20booking%3A%0AJourney%20date%3A%0A'
+                    : 'mailto:support@myairporttaxis.uk?subject=Referral%20code%20request&body=Hello%20My%20Airport%20Taxis%2C%0A%0AI%20would%20like%20to%20request%20a%20personal%20referral%20code.%0A%0AName%3A%0AEmail%20used%20for%20booking%3A%0ARecent%20booking%20reference%20(if%20available)%3A%0A'
+                }
+                className="inline-flex w-full items-center justify-center rounded-2xl bg-primary-900 px-6 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-800 sm:text-base"
+              >
+                <Mail className="mr-3 h-5 w-5 text-accent-400" />
+                Email support@myairporttaxis.uk
+              </a>
+
+              <button
+                type="button"
+                onClick={() => setActivePromo(null)}
+                className="mt-3 w-full rounded-2xl px-6 py-3 text-sm font-semibold text-gray-500 transition-colors hover:bg-gray-50 hover:text-primary-900"
+              >
+                Maybe later
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -3,7 +3,6 @@ import { useState } from 'react';
 import {
   Mail,
   Phone,
-  MapPin,
   Clock,
   Send,
   ArrowRight,
@@ -145,16 +144,9 @@ const Contact = () => {
                 },
 
                 {
-                  icon: MapPin,
-                  title: 'Office',
-                  value1: '123 Business Avenue',
-                  value2: 'New York, NY 10001',
-                },
-
-                {
                   icon: Clock,
                   title: 'Business Hours',
-                  value1: 'Office: Mon-Fri 9AM-6PM',
+                  value1: 'Booking Service: 24/7',
                   value2: 'Support Available 24/7',
                 },
               ].map((item, index) => (
@@ -368,46 +360,6 @@ const Contact = () => {
                     </button>
                   </form>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================= */}
-      {/* MAP */}
-      {/* ========================================================= */}
-
-      <section className="pb-16 sm:pb-20 lg:pb-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-premium sm:rounded-[32px]">
-            {/* Header */}
-            <div className="border-b border-gray-100 px-5 py-6 sm:px-8 sm:py-8">
-              <h2 className="mb-2 text-2xl font-black text-primary-900 sm:mb-3 sm:text-3xl">
-                Visit Our Office
-              </h2>
-
-              <p className="text-base text-gray-600 sm:text-lg">
-                Located in the heart of New York City.
-              </p>
-            </div>
-
-            {/* Placeholder */}
-            <div className="flex h-[320px] items-center justify-center bg-gradient-to-r from-primary-100 to-primary-200 px-5 text-center sm:h-[380px] lg:h-[450px]">
-              <div>
-                <MapPin className="mx-auto mb-5 h-12 w-12 text-primary-900 sm:mb-6 sm:h-16 sm:w-16" />
-
-                <h3 className="mb-2 text-xl font-bold text-primary-900 sm:mb-3 sm:text-2xl">
-                  Interactive Map
-                </h3>
-
-                <p className="text-base text-gray-700 sm:text-lg">
-                  123 Business Avenue, Suite 100
-                </p>
-
-                <p className="mt-2 text-gray-500">
-                  New York, NY 10001
-                </p>
               </div>
             </div>
           </div>
