@@ -370,9 +370,10 @@ const CarSelection = () => {
                 <div className="grid grid-cols-2 gap-1.5 sm:gap-3">
                   <button
                     onClick={() => handleSelectOneWay(car)}
+                    aria-pressed={isSelected && tripType === "ONE_WAY"}
                     className={`min-w-0 rounded-xl border-2 px-1 py-2 transition-all duration-300 sm:rounded-2xl sm:p-4 ${isSelected && tripType === "ONE_WAY"
-                        ? "border-primary-900 bg-primary-900 text-white"
-                        : "border-primary-100 bg-primary-50 hover:border-primary-900"
+                        ? "-translate-y-1 scale-[1.02] border-primary-900 bg-primary-900 text-white shadow-xl ring-4 ring-primary-900/20"
+                        : "border-primary-900 bg-primary-900 text-white hover:-translate-y-0.5 hover:brightness-110 hover:shadow-lg"
                       }`}
                   >
                     {originalOneWayFare && (
@@ -393,11 +394,12 @@ const CarSelection = () => {
                   <button
                     disabled={!car.supportsReturnTrip}
                     onClick={() => handleSelectReturn(car)}
+                    aria-pressed={isSelected && tripType === "RETURN"}
                     className={`min-w-0 rounded-xl border-2 px-1 py-2 transition-all duration-300 sm:rounded-2xl sm:p-4 ${!car.supportsReturnTrip
                         ? "cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400"
                         : isSelected && tripType === "RETURN"
-                          ? "border-accent-500 bg-accent-500 text-primary-950"
-                          : "border-accent-100 bg-accent-50 hover:border-accent-500"
+                          ? "-translate-y-1 scale-[1.02] border-accent-500 bg-accent-500 text-primary-950 shadow-xl ring-4 ring-accent-500/30"
+                          : "border-accent-500 bg-accent-500 text-primary-950 hover:-translate-y-0.5 hover:brightness-105 hover:shadow-lg"
                       }`}
                   >
                     {originalRoundTripFare && (

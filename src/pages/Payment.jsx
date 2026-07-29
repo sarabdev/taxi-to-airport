@@ -11,6 +11,8 @@ import {
   Plane,
   Users,
   Briefcase,
+  TicketPercent,
+  X,
 } from "lucide-react";
 
 import {
@@ -37,6 +39,14 @@ const Payment = () => {
 
   const [error, setError] = useState(null);
 
+  const [couponCode, setCouponCode] = useState("");
+
+  const [couponLoading, setCouponLoading] = useState(false);
+
+  const [couponError, setCouponError] = useState("");
+
+  const [couponMessage, setCouponMessage] = useState("");
+
   /* ========================================================= */
   /* LOAD */
   /* ========================================================= */
@@ -57,7 +67,82 @@ const Payment = () => {
     }
 
     setBookingData(booking);
+    setCouponCode(booking.pricing?.appliedCoupon || "");
   }, [navigate]);
+
+  /* ========================================================= */
+  /* COUPON */
+  /* ========================================================= */
+
+  const updateCoupon = async (code) => {
+    if (!bookingData || bookingData.paymentIntentId) return;
+
+    const normalizedCode = code.trim().toUpperCase();
+
+    if (code && !normalizedCode) {
+      setCouponError("Enter a coupon code");
+      return;
+    }
+
+    setCouponLoading(true);
+    setCouponError("");
+    setCouponMessage("");
+
+    try {
+      const response = await fetch(`${API_BASE}/api/pricing/calculate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          carId: bookingData.selectedCar._id,
+          fromPlaceId: bookingData.fromPlaceId,
+          toPlaceId: bookingData.toPlaceId,
+          returnFromPlaceId:
+            bookingData.tripType === "RETURN"
+              ? bookingData.returnTrip?.pickupPlaceId
+              : "",
+          returnToPlaceId:
+            bookingData.tripType === "RETURN"
+              ? bookingData.returnTrip?.dropoffPlaceId
+              : "",
+          isReturnTrip: bookingData.tripType === "RETURN",
+          couponCode: normalizedCode || null,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Unable to apply coupon");
+      }
+
+      const updatedBooking = {
+        ...bookingData,
+        pricing: {
+          ...bookingData.pricing,
+          ...result.breakdown,
+          totalFare: result.totalFare,
+          appliedCoupon: result.appliedCoupon,
+        },
+      };
+
+      setBookingData(updatedBooking);
+      localStorage.setItem("bookingData", JSON.stringify(updatedBooking));
+      setCouponCode(result.appliedCoupon || "");
+      setCouponMessage(
+        result.appliedCoupon
+          ? `Coupon ${result.appliedCoupon} applied successfully`
+          : "Coupon removed"
+      );
+    } catch (couponApplyError) {
+      setCouponError(
+        couponApplyError.message || "Unable to apply coupon"
+      );
+    } finally {
+      setCouponLoading(false);
+    }
+  };
 
   /* ========================================================= */
   /* SUBMIT */
@@ -66,7 +151,7 @@ const Payment = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!stripe || !elements) return;
+    if (!stripe || !elements || couponLoading) return;
 
     setProcessing(true);
 
@@ -403,6 +488,98 @@ const Payment = () => {
                   onSubmit={handleSubmit}
                   className="space-y-6 sm:space-y-8"
                 >
+                  {/* Coupon */}
+                  <div>
+                    <label
+                      htmlFor="coupon-code"
+                      className="mb-3 block text-sm font-semibold text-gray-700"
+                    >
+                      Coupon Code
+                    </label>
+
+                    <div className="rounded-[22px] border border-gray-200 bg-gray-50 p-4 sm:p-5">
+                      <div className="flex flex-col gap-3 sm:flex-row">
+                        <div className="relative min-w-0 flex-1">
+                          <TicketPercent className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-accent-500" />
+
+                          <input
+                            id="coupon-code"
+                            type="text"
+                            value={couponCode}
+                            onChange={(event) => {
+                              setCouponCode(event.target.value.toUpperCase());
+                              setCouponError("");
+                              setCouponMessage("");
+                            }}
+                            onKeyDown={(event) => {
+                              if (event.key === "Enter") {
+                                event.preventDefault();
+                                updateCoupon(couponCode);
+                              }
+                            }}
+                            placeholder="Enter coupon code"
+                            autoComplete="off"
+                            disabled={
+                              couponLoading ||
+                              processing ||
+                              Boolean(bookingData.paymentIntentId)
+                            }
+                            className="h-12 w-full rounded-xl border border-gray-200 bg-white pl-12 pr-4 font-bold uppercase tracking-wide text-primary-900 outline-none transition focus:border-accent-500 focus:ring-4 focus:ring-accent-500/10 disabled:cursor-not-allowed disabled:opacity-60"
+                          />
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => updateCoupon(couponCode)}
+                          disabled={
+                            couponLoading ||
+                            processing ||
+                            !couponCode.trim() ||
+                            Boolean(bookingData.paymentIntentId)
+                          }
+                          className="h-12 rounded-xl bg-accent-500 px-6 font-bold text-primary-950 transition hover:bg-accent-400 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          {couponLoading ? "Checking..." : "Apply"}
+                        </button>
+                      </div>
+
+                      {couponError && (
+                        <p className="mt-3 text-sm font-medium text-red-600">
+                          {couponError}
+                        </p>
+                      )}
+
+                      {(couponMessage ||
+                        bookingData.pricing.appliedCoupon) &&
+                        !couponError && (
+                        <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+                          <p className="text-sm font-semibold text-green-700">
+                            {couponMessage ||
+                              `Coupon ${bookingData.pricing.appliedCoupon} is applied`}
+                            {Number(
+                              bookingData.pricing.couponDiscountAmount
+                            ) > 0 &&
+                              ` — You saved £${Number(
+                                bookingData.pricing.couponDiscountAmount
+                              ).toFixed(2)}`}
+                          </p>
+
+                          {bookingData.pricing.appliedCoupon && (
+                            <button
+                              type="button"
+                              onClick={() => updateCoupon("")}
+                              disabled={couponLoading || processing}
+                              className="inline-flex items-center gap-1 text-sm font-bold text-gray-600 transition hover:text-red-600 disabled:opacity-50"
+                            >
+                              <X className="h-4 w-4" />
+                              Remove
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
                   {/* Stripe */}
                   <div>
                     <label className="mb-3 block text-sm font-semibold text-gray-700 sm:mb-4">
@@ -468,7 +645,7 @@ const Payment = () => {
                   <button
                     type="submit"
                     disabled={
-                      processing || !stripe
+                      processing || couponLoading || !stripe
                     }
                     className="w-full rounded-2xl bg-primary-900 px-6 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-primary-800 hover:shadow-premium disabled:cursor-not-allowed disabled:opacity-50 sm:px-8 sm:py-5 sm:text-base"
                   >
@@ -648,6 +825,27 @@ const Payment = () => {
 
                 {/* Total */}
                 <div className="border-t border-gray-100 pt-5 sm:pt-6">
+                  {bookingData.pricing.appliedCoupon &&
+                    Number(bookingData.pricing.couponDiscountAmount) > 0 && (
+                      <div className="mb-4 flex items-center justify-between gap-4 rounded-xl bg-green-50 px-4 py-3">
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-wide text-green-700">
+                            Coupon {bookingData.pricing.appliedCoupon}
+                          </p>
+                          <p className="mt-1 text-sm text-green-700">
+                            Discount applied
+                          </p>
+                        </div>
+
+                        <p className="font-black text-green-700">
+                          −£
+                          {Number(
+                            bookingData.pricing.couponDiscountAmount
+                          ).toFixed(2)}
+                        </p>
+                      </div>
+                    )}
+
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="mb-2 text-sm text-gray-500">

@@ -12,7 +12,6 @@ import {
   Shield,
   Star,
   Calendar,
-  Plane,
   Quote,
   Users,
   CarFront,
@@ -22,6 +21,10 @@ import {
   Share2,
   X,
 } from 'lucide-react';
+import executiveAirportTransfers from '../assets/hero-executive-airport-transfers.png';
+import groupFamilyTransfers from '../assets/hero-group-family-transfers.png';
+import airportFleet from '../assets/hero-airport-fleet.png';
+import welcomeRewardsBackground from '../assets/welcome-rewards-background.png';
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
 const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_MAPS_KEY;
@@ -121,22 +124,16 @@ const Home = () => {
 
   const sliderImages = [
     {
-      image:
-        'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=1600&auto=format&fit=crop',
+      image: executiveAirportTransfers,
       title: 'Executive Airport Transfers',
-      subtitle: 'Luxury vehicles available 24/7',
     },
     {
-      image:
-        'https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=1600&auto=format&fit=crop',
-      title: 'Professional Chauffeurs',
-      subtitle: 'Experienced and punctual drivers',
+      image: groupFamilyTransfers,
+      title: 'Group and Family Airport Transfers',
     },
     {
-      image:
-        'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=1600&auto=format&fit=crop',
-      title: 'Premium Travel Experience',
-      subtitle: 'Comfort, reliability and fixed pricing',
+      image: airportFleet,
+      title: 'Your Complete Airport Fleet',
     },
   ];
 
@@ -425,65 +422,25 @@ const Home = () => {
                     clickable: true,
                   }}
                   loop
-                  className="h-[360px] rounded-2xl sm:h-[460px] lg:h-[620px]"
+                  className="aspect-[36/29] rounded-2xl lg:h-[620px] lg:aspect-auto"
                 >
-                  {sliderImages.map((slide, index) => (
-                    <SwiperSlide key={index}>
-                      <div className="relative h-full">
+                  {sliderImages.map((slide) => (
+                    <SwiperSlide key={slide.title}>
+                      <div className="relative h-full overflow-hidden rounded-2xl bg-primary-950">
+                        <img
+                          src={slide.image}
+                          alt=""
+                          aria-hidden="true"
+                          className="absolute inset-0 h-full w-full scale-110 object-cover opacity-50 blur-2xl"
+                        />
+
+                        <div className="absolute inset-0 bg-primary-950/25"></div>
+
                         <img
                           src={slide.image}
                           alt={slide.title}
-                          className="h-full w-full rounded-2xl object-cover"
+                          className="relative h-full w-full object-contain"
                         />
-
-                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/80 via-black/25 to-transparent"></div>
-
-                        <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-8">
-                          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-2 backdrop-blur-md sm:mb-5 sm:px-4">
-                            <Plane className="h-4 w-4 shrink-0 text-accent-400" />
-
-                            <span className="text-xs font-medium text-white sm:text-sm">
-                              Premium Airport Transportation
-                            </span>
-                          </div>
-
-                          <h2 className="mb-3 text-2xl font-black leading-tight text-white sm:text-4xl md:text-5xl lg:mb-4">
-                            {slide.title}
-                          </h2>
-
-                          <p className="text-base leading-relaxed text-gray-200 sm:text-xl">
-                            {slide.subtitle}
-                          </p>
-
-                          <div className="mt-6 grid grid-cols-3 gap-3 sm:mt-8 sm:gap-5">
-                            <div>
-                              <div className="text-xl font-black text-white sm:text-3xl">
-                                10K+
-                              </div>
-                              <p className="mt-1 text-xs text-gray-300 sm:text-sm">
-                                Travelers
-                              </p>
-                            </div>
-
-                            <div>
-                              <div className="text-xl font-black text-white sm:text-3xl">
-                                24/7
-                              </div>
-                              <p className="mt-1 text-xs text-gray-300 sm:text-sm">
-                                Support
-                              </p>
-                            </div>
-
-                            <div>
-                              <div className="text-xl font-black text-white sm:text-3xl">
-                                99%
-                              </div>
-                              <p className="mt-1 text-xs text-gray-300 sm:text-sm">
-                                On-Time
-                              </p>
-                            </div>
-                          </div>
-                        </div>
                       </div>
                     </SwiperSlide>
                   ))}
@@ -773,8 +730,8 @@ const Home = () => {
 
                 <div className="group relative min-h-[300px] overflow-hidden rounded-[24px] sm:min-h-[340px] sm:rounded-[28px]">
                   <img
-                    src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=1600&auto=format&fit=crop"
-                    alt="Rewards"
+                    src={welcomeRewardsBackground}
+                    alt="Passenger receiving a rewards card during an airport transfer"
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
 
