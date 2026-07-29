@@ -56,7 +56,7 @@ const Footer = () => {
 
               <div className="min-w-0">
                 <h2 className="whitespace-nowrap text-xl font-black tracking-tight text-white sm:text-2xl">
-                  MYAIRPORTTAXIS
+                  MYAIRPORT<span className="text-accent-500">TAXIS</span>
                 </h2>
 
                 <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-gray-500 sm:text-xs">
@@ -272,7 +272,8 @@ const Footer = () => {
         <div className="mt-10 border-t border-white/10 pt-6 sm:mt-14 sm:pt-8 lg:mt-16">
           <div className="flex flex-col items-center justify-between gap-5 lg:flex-row lg:gap-6">
             <p className="text-center text-sm text-gray-500 lg:text-left">
-              © {new Date().getFullYear()} MYAIRPORTTAXIS. All rights reserved.
+              © {new Date().getFullYear()} MYAIRPORT
+              <span className="text-accent-500">TAXIS</span>. All rights reserved.
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-sm text-gray-500 sm:gap-x-6">

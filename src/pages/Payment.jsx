@@ -35,6 +35,10 @@ const Payment = () => {
 
   const [processing, setProcessing] = useState(false);
 
+  const [cardComplete, setCardComplete] = useState(false);
+
+  const [cardError, setCardError] = useState(null);
+
   const [completed, setCompleted] = useState(false);
 
   const [error, setError] = useState(null);
@@ -151,7 +155,7 @@ const Payment = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!stripe || !elements || couponLoading) return;
+    if (!stripe || !elements || !cardComplete || couponLoading) return;
 
     setProcessing(true);
 
@@ -589,6 +593,10 @@ const Payment = () => {
                     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
                       <div className="px-4 py-5 sm:px-5">
                         <CardElement
+                          onChange={(event) => {
+                            setCardComplete(event.complete);
+                            setCardError(event.error?.message || null);
+                          }}
                           options={{
                             hidePostalCode: true,
 
@@ -614,9 +622,9 @@ const Payment = () => {
                   </div>
 
                   {/* Error */}
-                  {error && (
+                  {(cardError || error) && (
                     <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700 sm:px-5 sm:text-base">
-                      {error}
+                      {cardError || error}
                     </div>
                   )}
 
@@ -645,7 +653,10 @@ const Payment = () => {
                   <button
                     type="submit"
                     disabled={
-                      processing || couponLoading || !stripe
+                      processing ||
+                      couponLoading ||
+                      !stripe ||
+                      !cardComplete
                     }
                     className="w-full rounded-2xl bg-primary-900 px-6 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-primary-800 hover:shadow-premium disabled:cursor-not-allowed disabled:opacity-50 sm:px-8 sm:py-5 sm:text-base"
                   >

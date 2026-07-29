@@ -56,7 +56,7 @@ const Navbar = () => {
 
               <div className="flex min-w-0 flex-col leading-tight">
                 <span className="truncate text-xl font-extrabold tracking-tight text-primary-900 sm:text-2xl">
-                  MYAIRPORTTAXIS
+                  MYAIRPORT<span className="text-accent-500">TAXIS</span>
                 </span>
 
                 <span className="hidden truncate text-[10px] uppercase tracking-[0.16em] text-gray-500 xs:block sm:text-[11px] sm:tracking-[0.2em]">
