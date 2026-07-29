@@ -1,11 +1,12 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, PlaneTakeoff, Sparkles, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import airportLogo from '../assets/my-airport-logo.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showLaunchOffer, setShowLaunchOffer] = useState(true);
 
   const location = useLocation();
 
@@ -38,6 +39,47 @@ const Navbar = () => {
           : 'bg-white'
         }`}
     >
+      {showLaunchOffer && (
+        <div className="relative overflow-hidden bg-primary-900 text-white">
+          <div className="pointer-events-none absolute -left-8 top-1/2 h-24 w-24 -translate-y-1/2 rounded-full bg-accent-500/15 blur-2xl" />
+          <div className="pointer-events-none absolute right-12 top-0 h-20 w-20 rounded-full bg-primary-400/20 blur-2xl" />
+
+          <div className="relative mx-auto flex min-h-11 max-w-7xl items-center justify-center gap-2 px-10 py-2 sm:gap-3 sm:px-12">
+            <span className="hidden items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-accent-400 sm:inline-flex">
+              <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+              Launch offer
+            </span>
+
+            <p className="text-center text-xs font-medium leading-5 sm:text-sm">
+              <span className="font-bold">We&apos;re live!</span>{' '}
+              Save 30% on your first airport transfer
+              <span className="hidden sm:inline"> with code</span>
+            </p>
+
+            <span className="rounded-md border border-dashed border-accent-400/70 bg-accent-500/15 px-2 py-1 font-mono text-xs font-extrabold tracking-wider text-accent-400 sm:px-2.5 sm:text-sm">
+              SAVE30
+            </span>
+
+            <Link
+              to="/booking"
+              className="hidden items-center gap-1 whitespace-nowrap text-xs font-bold text-white underline decoration-accent-400 decoration-2 underline-offset-4 transition-colors hover:text-accent-400 md:inline-flex"
+            >
+              Book now
+              <PlaneTakeoff className="h-3.5 w-3.5" aria-hidden="true" />
+            </Link>
+
+            <button
+              type="button"
+              onClick={() => setShowLaunchOffer(false)}
+              aria-label="Dismiss launch offer"
+              className="absolute right-2 inline-flex h-8 w-8 items-center justify-center rounded-full text-white/70 transition-colors hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-accent-400 sm:right-4"
+            >
+              <X className="h-4 w-4" aria-hidden="true" />
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between sm:h-18 md:h-20">
           {/* Logo */}
