@@ -1,11 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, PlaneTakeoff, Sparkles, X } from 'lucide-react';
+import { Menu, Sparkles, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import airportLogo from '../assets/my-airport-logo.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
 
   const location = useLocation();
 
@@ -16,33 +15,21 @@ const Navbar = () => {
   ];
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
     setIsOpen(false);
   }, [location.pathname]);
 
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav
-      className={`sticky top-0 z-[100] transition-all duration-300 ${isScrolled
-          ? 'border-b border-gray-200 bg-white/90 shadow-card backdrop-blur-md'
-          : 'bg-white'
-        }`}
-    >
-      <div className="relative z-[110] overflow-hidden bg-primary-900 text-white">
+    <>
+      <div
+        data-testid="promo-banner"
+        className="fixed inset-x-0 top-0 z-[120] h-11 overflow-hidden bg-primary-900 text-white"
+      >
         <div className="pointer-events-none absolute -left-8 top-1/2 h-24 w-24 -translate-y-1/2 rounded-full bg-accent-500/15 blur-2xl" />
         <div className="pointer-events-none absolute right-12 top-0 h-20 w-20 rounded-full bg-primary-400/20 blur-2xl" />
 
-        <div className="relative mx-auto flex min-h-11 max-w-7xl items-center justify-center gap-1.5 px-3 py-2 sm:gap-3 sm:px-6">
+        <div className="relative mx-auto flex h-11 max-w-7xl items-center justify-center gap-1.5 px-3 sm:gap-3 sm:px-6">
           <span className="hidden items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-accent-400 sm:inline-flex">
             <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
             Special offer
@@ -60,16 +47,15 @@ const Navbar = () => {
             WELCOME30
           </span>
 
-          <Link
-            to="/booking"
-            className="hidden items-center gap-1 whitespace-nowrap text-xs font-bold text-white underline decoration-accent-400 decoration-2 underline-offset-4 transition-colors hover:text-accent-400 md:inline-flex"
-          >
-            Book now
-            <PlaneTakeoff className="h-3.5 w-3.5" aria-hidden="true" />
-          </Link>
         </div>
       </div>
 
+      <div className="h-11" aria-hidden="true" />
+
+      <nav
+        data-testid="site-navbar"
+        className="relative z-[110] bg-white"
+      >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between sm:h-18 md:h-20">
           {/* Logo */}
@@ -174,7 +160,8 @@ const Navbar = () => {
           </Link>
         </div>
       </div>
-    </nav>
+      </nav>
+    </>
   );
 };
 
