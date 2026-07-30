@@ -24,33 +24,34 @@ const Navbar = () => {
     <>
       <div
         data-testid="promo-banner"
-        className="fixed inset-x-0 top-0 z-[120] h-11 overflow-hidden bg-primary-900 text-white"
+        className="fixed inset-x-0 top-0 z-[120] h-16 overflow-hidden bg-primary-900 text-white sm:h-11"
       >
         <div className="pointer-events-none absolute -left-8 top-1/2 h-24 w-24 -translate-y-1/2 rounded-full bg-accent-500/15 blur-2xl" />
         <div className="pointer-events-none absolute right-12 top-0 h-20 w-20 rounded-full bg-primary-400/20 blur-2xl" />
 
-        <div className="relative mx-auto flex h-11 max-w-7xl items-center justify-center gap-1.5 px-3 sm:gap-3 sm:px-6">
-          <span className="hidden items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-accent-400 sm:inline-flex">
+        <div className="relative mx-auto flex h-full max-w-7xl flex-col items-center justify-center gap-1 px-2 sm:h-11 sm:flex-row sm:gap-3 sm:px-6">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-accent-400 sm:px-2.5 sm:py-1 sm:text-[10px]">
             <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
             Special offer
           </span>
 
-          <p className="text-center text-xs font-semibold leading-5 sm:text-sm">
-            Save 30% on booking
-            <span className="mx-1.5 text-white/50" aria-hidden="true">
-              /
+          <div className="flex items-center justify-center gap-1.5">
+            <p className="text-center text-[11px] font-semibold leading-4 sm:text-sm sm:leading-5">
+              Save 30% on booking
+              <span className="mx-1 text-white/50 sm:mx-1.5" aria-hidden="true">
+                /
+              </span>
+              Use Code:
+            </p>
+
+            <span className="rounded-md border border-dashed border-accent-400/70 bg-accent-500/15 px-1.5 py-0.5 font-mono text-[10px] font-extrabold tracking-wider text-accent-400 sm:px-2.5 sm:py-1 sm:text-sm">
+              WELCOME30
             </span>
-            Use Code:
-          </p>
-
-          <span className="rounded-md border border-dashed border-accent-400/70 bg-accent-500/15 px-2 py-1 font-mono text-xs font-extrabold tracking-wider text-accent-400 sm:px-2.5 sm:text-sm">
-            WELCOME30
-          </span>
-
+          </div>
         </div>
       </div>
 
-      <div className="h-11" aria-hidden="true" />
+      <div className="h-16 sm:h-11" aria-hidden="true" />
 
       <nav
         data-testid="site-navbar"
