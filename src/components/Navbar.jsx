@@ -24,34 +24,31 @@ const Navbar = () => {
     <>
       <div
         data-testid="promo-banner"
-        className="fixed inset-x-0 top-0 z-[120] h-16 overflow-hidden bg-primary-900 text-white sm:h-11"
+        className="fixed inset-x-0 top-0 z-[120] h-[76px] overflow-hidden bg-[#ff3131] text-white sm:h-[72px]"
       >
-        <div className="pointer-events-none absolute -left-8 top-1/2 h-24 w-24 -translate-y-1/2 rounded-full bg-accent-500/15 blur-2xl" />
-        <div className="pointer-events-none absolute right-12 top-0 h-20 w-20 rounded-full bg-primary-400/20 blur-2xl" />
-
-        <div className="relative mx-auto flex h-full max-w-7xl flex-col items-center justify-center gap-1 px-2 sm:h-11 sm:flex-row sm:gap-3 sm:px-6">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-accent-400 sm:px-2.5 sm:py-1 sm:text-[10px]">
-            <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+        <div className="mx-auto flex h-full max-w-7xl items-center justify-center gap-2 px-3 sm:gap-4 sm:px-6 lg:gap-8">
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-white px-2.5 py-2 text-[10px] font-extrabold uppercase leading-none tracking-tight text-[#ff3131] shadow-sm sm:gap-2 sm:px-4 sm:py-3 sm:text-base lg:px-5 lg:text-xl">
+            <Sparkles className="h-4 w-4 fill-[#ff3131]/15 sm:h-5 sm:w-5 lg:h-6 lg:w-6" aria-hidden="true" />
             Special offer
           </span>
 
-          <div className="flex items-center justify-center gap-1.5">
-            <p className="text-center text-[11px] font-semibold leading-4 sm:text-sm sm:leading-5">
-              Save 30% on booking
-              <span className="mx-1 text-white/50 sm:mx-1.5" aria-hidden="true">
-                /
+          <div className="flex min-w-0 flex-col items-center justify-center gap-1.5 sm:flex-row sm:gap-3 lg:gap-5">
+            <p className="whitespace-nowrap text-center text-[12px] font-extrabold uppercase leading-none tracking-tight sm:text-lg lg:text-2xl">
+              Save 30% now
+              <span className="mx-1.5 sm:mx-2" aria-hidden="true">
+                |
               </span>
-              Use Code:
+              Code:
             </p>
 
-            <span className="rounded-md border border-dashed border-accent-400/70 bg-accent-500/15 px-1.5 py-0.5 font-mono text-[10px] font-extrabold tracking-wider text-accent-400 sm:px-2.5 sm:py-1 sm:text-sm">
+            <span className="rounded-lg bg-white px-2.5 py-1.5 text-[11px] font-extrabold uppercase leading-none tracking-[0.08em] text-[#ff3131] shadow-sm sm:px-4 sm:py-3 sm:text-base lg:px-5 lg:text-xl">
               WELCOME30
             </span>
           </div>
         </div>
       </div>
 
-      <div className="h-16 sm:h-11" aria-hidden="true" />
+      <div className="h-[76px] sm:h-[72px]" aria-hidden="true" />
 
       <nav
         data-testid="site-navbar"
