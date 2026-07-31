@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -16,6 +16,7 @@ import {
 
 import {
   CardElement,
+  PaymentRequestButtonElement,
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
@@ -42,6 +43,8 @@ const Payment = () => {
 
   const [error, setError] = useState(null);
 
+  const [paymentRequest, setPaymentRequest] = useState(null);
+
   /* ========================================================= */
   /* LOAD */
   /* ========================================================= */
@@ -63,6 +66,211 @@ const Payment = () => {
 
     setBookingData(booking);
   }, [navigate]);
+
+  const createWalletPaymentIntent = useCallback(async (currentBooking) => {
+    const response = await fetch(`${API_BASE}/api/payments/create-intent`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        carId: currentBooking.selectedCar._id,
+        fromPlaceId: currentBooking.fromPlaceId,
+        toPlaceId: currentBooking.toPlaceId,
+        returnFromPlaceId:
+          currentBooking.tripType === "RETURN"
+            ? currentBooking.returnTrip?.pickupPlaceId
+            : "",
+        returnToPlaceId:
+          currentBooking.tripType === "RETURN"
+            ? currentBooking.returnTrip?.dropoffPlaceId
+            : "",
+        isReturnTrip: currentBooking.tripType === "RETURN",
+        couponCode: currentBooking.pricing?.appliedCoupon || null,
+      }),
+    });
+    const intentData = await response.json();
+
+    if (!response.ok) {
+      throw new Error(intentData.message || "Unable to confirm fare");
+    }
+
+    return intentData;
+  }, []);
+
+  const completeWalletBooking = useCallback(async (
+    paymentIntentId,
+    currentBooking
+  ) => {
+    const paidBooking = { ...currentBooking, paymentIntentId };
+    setBookingData(paidBooking);
+    localStorage.setItem("bookingData", JSON.stringify(paidBooking));
+
+    const response = await fetch(`${API_BASE}/api/bookings`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customerName: paidBooking.user.fullName,
+        customerEmail: paidBooking.user.email,
+        customerPhone: paidBooking.user.mobile,
+        pickupLocation: paidBooking.fromLocation,
+        pickupPlaceId: paidBooking.fromPlaceId,
+        dropoffLocation: paidBooking.toLocation,
+        dropoffPlaceId: paidBooking.toPlaceId,
+        pickupDate: paidBooking.pickupDate,
+        pickupTime: paidBooking.pickupTime,
+        returnTrip:
+          paidBooking.tripType === "RETURN"
+            ? paidBooking.returnTrip
+            : null,
+        carId: paidBooking.selectedCar._id,
+        paymentIntentId,
+        isReturnTrip: paidBooking.tripType === "RETURN",
+        couponCode: paidBooking.pricing?.appliedCoupon || null,
+        passengers: paidBooking.user.passengers,
+        luggage: {
+          largeBags23kg: paidBooking.user.luggage.largeBags23kg,
+          smallBags15kg: paidBooking.user.luggage.smallBags15kg,
+          shoulderBags: paidBooking.user.luggage.shoulderBags,
+          extraLargeItemType: paidBooking.user.luggage.extraLargeItemType,
+          extraLargeItemNote:
+            paidBooking.user.luggage.extraLargeItemNote || "",
+        },
+        flight: {
+          flightNumber: paidBooking.user.flight.flightNumber,
+          arrivingFrom: paidBooking.user.flight.arrivingFrom,
+          arrivalDateTime: paidBooking.user.flight.arrivalDateTime,
+          meetAndGreet: paidBooking.user.flight.meetAndGreet,
+        },
+      }),
+    });
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || "Unable to confirm your booking");
+    }
+
+    setCompleted(true);
+    setTimeout(() => {
+      localStorage.removeItem("bookingData");
+      navigate("/");
+    }, 3000);
+  }, [navigate]);
+
+  useEffect(() => {
+    if (!stripe || !bookingData || bookingData.paymentIntentId) {
+      setPaymentRequest(null);
+      return undefined;
+    }
+
+    const total = Math.round(Number(bookingData.pricing.totalFare) * 100);
+    if (!Number.isInteger(total) || total <= 0) return undefined;
+
+    const request = stripe.paymentRequest({
+      country: "GB",
+      currency: "gbp",
+      total: {
+        label: "MYAIRPORTTAXIS airport transfer",
+        amount: total,
+      },
+      requestPayerName: true,
+      requestPayerEmail: true,
+    });
+    let active = true;
+
+    const handleWalletPayment = async (event) => {
+      setProcessing(true);
+      setError(null);
+      let walletCompleted = false;
+
+      try {
+        const intentData = await createWalletPaymentIntent(bookingData);
+        const authoritativeTotal = Number(intentData.pricing.totalFare);
+
+        if (
+          Math.abs(
+            Number(bookingData.pricing.totalFare) - authoritativeTotal
+          ) >= 0.01
+        ) {
+          const updatedBooking = {
+            ...bookingData,
+            pricing: {
+              ...bookingData.pricing,
+              ...intentData.pricing.breakdown,
+              totalFare: authoritativeTotal,
+              appliedCoupon: intentData.pricing.appliedCoupon,
+            },
+          };
+          setBookingData(updatedBooking);
+          localStorage.setItem("bookingData", JSON.stringify(updatedBooking));
+          event.complete("fail");
+          walletCompleted = true;
+          setError(
+            "Your fare was updated using the latest rate. Review the new total and try your wallet again."
+          );
+          return;
+        }
+
+        let confirmation = await stripe.confirmCardPayment(
+          intentData.clientSecret,
+          { payment_method: event.paymentMethod.id },
+          { handleActions: false }
+        );
+
+        if (confirmation.error) {
+          event.complete("fail");
+          walletCompleted = true;
+          throw confirmation.error;
+        }
+
+        event.complete("success");
+        walletCompleted = true;
+
+        if (confirmation.paymentIntent.status === "requires_action") {
+          confirmation = await stripe.confirmCardPayment(
+            intentData.clientSecret
+          );
+        }
+
+        if (
+          confirmation.error ||
+          confirmation.paymentIntent?.status !== "succeeded"
+        ) {
+          throw new Error(
+            confirmation.error?.message ||
+              "Wallet payment was not completed. Please try again."
+          );
+        }
+
+        await completeWalletBooking(
+          confirmation.paymentIntent.id,
+          bookingData
+        );
+      } catch (walletError) {
+        if (!walletCompleted) event.complete("fail");
+        setError(
+          walletError.message || "Wallet payment failed. Please try again."
+        );
+      } finally {
+        setProcessing(false);
+      }
+    };
+
+    request.on("paymentmethod", handleWalletPayment);
+    request.canMakePayment().then((available) => {
+      if (active && available) setPaymentRequest(request);
+    }).catch(() => {
+      if (active) setPaymentRequest(null);
+    });
+
+    return () => {
+      active = false;
+      request.off("paymentmethod", handleWalletPayment);
+    };
+  }, [
+    bookingData,
+    completeWalletBooking,
+    createWalletPaymentIntent,
+    stripe,
+  ]);
 
   /* ========================================================= */
   /* SUBMIT */
@@ -418,6 +626,34 @@ const Payment = () => {
                         <p className="mt-1 text-sm font-medium">
                           You saved £{Number(bookingData.pricing.couponDiscountAmount || 0).toFixed(2)} on this booking.
                         </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {paymentRequest && (
+                    <div>
+                      <p className="mb-3 text-sm font-semibold text-gray-700">
+                        Express Checkout
+                      </p>
+                      <div className={processing ? "pointer-events-none opacity-60" : ""}>
+                        <PaymentRequestButtonElement
+                          options={{
+                            paymentRequest,
+                            style: {
+                              paymentRequestButton: {
+                                type: "book",
+                                theme: "dark",
+                                height: "52px",
+                              },
+                            },
+                          }}
+                        />
+                      </div>
+
+                      <div className="mt-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.16em] text-gray-400">
+                        <span className="h-px flex-1 bg-gray-200" />
+                        Or pay by card
+                        <span className="h-px flex-1 bg-gray-200" />
                       </div>
                     </div>
                   )}
