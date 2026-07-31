@@ -182,6 +182,7 @@ const CarSelection = () => {
           body: JSON.stringify({
             fromPlaceId: booking.fromPlaceId,
             toPlaceId: booking.toPlaceId,
+            couponCode: booking.couponCode || null,
           }),
         });
 
@@ -239,6 +240,14 @@ const CarSelection = () => {
       tripType === "RETURN"
         ? selectedCar.pricing.roundTripFare
         : selectedCar.pricing.oneWayFare;
+    const appliedCoupon =
+      tripType === "RETURN"
+        ? selectedCar.pricing.returnAppliedCoupon
+        : selectedCar.pricing.oneWayAppliedCoupon;
+    const couponDiscountAmount =
+      tripType === "RETURN"
+        ? selectedCar.pricing.returnCouponDiscountAmount
+        : selectedCar.pricing.oneWayCouponDiscountAmount;
 
     localStorage.setItem(
       "bookingData",
@@ -255,6 +264,8 @@ const CarSelection = () => {
           totalFare,
 
           type: tripType,
+          appliedCoupon: appliedCoupon || null,
+          couponDiscountAmount: couponDiscountAmount || 0,
         },
       })
     );
@@ -290,6 +301,15 @@ const CarSelection = () => {
           </p>
         </div>
 
+        {bookingData.couponCode && (
+          <div className="mb-6 flex items-center gap-3 rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-green-800 sm:mb-8 sm:px-5">
+            <CheckCircle className="h-5 w-5 shrink-0" />
+            <p className="text-sm font-semibold sm:text-base">
+              Voucher <span className="font-black">{bookingData.couponCode}</span> applied to eligible prices below.
+            </p>
+          </div>
+        )}
+
         {/* ========================================================= */}
         {/* VEHICLES */}
         {/* ========================================================= */}
@@ -304,6 +324,10 @@ const CarSelection = () => {
             } = car.pricing || {};
 
             const isSelected = selectedCar?._id === car._id;
+            const hasVoucherPrice = Boolean(
+              car.pricing?.oneWayAppliedCoupon ||
+                car.pricing?.returnAppliedCoupon
+            );
 
             return (
               <div
@@ -363,6 +387,13 @@ const CarSelection = () => {
                         {feature}
                       </span>
                     ))}
+                  </div>
+                )}
+
+                {hasVoucherPrice && (
+                  <div className="mb-2.5 flex items-center justify-center gap-1.5 rounded-lg bg-green-50 px-2 py-1.5 text-[10px] font-bold uppercase tracking-wide text-green-700 sm:mb-4 sm:text-xs">
+                    <CheckCircle className="h-3.5 w-3.5" />
+                    Voucher applied
                   </div>
                 )}
 

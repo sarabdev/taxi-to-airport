@@ -17,6 +17,7 @@ import {
   CarFront,
   BadgeCheck,
   Gift,
+  TicketPercent,
   Mail,
   Share2,
   X,
@@ -62,6 +63,10 @@ const Home = () => {
 
   const [loading, setLoading] = useState(false);
   const [activePromo, setActivePromo] = useState(null);
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [couponError, setCouponError] = useState('');
 
   const [formData, setFormData] = useState({
     fromType: 'airport',
@@ -167,10 +172,62 @@ const Home = () => {
   /* FORM SUBMIT */
   /* ========================================================= */
 
+  const validateCoupon = async (code) => {
+    const normalizedCode = code.trim().toUpperCase();
+
+    if (!normalizedCode) throw new Error('Enter a voucher code');
+
+    const response = await fetch(`${API_BASE}/api/coupons/validate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: normalizedCode }),
+    });
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || 'This voucher is not valid');
+    }
+
+    return result.coupon;
+  };
+
+  const handleApplyCoupon = async () => {
+    setCouponLoading(true);
+    setCouponError('');
+
+    try {
+      const coupon = await validateCoupon(couponCode);
+      setAppliedCoupon(coupon);
+      setCouponCode(coupon.code);
+    } catch (error) {
+      setAppliedCoupon(null);
+      setCouponError(error.message || 'Unable to apply voucher');
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     setLoading(true);
+
+    let confirmedCoupon = appliedCoupon;
+    const normalizedCouponCode = couponCode.trim().toUpperCase();
+
+    if (normalizedCouponCode && confirmedCoupon?.code !== normalizedCouponCode) {
+      try {
+        confirmedCoupon = await validateCoupon(normalizedCouponCode);
+        setAppliedCoupon(confirmedCoupon);
+        setCouponCode(confirmedCoupon.code);
+        setCouponError('');
+      } catch (error) {
+        setAppliedCoupon(null);
+        setCouponError(error.message || 'Unable to apply voucher');
+        setLoading(false);
+        return;
+      }
+    }
 
     let pricing = null;
 
@@ -201,6 +258,7 @@ const Home = () => {
       JSON.stringify({
         ...formData,
         pricing,
+        couponCode: confirmedCoupon?.code || null,
       })
     );
 
@@ -302,6 +360,61 @@ const Home = () => {
                       autoComplete="off"
                       required
                     />
+                  </div>
+
+                  {/* VOUCHER */}
+                  <div>
+                    <label htmlFor="voucher-code" className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
+                      Voucher Code <span className="font-normal text-gray-400">(optional)</span>
+                    </label>
+
+                    <div className={`rounded-2xl border p-3 transition ${appliedCoupon ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50'}`}>
+                      <div className="flex flex-col gap-3 sm:flex-row">
+                        <div className="relative min-w-0 flex-1">
+                          <TicketPercent className={`pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 ${appliedCoupon ? 'text-green-600' : 'text-accent-500'}`} />
+                          <input
+                            id="voucher-code"
+                            type="text"
+                            value={couponCode}
+                            onChange={(event) => {
+                              setCouponCode(event.target.value.toUpperCase());
+                              setAppliedCoupon(null);
+                              setCouponError('');
+                            }}
+                            onKeyDown={(event) => {
+                              if (event.key === 'Enter') {
+                                event.preventDefault();
+                                handleApplyCoupon();
+                              }
+                            }}
+                            placeholder="Enter voucher code"
+                            autoComplete="off"
+                            disabled={couponLoading || loading}
+                            className="h-12 w-full rounded-xl border border-gray-200 bg-white pl-12 pr-4 font-bold uppercase tracking-wide text-primary-900 outline-none transition focus:border-accent-500 focus:ring-4 focus:ring-accent-500/10 disabled:opacity-60"
+                          />
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={handleApplyCoupon}
+                          disabled={couponLoading || loading || !couponCode.trim()}
+                          className="h-12 rounded-xl bg-accent-500 px-6 font-bold text-primary-950 transition hover:bg-accent-400 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          {couponLoading ? 'Checking...' : appliedCoupon ? 'Applied' : 'Apply'}
+                        </button>
+                      </div>
+
+                      {couponError && (
+                        <p className="mt-2 text-sm font-medium text-red-600">{couponError}</p>
+                      )}
+
+                      {appliedCoupon && !couponError && (
+                        <p className="mt-2 flex items-center gap-2 text-sm font-semibold text-green-700">
+                          <CheckCircle className="h-4 w-4" />
+                          Voucher {appliedCoupon.code} will be applied to eligible vehicle prices.
+                        </p>
+                      )}
+                    </div>
                   </div>
 
                   {/* DATE & TIME */}
