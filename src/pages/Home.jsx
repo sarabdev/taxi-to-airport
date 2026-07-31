@@ -26,6 +26,7 @@ import executiveAirportTransfers from '../assets/hero-executive-airport-transfer
 import groupFamilyTransfers from '../assets/hero-group-family-transfers.png';
 import airportFleet from '../assets/hero-airport-fleet.png';
 import welcomeRewardsBackground from '../assets/welcome-rewards-background.png';
+import welcomeOfferCarousel from '../assets/welcome-offer-carousel.png';
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
 const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_MAPS_KEY;
@@ -128,6 +129,10 @@ const Home = () => {
   }, []);
 
   const sliderImages = [
+    {
+      image: welcomeOfferCarousel,
+      title: 'Welcome offer — save 30% with code WELCOME30',
+    },
     {
       image: executiveAirportTransfers,
       title: 'Executive Airport Transfers',
