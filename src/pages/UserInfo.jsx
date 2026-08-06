@@ -90,11 +90,31 @@ const UserInfo = () => {
 
   const [pricingError, setPricingError] = useState("");
 
+  const [meetAndGreetPrice, setMeetAndGreetPrice] = useState(null);
+
   const bookingDataRef = useRef(null);
 
   useEffect(() => {
     bookingDataRef.current = bookingData;
   }, [bookingData]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetch(`${API_BASE}/api/settings/public`, { signal: controller.signal })
+      .then((response) => {
+        if (!response.ok) throw new Error("Unable to load service price");
+        return response.json();
+      })
+      .then((settings) => {
+        setMeetAndGreetPrice(Number(settings.meetAndGreetPrice || 0));
+      })
+      .catch((error) => {
+        if (error.name !== "AbortError") setMeetAndGreetPrice(null);
+      });
+
+    return () => controller.abort();
+  }, []);
 
   const handleReturnTripChange = useCallback((updates) => {
     setForm((prev) => ({
@@ -127,10 +147,7 @@ const UserInfo = () => {
 
     const defaultReturnDate = addDaysToDate(parsed.pickupDate, 1);
     const defaultArrivalDateTime =
-      parsed.user?.flight?.arrivalDateTime ||
-      (parsed.pickupDate && parsed.pickupTime
-        ? `${parsed.pickupDate}T${parsed.pickupTime}`
-        : "");
+      parsed.user?.flight?.arrivalDateTime || "";
 
     const defaultReturnTrip = {
       pickupLocation:
@@ -230,15 +247,17 @@ const UserInfo = () => {
   useEffect(() => {
     const currentBooking = bookingDataRef.current;
 
-    if (!currentBooking || currentBooking.tripType !== "RETURN") return;
+    if (!currentBooking) return;
+
+    const isReturnTrip = currentBooking.tripType === "RETURN";
 
     const { pickupPlaceId, dropoffPlaceId } = form.returnTrip;
 
-    if (!pickupPlaceId || !dropoffPlaceId) return;
+    if (isReturnTrip && (!pickupPlaceId || !dropoffPlaceId)) return;
 
     const controller = new AbortController();
 
-    async function refreshReturnPricing() {
+    async function refreshPricing() {
       setPricingLoading(true);
       setPricingError("");
 
@@ -252,16 +271,17 @@ const UserInfo = () => {
             carId: currentBooking.selectedCar?._id,
             fromPlaceId: currentBooking.fromPlaceId,
             toPlaceId: currentBooking.toPlaceId,
-            returnFromPlaceId: pickupPlaceId,
-            returnToPlaceId: dropoffPlaceId,
-            isReturnTrip: true,
+            returnFromPlaceId: isReturnTrip ? pickupPlaceId : "",
+            returnToPlaceId: isReturnTrip ? dropoffPlaceId : "",
+            isReturnTrip,
             couponCode: currentBooking.pricing?.appliedCoupon || null,
+            meetAndGreet: form.flight.meetAndGreet,
           }),
           signal: controller.signal,
         });
 
         if (!res.ok) {
-          throw new Error("Unable to update return fare");
+          throw new Error("Unable to update fare");
         }
 
         const result = await res.json();
@@ -274,8 +294,8 @@ const UserInfo = () => {
 
         const updatedBooking = {
           ...currentBooking,
-          returnTrip: form.returnTrip,
-          isReturnTrip: true,
+          returnTrip: isReturnTrip ? form.returnTrip : currentBooking.returnTrip,
+          isReturnTrip,
           pricing: {
             ...currentBooking.pricing,
             ...result.breakdown,
@@ -283,7 +303,7 @@ const UserInfo = () => {
             returnDiscountAmount: result.breakdown.carDiscountAmount,
             totalFare: result.totalFare,
             appliedCoupon: result.appliedCoupon,
-            type: "RETURN",
+            type: isReturnTrip ? "RETURN" : "ONE_WAY",
           },
         };
 
@@ -292,18 +312,19 @@ const UserInfo = () => {
         localStorage.setItem("bookingData", JSON.stringify(updatedBooking));
       } catch (err) {
         if (err.name !== "AbortError") {
-          setPricingError(err.message || "Unable to update return fare");
+          setPricingError(err.message || "Unable to update fare");
         }
       } finally {
         setPricingLoading(false);
       }
     }
 
-    refreshReturnPricing();
+    refreshPricing();
 
     return () => controller.abort();
   }, [
     form.returnTrip,
+    form.flight.meetAndGreet,
   ]);
 
   /* ========================================================= */
@@ -361,18 +382,6 @@ const UserInfo = () => {
     if (!form.mobile.trim()) err.mobile = "Required";
 
     if (!form.email.trim()) err.email = "Required";
-
-    if (!form.flight.flightNumber.trim())
-      err.flightNumber = "Required";
-
-    if (!form.flight.arrivingFrom.trim())
-      err.arrivingFrom = "Required";
-
-    const [arrivalDate = "", arrivalTime = ""] =
-      form.flight.arrivalDateTime?.split("T") || [];
-
-    if (!arrivalDate || !arrivalTime)
-      err.arrivalDateTime = "Required";
 
     if (
       form.luggage.extraLargeItemType === "other" &&
@@ -1036,11 +1045,11 @@ const UserInfo = () => {
 
                     <div className="min-w-0">
                       <h3 className="text-xl font-black text-primary-900 sm:text-2xl">
-                        Flight Information
+                        Flight Information <span className="text-base font-semibold text-gray-500">(Optional)</span>
                       </h3>
 
                       <p className="mt-1 text-sm text-gray-500 sm:text-base">
-                        Arrival and airport details
+                        Add arrival details if applicable
                       </p>
                     </div>
                   </div>
@@ -1050,7 +1059,7 @@ const UserInfo = () => {
                       {/* Flight */}
                       <div>
                         <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
-                          Flight Number *
+                          Flight Number
                         </label>
 
                         <input
@@ -1064,13 +1073,12 @@ const UserInfo = () => {
                           }
                         />
 
-                        {renderError("flightNumber")}
                       </div>
 
                       {/* From */}
                       <div>
                         <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
-                          Arriving From *
+                          Arriving From
                         </label>
 
                         <input
@@ -1084,7 +1092,6 @@ const UserInfo = () => {
                           }
                         />
 
-                        {renderError("arrivingFrom")}
                       </div>
                     </div>
 
@@ -1092,7 +1099,7 @@ const UserInfo = () => {
                     <div>
                       <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                         <Calendar className="mr-2 inline h-4 w-4 text-primary-900" />
-                        Arrival Date & Time *
+                        Arrival Date &amp; Time
                       </label>
 
                       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
@@ -1128,7 +1135,6 @@ const UserInfo = () => {
                         />
                       </div>
 
-                      {renderError("arrivalDateTime")}
                     </div>
 
                     {/* Meet */}
@@ -1148,7 +1154,12 @@ const UserInfo = () => {
 
                         <div>
                           <div className="font-bold text-primary-900">
-                            Meet & Greet Service
+                            Meet &amp; Greet Service
+                            {meetAndGreetPrice != null && (
+                              <span className="ml-2 text-accent-600">
+                                +£{meetAndGreetPrice.toFixed(2)}
+                              </span>
+                            )}
                           </div>
 
                           <p className="mt-1 text-sm text-gray-600">
@@ -1244,6 +1255,20 @@ const UserInfo = () => {
                 </div>
 
                 <div className="border-t border-gray-100"></div>
+
+                {form.flight.meetAndGreet && (
+                  <>
+                    <div className="flex items-center justify-between gap-4 text-sm">
+                      <span className="font-semibold text-gray-600">
+                        Meet &amp; Greet
+                      </span>
+                      <span className="font-bold text-primary-900">
+                        +£{Number(bookingData.pricing?.meetAndGreetFee || 0).toFixed(2)}
+                      </span>
+                    </div>
+                    <div className="border-t border-gray-100"></div>
+                  </>
+                )}
 
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">

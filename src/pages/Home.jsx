@@ -372,7 +372,6 @@ const Home = () => {
                     <label htmlFor="voucher-code" className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                       Voucher Code <span className="font-normal text-gray-400">(optional)</span>
                     </label>
-
                     <div className={`rounded-2xl border p-3 transition ${appliedCoupon ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50'}`}>
                       <div className="flex flex-col gap-3 sm:flex-row">
                         <div className="relative min-w-0 flex-1">
@@ -408,6 +407,10 @@ const Home = () => {
                           {couponLoading ? 'Checking...' : appliedCoupon ? 'Applied' : 'Apply'}
                         </button>
                       </div>
+
+                      <p className="mt-1.5 text-[10px] leading-4 text-gray-400 sm:text-[11px]">
+                        Offer applies on all transfers of 10 miles or more only.
+                      </p>
 
                       {couponError && (
                         <p className="mt-2 text-sm font-medium text-red-600">{couponError}</p>
@@ -476,33 +479,6 @@ const Home = () => {
                     <p className="mt-2 text-xs text-gray-500 sm:mt-3">
                       Your local device time is automatically selected.
                     </p>
-                  </div>
-
-                  {/* FEATURES */}
-                  <div className="grid grid-cols-1 gap-3 xs:grid-cols-3 sm:grid-cols-3 sm:gap-4">
-                    <div className="rounded-2xl border border-gray-100 bg-gray-50 p-4 text-center">
-                      <Clock className="mx-auto mb-2 h-5 w-5 text-accent-500" />
-
-                      <p className="text-xs font-semibold text-gray-700">
-                        24/7 Service
-                      </p>
-                    </div>
-
-                    <div className="rounded-2xl border border-gray-100 bg-gray-50 p-4 text-center">
-                      <Shield className="mx-auto mb-2 h-5 w-5 text-accent-500" />
-
-                      <p className="text-xs font-semibold text-gray-700">
-                        Safe Travel
-                      </p>
-                    </div>
-
-                    <div className="rounded-2xl border border-gray-100 bg-gray-50 p-4 text-center">
-                      <CarFront className="mx-auto mb-2 h-5 w-5 text-accent-500" />
-
-                      <p className="text-xs font-semibold text-gray-700">
-                        Luxury Fleet
-                      </p>
-                    </div>
                   </div>
 
                   {/* SUBMIT */}

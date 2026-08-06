@@ -1,0 +1,12 @@
+REPLACE_THIS_FILE_WITH_THE_CONTENTS_FROM_STRIPE
+
+Steps:
+1. Stripe Dashboard -> Settings -> Payment method domains -> Add domain: www.myairporttaxis.uk
+2. Click the domain -> Download the "apple-developer-merchantid-domain-association" file.
+3. Replace the ENTIRE contents of this file with the downloaded file's contents.
+4. Keep this exact path and filename (no extension): /.well-known/apple-developer-merchantid-domain-association
+5. Redeploy. Verify it is publicly reachable:
+   https://www.myairporttaxis.uk/.well-known/apple-developer-merchantid-domain-association
+6. Back in the Stripe Dashboard, click "Verify" on the domain.
+
+Do this in BOTH test mode and live mode (the domain list is separate per mode).

@@ -85,6 +85,7 @@ const Payment = () => {
             : "",
         isReturnTrip: currentBooking.tripType === "RETURN",
         couponCode: currentBooking.pricing?.appliedCoupon || null,
+        meetAndGreet: Boolean(currentBooking.user?.flight?.meetAndGreet),
       }),
     });
     const intentData = await response.json();
@@ -313,6 +314,7 @@ const Payment = () => {
                 : "",
             isReturnTrip: bookingData.tripType === "RETURN",
             couponCode: bookingData.pricing?.appliedCoupon || null,
+            meetAndGreet: Boolean(bookingData.user?.flight?.meetAndGreet),
           }),
           }
         );
@@ -929,6 +931,23 @@ const Payment = () => {
                         </p>
                       </div>
                     )}
+
+                  {bookingData.user?.flight?.meetAndGreet && (
+                    <div className="mb-4 flex items-center justify-between gap-4 rounded-xl bg-primary-50 px-4 py-3">
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-wide text-primary-900">
+                          Meet &amp; Greet Service
+                        </p>
+                        <p className="mt-1 text-sm text-gray-600">
+                          Airport arrivals terminal
+                        </p>
+                      </div>
+
+                      <p className="font-black text-primary-900">
+                        +£{Number(bookingData.pricing.meetAndGreetFee || 0).toFixed(2)}
+                      </p>
+                    </div>
+                  )}
 
                   <div className="flex items-center justify-between">
                     <div>
