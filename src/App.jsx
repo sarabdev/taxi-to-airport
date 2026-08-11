@@ -15,6 +15,8 @@ import Payment from './pages/Payment';
 import UserInfo from './pages/UserInfo';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
+import ThankYou from './pages/ThankYou';
+import ChatWithUs from './components/ChatWithUs';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -47,10 +49,13 @@ function App() {
             <Route path="/booking/cars" element={<CarSelection />} />
             <Route path="/booking/info" element={<UserInfo />} />
             <Route path="/booking/payment" element={<Payment />} />
+            <Route path="/booking/thank-you" element={<ThankYou />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
           </Routes>
         </main>
+
+        <ChatWithUs />
 
         <Footer />
       </div>

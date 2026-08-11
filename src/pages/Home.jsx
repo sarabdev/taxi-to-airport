@@ -64,7 +64,7 @@ const Home = () => {
 
   const [loading, setLoading] = useState(false);
   const [activePromo, setActivePromo] = useState(null);
-  const [couponCode, setCouponCode] = useState('');
+  const [couponCode, setCouponCode] = useState('WELCOME30');
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [couponLoading, setCouponLoading] = useState(false);
   const [couponError, setCouponError] = useState('');

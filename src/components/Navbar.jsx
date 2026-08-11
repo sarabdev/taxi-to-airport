@@ -24,31 +24,31 @@ const Navbar = () => {
     <>
       <div
         data-testid="promo-banner"
-        className="fixed inset-x-0 top-0 z-[120] h-[52px] overflow-hidden bg-[#ff3131] text-white sm:h-[72px]"
+        className="fixed inset-x-0 top-0 z-[120] h-[56px] overflow-hidden bg-[#ff3131] text-white sm:h-[72px]"
       >
-        <div className="mx-auto flex h-full max-w-7xl items-center justify-center gap-1 px-1.5 sm:gap-4 sm:px-6 lg:gap-8">
-          <span className="inline-flex shrink-0 items-center gap-0.5 rounded-full bg-white px-2 py-2 text-[8px] font-extrabold uppercase leading-none tracking-tight text-[#ff3131] shadow-sm sm:gap-2 sm:px-4 sm:py-3 sm:text-base lg:px-5 lg:text-xl">
-            <Sparkles className="h-3 w-3 fill-[#ff3131]/15 sm:h-5 sm:w-5 lg:h-6 lg:w-6" aria-hidden="true" />
+        <div className="mx-auto flex h-full max-w-7xl items-center justify-center gap-2 px-1 sm:gap-4 sm:px-6 lg:gap-8">
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-white px-1.5 py-2 text-[10px] font-extrabold uppercase leading-none tracking-tight text-[#ff3131] shadow-sm sm:gap-2 sm:px-4 sm:py-3 sm:text-base lg:px-5 lg:text-xl">
+            <Sparkles className="h-3.5 w-3.5 fill-[#ff3131]/15 sm:h-5 sm:w-5 lg:h-6 lg:w-6" aria-hidden="true" />
             Special offer
           </span>
 
-          <div className="flex min-w-0 flex-row items-center justify-center gap-1 sm:gap-3 lg:gap-5">
-            <p className="whitespace-nowrap text-center text-[9px] font-extrabold uppercase leading-none tracking-tight sm:text-lg lg:text-2xl">
+          <div className="flex min-w-0 flex-row items-center justify-center gap-2 sm:gap-3 lg:gap-5">
+            <p className="whitespace-nowrap text-center text-[11px] font-extrabold uppercase leading-none tracking-tight sm:text-lg lg:text-2xl">
               Save 30% now
-              <span className="mx-0.5 sm:mx-2" aria-hidden="true">
+              <span className="mx-1 sm:mx-2" aria-hidden="true">
                 |
               </span>
               Code:
             </p>
 
-            <span className="shrink-0 rounded-md bg-white px-2 py-2 text-[9px] font-extrabold uppercase leading-none tracking-[0.04em] text-[#ff3131] shadow-sm sm:rounded-lg sm:px-4 sm:py-3 sm:text-base sm:tracking-[0.08em] lg:px-5 lg:text-xl">
+            <span className="shrink-0 rounded-md bg-white px-1.5 py-2 text-[10px] font-extrabold uppercase leading-none tracking-[0.04em] text-[#ff3131] shadow-sm sm:rounded-lg sm:px-4 sm:py-3 sm:text-base sm:tracking-[0.08em] lg:px-5 lg:text-xl">
               WELCOME30
             </span>
           </div>
         </div>
       </div>
 
-      <div className="h-[52px] sm:h-[72px]" aria-hidden="true" />
+      <div className="h-[56px] sm:h-[72px]" aria-hidden="true" />
 
       <nav
         data-testid="site-navbar"

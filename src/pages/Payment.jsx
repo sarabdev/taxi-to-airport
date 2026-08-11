@@ -39,8 +39,6 @@ const Payment = () => {
 
   const [cardError, setCardError] = useState(null);
 
-  const [completed, setCompleted] = useState(false);
-
   const [error, setError] = useState(null);
 
   const [paymentRequest, setPaymentRequest] = useState(null);
@@ -149,11 +147,15 @@ const Payment = () => {
       throw new Error(result.message || "Unable to confirm your booking");
     }
 
-    setCompleted(true);
-    setTimeout(() => {
-      localStorage.removeItem("bookingData");
-      navigate("/");
-    }, 3000);
+    sessionStorage.setItem(
+      "bookingConfirmation",
+      JSON.stringify({
+        booking: result.booking,
+        selectedCar: paidBooking.selectedCar,
+      })
+    );
+    localStorage.removeItem("bookingData");
+    navigate("/booking/thank-you", { replace: true });
   }, [navigate]);
 
   useEffect(() => {
@@ -460,13 +462,15 @@ const Payment = () => {
         );
       }
 
-      setCompleted(true);
-
-      setTimeout(() => {
-        localStorage.removeItem("bookingData");
-
-        navigate("/");
-      }, 3000);
+      sessionStorage.setItem(
+        "bookingConfirmation",
+        JSON.stringify({
+          booking: bookingResult.booking,
+          selectedCar: bookingData.selectedCar,
+        })
+      );
+      localStorage.removeItem("bookingData");
+      navigate("/booking/thank-you", { replace: true });
     } catch (error) {
       setError(error.message || "Payment failed. Please try again.");
     } finally {
@@ -475,37 +479,6 @@ const Payment = () => {
   };
 
   if (!bookingData) return null;
-
-  /* ========================================================= */
-  /* SUCCESS */
-  /* ========================================================= */
-
-  if (completed) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-surface-light px-4 py-10">
-        <div className="w-full max-w-lg rounded-[28px] border border-gray-100 bg-white p-6 text-center shadow-premium sm:rounded-[36px] sm:p-10 md:p-12">
-          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-100 sm:mb-8 sm:h-24 sm:w-24">
-            <CheckCircle className="h-12 w-12 text-green-600 sm:h-14 sm:w-14" />
-          </div>
-
-          <h2 className="mb-4 text-3xl font-black text-primary-900 sm:mb-5 sm:text-4xl">
-            Booking Confirmed
-          </h2>
-
-          <p className="text-base leading-relaxed text-gray-600 sm:text-lg">
-            Payment completed successfully.
-            Your airport transfer has been booked.
-          </p>
-
-          <div className="mt-8 inline-flex max-w-full items-center gap-2 rounded-full border border-green-200 bg-green-50 px-4 py-3 text-sm font-semibold text-green-700 sm:mt-10 sm:px-5 sm:text-base">
-            <BadgeCheck className="h-5 w-5 shrink-0" />
-
-            Redirecting shortly...
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen overflow-hidden bg-surface-light py-6 sm:py-8 md:py-10">
