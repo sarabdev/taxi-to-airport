@@ -26,24 +26,25 @@ const Navbar = () => {
         data-testid="promo-banner"
         className="fixed inset-x-0 top-0 z-[120] h-[56px] overflow-hidden bg-[#ff3131] text-white sm:h-[72px]"
       >
-        <div className="mx-auto flex h-full max-w-7xl items-center justify-center gap-1 px-0.5 sm:gap-4 sm:px-6 lg:gap-8">
+        <div className="mx-auto flex h-full max-w-7xl items-center justify-center gap-2 px-0 sm:gap-4 sm:px-6 lg:gap-8">
           <span className="inline-flex shrink-0 items-center gap-0.5 rounded-full bg-white px-1 py-2 text-[8px] font-extrabold uppercase leading-none tracking-tight text-[#ff3131] shadow-sm sm:gap-2 sm:px-4 sm:py-3 sm:text-base lg:px-5 lg:text-xl">
             <Sparkles className="h-3 w-3 fill-[#ff3131]/15 sm:h-5 sm:w-5 lg:h-6 lg:w-6" aria-hidden="true" />
             Special offer
           </span>
 
-          <div className="flex min-w-0 flex-row items-center justify-center gap-1 sm:gap-3 lg:gap-5">
-            <p className="whitespace-nowrap text-center text-[9px] font-extrabold uppercase leading-none tracking-tighter sm:text-lg sm:tracking-tight lg:text-2xl">
+          <div className="flex min-w-0 flex-row items-center justify-center gap-2 sm:gap-4 lg:gap-6">
+            <p className="shrink-0 whitespace-nowrap text-center text-[14px] font-black uppercase leading-none tracking-tighter sm:text-xl sm:tracking-tight lg:text-2xl">
               Save 30% now
-              <span className="mx-0.5 sm:mx-2" aria-hidden="true">
-                |
-              </span>
-              Code:
             </p>
 
-            <span className="shrink-0 rounded-md bg-white px-2 py-2.5 text-[16px] font-black uppercase leading-none tracking-tight text-[#ff3131] shadow-md ring-1 ring-white/70 sm:rounded-lg sm:px-4 sm:py-3 sm:text-xl sm:tracking-[0.08em] lg:px-5 lg:text-2xl">
-              WELCOME30
-            </span>
+            <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+              <span className="text-[8px] font-extrabold uppercase leading-none sm:text-sm lg:text-base">
+                Code:
+              </span>
+              <span className="rounded-md bg-white px-1.5 py-2.5 text-[14px] font-black uppercase leading-none tracking-tight text-[#ff3131] shadow-md ring-1 ring-white/70 sm:rounded-lg sm:px-4 sm:py-3 sm:text-xl sm:tracking-[0.08em] lg:px-5 lg:text-2xl">
+                WELCOME30
+              </span>
+            </div>
           </div>
         </div>
       </div>

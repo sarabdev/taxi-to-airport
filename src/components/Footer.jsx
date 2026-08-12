@@ -226,6 +226,9 @@ const Footer = () => {
                   <WhatsAppIcon className="h-6 w-6 shrink-0" />
                   <span>
                     <span className="block leading-none">Chat with us</span>
+                    <span className="mt-1.5 block text-sm font-bold leading-none text-white">
+                      +44 7899 001900
+                    </span>
                     <span className="mt-1 block text-xs font-medium text-white/80">
                       Available 24/7
                     </span>
