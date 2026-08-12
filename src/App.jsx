@@ -16,7 +16,6 @@ import UserInfo from './pages/UserInfo';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import ThankYou from './pages/ThankYou';
-import ChatWithUs from './components/ChatWithUs';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -54,8 +53,6 @@ function App() {
             <Route path="/terms" element={<Terms />} />
           </Routes>
         </main>
-
-        <ChatWithUs />
 
         <Footer />
       </div>

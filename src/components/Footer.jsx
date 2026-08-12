@@ -216,24 +216,21 @@ const Footer = () => {
             <div className="space-y-5 sm:space-y-6">
               {/* WhatsApp */}
               <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 sm:h-11 sm:w-11">
-                  <WhatsAppIcon className="h-5 w-5 text-accent-400" />
-                </div>
-
-                <div className="min-w-0">
-                  <a
-                    href="https://wa.me/447899001900"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="break-words font-semibold text-white transition-colors duration-300 hover:text-accent-400"
-                  >
-                    +44 7899 001900
-                  </a>
-
-                  <p className="mt-1 text-sm text-gray-500">
-                    Chat Available 24/7
-                  </p>
-                </div>
+                <a
+                  href="https://wa.me/447899001900?text=Hello%20My%20Airport%20Taxis%2C%20I%20need%20help%20with%20a%20booking."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Chat with us on WhatsApp"
+                  className="inline-flex items-center gap-3 rounded-xl bg-[#25D366] px-4 py-3 font-bold text-white shadow-soft transition duration-300 hover:-translate-y-0.5 hover:bg-[#1ebe5d] focus:outline-none focus:ring-4 focus:ring-green-900/40"
+                >
+                  <WhatsAppIcon className="h-6 w-6 shrink-0" />
+                  <span>
+                    <span className="block leading-none">Chat with us</span>
+                    <span className="mt-1 block text-xs font-medium text-white/80">
+                      Available 24/7
+                    </span>
+                  </span>
+                </a>
               </div>
 
               {/* Email */}

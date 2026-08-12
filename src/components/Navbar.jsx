@@ -41,7 +41,7 @@ const Navbar = () => {
               Code:
             </p>
 
-            <span className="shrink-0 rounded-md bg-white px-1.5 py-2 text-[10px] font-extrabold uppercase leading-none tracking-[0.04em] text-[#ff3131] shadow-sm sm:rounded-lg sm:px-4 sm:py-3 sm:text-base sm:tracking-[0.08em] lg:px-5 lg:text-xl">
+            <span className="shrink-0 rounded-md bg-white px-2 py-2 text-[13px] font-black uppercase leading-none tracking-[0.04em] text-[#ff3131] shadow-md ring-1 ring-white/70 sm:rounded-lg sm:px-4 sm:py-3 sm:text-xl sm:tracking-[0.08em] lg:px-5 lg:text-2xl">
               WELCOME30
             </span>
           </div>
