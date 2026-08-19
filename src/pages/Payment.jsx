@@ -344,7 +344,7 @@ const Payment = () => {
           setBookingData(updatedBooking);
           localStorage.setItem("bookingData", JSON.stringify(updatedBooking));
           setError(
-            "Your fare was updated using the latest city rate. Please review the total and click Pay again."
+            "Your fare was updated using the latest pricing. Please review the total and click Pay again."
           );
           return;
         }
