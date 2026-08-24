@@ -52,27 +52,39 @@ const Navbar = () => {
 
       <div
         data-testid="support-banner"
-        className="fixed inset-x-0 top-[56px] z-[119] h-9 bg-[#25D366] text-white sm:top-[72px] sm:h-10"
+        className="fixed inset-x-0 top-[56px] z-[119] h-11 bg-[#25D366] text-white sm:top-[72px] sm:h-10"
       >
         <a
           href="https://wa.me/447899001900?text=Hello%20My%20Airport%20Taxis%2C%20I%20need%20help%20with%20a%20booking."
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Open the WhatsApp support live chat"
-          className="mx-auto flex h-full max-w-7xl items-center justify-center gap-2 px-3 text-[11px] font-bold leading-none transition-colors hover:bg-black/5 sm:gap-4 sm:px-6 sm:text-sm"
+          className="mx-auto flex h-full max-w-7xl items-center justify-center px-3 transition-colors hover:bg-black/5 sm:gap-4 sm:px-6"
         >
-          <span className="whitespace-nowrap">
-            24/7 Support Available <span>- Chat now</span>
+          <span className="flex items-center gap-2 sm:hidden">
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/20 ring-1 ring-white/30">
+              <WhatsAppIcon className="h-4 w-4" />
+            </span>
+            <span className="leading-tight">
+              <span className="block text-xs font-extrabold">24/7 Support Available</span>
+              <span className="mt-0.5 block text-[10px] font-semibold text-white/90">
+                Helpline · WhatsApp live chat · Chat now
+              </span>
+            </span>
           </span>
-          <span className="h-4 w-px bg-white/50" aria-hidden="true" />
-          <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
-            <WhatsAppIcon className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" />
-            Helpline - WhatsApp live chat
+
+          <span className="hidden items-center gap-4 text-sm font-bold leading-none sm:flex">
+            <span className="whitespace-nowrap">24/7 Support Available - Chat now</span>
+            <span className="h-4 w-px bg-white/50" aria-hidden="true" />
+            <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+              <WhatsAppIcon className="h-5 w-5 shrink-0" />
+              Helpline - WhatsApp live chat
+            </span>
           </span>
         </a>
       </div>
 
-      <div className="h-[92px] sm:h-[112px]" aria-hidden="true" />
+      <div className="h-[100px] sm:h-[112px]" aria-hidden="true" />
 
       <nav
         data-testid="site-navbar"
