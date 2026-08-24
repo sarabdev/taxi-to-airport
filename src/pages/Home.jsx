@@ -408,10 +408,6 @@ const Home = () => {
                         </button>
                       </div>
 
-                      <p className="mt-1.5 text-[10px] leading-4 text-gray-400 sm:text-[11px]">
-                        Offer applies on all transfers of 10 miles or more only.
-                      </p>
-
                       {couponError && (
                         <p className="mt-2 text-sm font-medium text-red-600">{couponError}</p>
                       )}
