@@ -271,7 +271,7 @@ const Footer = () => {
                 to="/terms"
                 className="transition-colors duration-300 hover:text-white"
               >
-                Terms of Use
+                Terms and Conditions
               </Link>
 
             </div>

@@ -2,7 +2,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { Menu, Sparkles, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import airportLogo from '../assets/my-airport-logo.png';
-import WhatsAppIcon from './WhatsAppIcon';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,7 +13,7 @@ const Navbar = () => {
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' },
     { name: 'Privacy Policy', path: '/privacy' },
-    { name: 'Terms of Use', path: '/terms' },
+    { name: 'Terms and Conditions', path: '/terms' },
   ];
 
   useEffect(() => {
@@ -54,7 +53,7 @@ const Navbar = () => {
 
       <div
         data-testid="support-banner"
-        className="fixed inset-x-0 top-[56px] z-[119] h-11 bg-[#25D366] text-white sm:top-[72px] sm:h-10"
+        className="fixed inset-x-0 top-[56px] z-[119] h-8 bg-[#25D366] text-white sm:top-[72px]"
       >
         <a
           href="https://wa.me/447899001900?text=Hello%20My%20Airport%20Taxis%2C%20I%20need%20help%20with%20a%20booking."
@@ -63,16 +62,13 @@ const Navbar = () => {
           aria-label="Open the WhatsApp support live chat"
           className="mx-auto flex h-full max-w-7xl items-center justify-center px-3 transition-colors hover:bg-black/5 sm:gap-4 sm:px-6"
         >
-          <span className="inline-flex items-center gap-2 whitespace-nowrap text-xs font-bold leading-none sm:text-sm">
-            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/20 ring-1 ring-white/30 sm:h-8 sm:w-8">
-              <WhatsAppIcon className="h-4 w-4 sm:h-5 sm:w-5" />
-            </span>
-            Helpline - WhatsApp live chat
+          <span className="whitespace-nowrap text-xs font-bold leading-none sm:text-sm">
+            WhatsApp live chat
           </span>
         </a>
       </div>
 
-      <div className="h-[100px] sm:h-[112px]" aria-hidden="true" />
+      <div className="h-[88px] sm:h-[104px]" aria-hidden="true" />
 
       <nav
         data-testid="site-navbar"
