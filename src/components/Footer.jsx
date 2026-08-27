@@ -216,13 +216,16 @@ const Footer = () => {
             <div className="space-y-5 sm:space-y-6">
               {/* Phone */}
               <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 sm:h-11 sm:w-11">
+                  <Phone className="h-5 w-5 text-accent-400" />
+                </div>
+
                 <a
                   href="tel:+447899001900"
                   aria-label="Call +44 7899 001900"
-                  className="inline-flex items-center gap-3 rounded-xl bg-[#25D366] px-4 py-3 font-bold text-white shadow-soft transition duration-300 hover:-translate-y-0.5 hover:bg-[#1ebe5d] focus:outline-none focus:ring-4 focus:ring-green-900/40"
+                  className="whitespace-nowrap text-sm font-semibold tracking-tight text-white transition-colors duration-300 hover:text-accent-400"
                 >
-                  <Phone className="h-6 w-6 shrink-0" />
-                  <span className="leading-none">+44 7899 001900</span>
+                  +44 7899 001900
                 </a>
               </div>
 
