@@ -13,6 +13,8 @@ const Navbar = () => {
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' },
+    { name: 'Privacy Policy', path: '/privacy' },
+    { name: 'Terms of Use', path: '/terms' },
   ];
 
   useEffect(() => {
@@ -61,25 +63,11 @@ const Navbar = () => {
           aria-label="Open the WhatsApp support live chat"
           className="mx-auto flex h-full max-w-7xl items-center justify-center px-3 transition-colors hover:bg-black/5 sm:gap-4 sm:px-6"
         >
-          <span className="flex items-center gap-2 sm:hidden">
-            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/20 ring-1 ring-white/30">
-              <WhatsAppIcon className="h-4 w-4" />
+          <span className="inline-flex items-center gap-2 whitespace-nowrap text-xs font-bold leading-none sm:text-sm">
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/20 ring-1 ring-white/30 sm:h-8 sm:w-8">
+              <WhatsAppIcon className="h-4 w-4 sm:h-5 sm:w-5" />
             </span>
-            <span className="leading-tight">
-              <span className="block text-xs font-extrabold">24/7 Support Available</span>
-              <span className="mt-0.5 block text-[10px] font-semibold text-white/90">
-                Helpline · WhatsApp live chat · Chat now
-              </span>
-            </span>
-          </span>
-
-          <span className="hidden items-center gap-4 text-sm font-bold leading-none sm:flex">
-            <span className="whitespace-nowrap">24/7 Support Available - Chat now</span>
-            <span className="h-4 w-px bg-white/50" aria-hidden="true" />
-            <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
-              <WhatsAppIcon className="h-5 w-5 shrink-0" />
-              Helpline - WhatsApp live chat
-            </span>
+            Helpline - WhatsApp live chat
           </span>
         </a>
       </div>
@@ -119,7 +107,7 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden items-center space-x-6 md:flex lg:space-x-10">
+          <div className="hidden items-center gap-4 lg:flex xl:gap-7">
             {navItems.map((item) => (
               <Link
                 key={item.path}
@@ -147,7 +135,7 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Toggle */}
-          <div className="flex shrink-0 items-center md:hidden">
+          <div className="flex shrink-0 items-center lg:hidden">
             <button
               type="button"
               aria-label="Toggle menu"
@@ -167,7 +155,7 @@ const Navbar = () => {
 
       {/* Mobile Navigation */}
       <div
-        className={`overflow-hidden transition-all duration-300 md:hidden ${isOpen
+        className={`overflow-hidden transition-all duration-300 lg:hidden ${isOpen
             ? 'max-h-[420px] border-t border-gray-200 opacity-100'
             : 'max-h-0 opacity-0'
           }`}

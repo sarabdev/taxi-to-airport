@@ -31,6 +31,9 @@ import welcomeOfferCarousel from '../assets/welcome-offer-carousel.png';
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
 const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_MAPS_KEY;
 
+const getPlaceDisplayName = (place) =>
+  place.name || place.formatted_address || '';
+
 const getLocalDateTime = () => {
   const now = new Date();
 
@@ -149,24 +152,28 @@ const Home = () => {
 
   const initAutocomplete = () => {
     if (fromInputRef.current) {
-      const fromAuto = new window.google.maps.places.Autocomplete(fromInputRef.current);
+      const fromAuto = new window.google.maps.places.Autocomplete(fromInputRef.current, {
+        fields: ['name', 'formatted_address', 'place_id'],
+      });
       fromAuto.addListener('place_changed', () => {
         const place = fromAuto.getPlace();
         setFormData((prev) => ({
           ...prev,
-          fromLocation: place.formatted_address || '',
+          fromLocation: getPlaceDisplayName(place),
           fromPlaceId: place.place_id || '',
         }));
       });
     }
 
     if (toInputRef.current) {
-      const toAuto = new window.google.maps.places.Autocomplete(toInputRef.current);
+      const toAuto = new window.google.maps.places.Autocomplete(toInputRef.current, {
+        fields: ['name', 'formatted_address', 'place_id'],
+      });
       toAuto.addListener('place_changed', () => {
         const place = toAuto.getPlace();
         setFormData((prev) => ({
           ...prev,
-          toLocation: place.formatted_address || '',
+          toLocation: getPlaceDisplayName(place),
           toPlaceId: place.place_id || '',
         }));
       });

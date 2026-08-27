@@ -22,6 +22,9 @@ import {
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
 const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_MAPS_KEY;
 
+const getPlaceDisplayName = (place) =>
+  place.name || place.formatted_address || "";
+
 const TIME_OPTIONS = Array.from({ length: 24 * 12 }, (_, index) => {
   const hours = Math.floor(index / 12);
   const minutes = (index % 12) * 5;
@@ -48,6 +51,7 @@ const initialForm = {
   email: "",
   mobile: "",
   passengers: 1,
+  termsAccepted: false,
 
   returnTrip: {
     pickupLocation: "",
@@ -192,14 +196,15 @@ const UserInfo = () => {
     const initAutocomplete = () => {
       if (returnPickupRef.current) {
         const pickupAuto = new window.google.maps.places.Autocomplete(
-          returnPickupRef.current
+          returnPickupRef.current,
+          { fields: ["name", "formatted_address", "place_id"] }
         );
 
         pickupAuto.addListener("place_changed", () => {
           const place = pickupAuto.getPlace();
 
           handleReturnTripChange({
-            pickupLocation: place.formatted_address || "",
+            pickupLocation: getPlaceDisplayName(place),
             pickupPlaceId: place.place_id || "",
           });
         });
@@ -207,14 +212,15 @@ const UserInfo = () => {
 
       if (returnDropoffRef.current) {
         const dropoffAuto = new window.google.maps.places.Autocomplete(
-          returnDropoffRef.current
+          returnDropoffRef.current,
+          { fields: ["name", "formatted_address", "place_id"] }
         );
 
         dropoffAuto.addListener("place_changed", () => {
           const place = dropoffAuto.getPlace();
 
           handleReturnTripChange({
-            dropoffLocation: place.formatted_address || "",
+            dropoffLocation: getPlaceDisplayName(place),
             dropoffPlaceId: place.place_id || "",
           });
         });
@@ -382,6 +388,10 @@ const UserInfo = () => {
     if (!form.mobile.trim()) err.mobile = "Required";
 
     if (!form.email.trim()) err.email = "Required";
+
+    if (!form.termsAccepted) {
+      err.termsAccepted = "Please agree to the Terms and Conditions";
+    }
 
     if (
       form.luggage.extraLargeItemType === "other" &&
@@ -1168,6 +1178,34 @@ const UserInfo = () => {
                           </p>
                         </div>
                       </label>
+                    </div>
+
+                    {/* Terms */}
+                    <div>
+                      <div className="flex items-center gap-2 text-sm text-gray-700 sm:text-base">
+                        <input
+                          id="termsAccepted"
+                          type="checkbox"
+                          className="h-5 w-5 shrink-0 rounded border-gray-300 text-primary-900 focus:ring-primary-900"
+                          checked={form.termsAccepted}
+                          onChange={(e) =>
+                            setForm((prev) => ({
+                              ...prev,
+                              termsAccepted: e.target.checked,
+                            }))
+                          }
+                        />
+                        <label htmlFor="termsAccepted" className="cursor-pointer">
+                          I agree to the
+                        </label>
+                        <Link
+                          to="/terms"
+                          className="font-semibold text-primary-900 underline decoration-accent-500 underline-offset-4 hover:text-accent-600"
+                        >
+                          Terms and Conditions
+                        </Link>
+                      </div>
+                      {renderError("termsAccepted")}
                     </div>
                   </div>
                 </section>
