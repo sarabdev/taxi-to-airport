@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, Sparkles, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import airportLogo from '../assets/my-airport-logo.png';
+import zaltLogo from '../assets/zalt-logo.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -56,7 +56,7 @@ const Navbar = () => {
         className="fixed inset-x-0 top-[56px] z-[119] h-8 bg-[#25D366] text-white sm:top-[72px]"
       >
         <a
-          href="https://wa.me/447899001900?text=Hello%20My%20Airport%20Taxis%2C%20I%20need%20help%20with%20a%20booking."
+          href="https://wa.me/447899001900?text=Hello%20Zalt%2C%20I%20need%20help%20with%20a%20booking."
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Open the WhatsApp support live chat"
@@ -82,19 +82,15 @@ const Navbar = () => {
               to="/"
               className="group flex min-w-0 items-center gap-2 sm:gap-3"
             >
-              <div className="flex h-11 w-16 shrink-0 items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-105 sm:h-12 sm:w-20">
+              <div className="flex h-11 w-28 shrink-0 items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-105 sm:h-12 sm:w-32">
                 <img
-                  src={airportLogo}
-                  alt="MYAIRPORTTAXIS logo"
-                  className="h-full w-full scale-[1.65] object-contain"
+                  src={zaltLogo}
+                  alt="Zalt logo"
+                  className="h-full w-full object-contain"
                 />
               </div>
 
               <div className="flex min-w-0 flex-col leading-tight">
-                <span className="truncate text-xl font-extrabold tracking-tight text-primary-900 sm:text-2xl">
-                  MYAIRPORT<span className="text-accent-500">TAXIS</span>
-                </span>
-
                 <span className="hidden truncate text-[10px] uppercase tracking-[0.16em] text-gray-500 xs:block sm:text-[11px] sm:tracking-[0.2em]">
                   Premium Airport Transfers
                 </span>

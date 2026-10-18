@@ -12,7 +12,7 @@ import {
   Clock3,
   BadgeCheck,
 } from 'lucide-react';
-import airportLogo from '../assets/my-airport-logo.png';
+import zaltLogo from '../assets/zalt-logo.png';
 
 const Footer = () => {
   return (
@@ -36,19 +36,15 @@ const Footer = () => {
               to="/"
               className="group mb-5 flex items-center gap-3 sm:mb-6"
             >
-              <div className="flex h-12 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white transition-transform duration-300 group-hover:scale-105 sm:h-14 sm:w-24">
+              <div className="flex h-12 w-32 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white transition-transform duration-300 group-hover:scale-105 sm:h-14 sm:w-36">
                 <img
-                  src={airportLogo}
-                  alt="MYAIRPORTTAXIS logo"
-                  className="h-full w-full scale-[1.65] object-contain"
+                  src={zaltLogo}
+                  alt="Zalt logo"
+                  className="h-full w-full object-contain"
                 />
               </div>
 
               <div className="min-w-0">
-                <h2 className="whitespace-nowrap text-xl font-black tracking-tight text-white sm:text-2xl">
-                  MYAIRPORT<span className="text-accent-500">TAXIS</span>
-                </h2>
-
                 <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-gray-500 sm:text-xs">
                   Premium Transfers
                 </p>
@@ -255,8 +251,7 @@ const Footer = () => {
         <div className="mt-10 border-t border-white/10 pt-6 sm:mt-14 sm:pt-8 lg:mt-16">
           <div className="flex flex-col items-center justify-between gap-5 lg:flex-row lg:gap-6">
             <p className="text-center text-sm text-gray-500 lg:text-left">
-              © {new Date().getFullYear()} MYAIRPORT
-              <span className="text-accent-500">TAXIS</span>. All rights reserved.
+              © {new Date().getFullYear()} Zalt. All rights reserved.
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-sm text-gray-500 sm:gap-x-6">

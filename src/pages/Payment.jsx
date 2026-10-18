@@ -171,7 +171,7 @@ const Payment = () => {
       country: "GB",
       currency: "gbp",
       total: {
-        label: "MYAIRPORTTAXIS airport transfer",
+        label: "Zalt airport transfer",
         amount: total,
       },
       requestPayerName: true,

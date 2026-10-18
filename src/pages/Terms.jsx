@@ -86,7 +86,7 @@ const Terms = () => {
             </h1>
 
             <p className="mt-5 max-w-3xl text-base leading-relaxed text-gray-300 sm:text-lg">
-              The terms governing your use of My Airport Taxis and bookings made through our platform.
+              The terms governing your use of Zalt and bookings made through our platform.
             </p>
 
             <p className="mt-6 text-sm font-medium text-gray-400">
@@ -122,7 +122,7 @@ const Terms = () => {
             <div className="space-y-10 sm:space-y-12">
               <Section number="1" title="Introduction" icon={BadgeCheck}>
                 <p>
-                  These Terms of Use (&quot;Terms&quot;) govern access to and use of the website myairporttaxis.uk (the &quot;Platform&quot;), operated by My Airport Taxis (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;, the &quot;Company&quot;).
+                  These Terms of Use (&quot;Terms&quot;) govern access to and use of this website (the &quot;Platform&quot;), operated by Zalt (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;, the &quot;Company&quot;).
                 </p>
                 <p>
                   The Platform allows travellers (&quot;you&quot;, &quot;Traveller&quot;) to book airport transfer and related transport services (&quot;Transport Services&quot;) that are carried out by independent, licensed private hire drivers and operators (&quot;Drivers&quot;). We are a booking intermediary: we connect you with Drivers and facilitate your booking and payment, but we do not ourselves operate vehicles, hold a private hire operator&apos;s licence, or act as a transport carrier.
@@ -318,7 +318,7 @@ const Terms = () => {
 
               <Section number="11" title="Intellectual Property">
                 <p>
-                  All content on the Platform - including text, graphics, logos, and the &quot;My Airport Taxis&quot; name and branding - is owned by us or our licensors and is protected by applicable intellectual property laws. We grant you a limited, non-exclusive, non-transferable licence to access and use the Platform for your personal, non-commercial use only. You may not copy, reproduce, resell, or create derivative works from the Platform&apos;s content without our prior written consent.
+                  All content on the Platform - including text, graphics, logos, and the &quot;Zalt&quot; name and branding - is owned by us or our licensors and is protected by applicable intellectual property laws. We grant you a limited, non-exclusive, non-transferable licence to access and use the Platform for your personal, non-commercial use only. You may not copy, reproduce, resell, or create derivative works from the Platform&apos;s content without our prior written consent.
                 </p>
               </Section>
 

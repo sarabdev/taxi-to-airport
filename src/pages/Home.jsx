@@ -570,7 +570,7 @@ const Home = () => {
                   </h2>
 
                   <p className="mt-4 max-w-2xl text-base leading-relaxed text-gray-600 sm:mt-5 sm:text-xl">
-                    Verified experiences from travelers who trust MYAIRPORTTAXIS
+                    Verified experiences from travelers who trust Zalt
                     for reliable and luxury airport transportation.
                   </p>
                 </div>
@@ -1165,8 +1165,8 @@ const Home = () => {
               <a
                 href={
                   activePromo === 'rewards'
-                    ? 'mailto:support@myairporttaxis.uk?subject=Rewards%20enquiry&body=Hello%20My%20Airport%20Taxis%2C%0A%0AI%20would%20like%20to%20check%20the%20rewards%20available%20for%20my%20completed%20journey.%0A%0ABooking%20reference%3A%0AEmail%20used%20for%20booking%3A%0AJourney%20date%3A%0A'
-                    : 'mailto:support@myairporttaxis.uk?subject=Referral%20code%20request&body=Hello%20My%20Airport%20Taxis%2C%0A%0AI%20would%20like%20to%20request%20a%20personal%20referral%20code.%0A%0AName%3A%0AEmail%20used%20for%20booking%3A%0ARecent%20booking%20reference%20(if%20available)%3A%0A'
+                    ? 'mailto:support@myairporttaxis.uk?subject=Rewards%20enquiry&body=Hello%20Zalt%2C%0A%0AI%20would%20like%20to%20check%20the%20rewards%20available%20for%20my%20completed%20journey.%0A%0ABooking%20reference%3A%0AEmail%20used%20for%20booking%3A%0AJourney%20date%3A%0A'
+                    : 'mailto:support@myairporttaxis.uk?subject=Referral%20code%20request&body=Hello%20Zalt%2C%0A%0AI%20would%20like%20to%20request%20a%20personal%20referral%20code.%0A%0AName%3A%0AEmail%20used%20for%20booking%3A%0ARecent%20booking%20reference%20(if%20available)%3A%0A'
                 }
                 className="inline-flex w-full items-center justify-center rounded-2xl bg-primary-900 px-6 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-800 sm:text-base"
               >

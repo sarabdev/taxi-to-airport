@@ -79,7 +79,7 @@ const Privacy = () => {
             </h1>
 
             <p className="mt-5 max-w-3xl text-base leading-relaxed text-gray-300 sm:text-lg">
-              How My Airport Taxis collects, uses, shares, and protects your personal data.
+              How Zalt collects, uses, shares, and protects your personal data.
             </p>
 
             <p className="mt-6 text-sm font-medium text-gray-400">
@@ -126,7 +126,7 @@ const Privacy = () => {
             <div className="space-y-10 sm:space-y-12">
               <Section number="1" title="Introduction" icon={BadgeCheck}>
                 <p>
-                  1.1 My Airport Taxis (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;, the &quot;Company&quot;) operates the website myairporttaxis.uk (the &quot;Platform&quot;), through which customers (&quot;you&quot;, &quot;your&quot;, the &quot;Traveller&quot;) can book airport transfer services carried out by independent, licensed private hire drivers and operators (&quot;Drivers&quot;).
+                  1.1 Zalt (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;, the &quot;Company&quot;) operates this website (the &quot;Platform&quot;), through which customers (&quot;you&quot;, &quot;your&quot;, the &quot;Traveller&quot;) can book airport transfer services carried out by independent, licensed private hire drivers and operators (&quot;Drivers&quot;).
                 </p>
                 <p>
                   1.2 We are a booking intermediary. We do not operate vehicles or employ Drivers ourselves. When you book through the Platform, your transfer is carried out by an independent, licensed Driver, and this Privacy Policy explains what happens to your personal data both when you use our Platform and when that data needs to be shared with a Driver to fulfil your booking.
@@ -138,7 +138,7 @@ const Privacy = () => {
                 <div className="rounded-2xl border border-accent-200 bg-accent-50 p-5">
                   <h3 className="mb-3 font-bold text-primary-900">Data Controller details</h3>
                   <BulletList>
-                    <Bullet><strong className="text-gray-800">Company name:</strong> My Airport Taxis</Bullet>
+                    <Bullet><strong className="text-gray-800">Company name:</strong> Zalt</Bullet>
                     <Bullet>
                       <strong className="text-gray-800">Contact email:</strong>{' '}
                       <a className="font-semibold text-primary-900 underline decoration-accent-500 underline-offset-4" href="mailto:support@myairporttaxis.uk">
