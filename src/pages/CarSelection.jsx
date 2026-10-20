@@ -18,6 +18,7 @@ import estateCar from "../assets/cars/estate_car.webp";
 import peopleCarrier from "../assets/cars/people_carrier_doc.png";
 import executivePeopleCarrier from "../assets/cars/executive_people_car.png";
 import minibus16 from "../assets/cars/minibus_16.png";
+import { getRouteStops } from "../lib/routeStops";
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
 
@@ -182,6 +183,7 @@ const CarSelection = () => {
           body: JSON.stringify({
             fromPlaceId: booking.fromPlaceId,
             toPlaceId: booking.toPlaceId,
+            stops: getRouteStops(booking),
             couponCode: booking.couponCode || null,
           }),
         });

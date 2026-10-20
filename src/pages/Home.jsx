@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
@@ -21,18 +21,18 @@ import {
   Mail,
   Share2,
   X,
+  Plus,
+  MapPin,
 } from 'lucide-react';
 import executiveAirportTransfers from '../assets/hero-executive-airport-transfers.png';
 import groupFamilyTransfers from '../assets/hero-group-family-transfers.png';
 import airportFleet from '../assets/hero-airport-fleet.png';
 import welcomeRewardsBackground from '../assets/welcome-rewards-background.png';
 import welcomeOfferCarousel from '../assets/welcome-offer-carousel.png';
+import PlaceAutocompleteInput from '../components/PlaceAutocompleteInput';
+import { MAX_STOPS, createStop, getRouteStops } from '../lib/routeStops';
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
-const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_MAPS_KEY;
-
-const getPlaceDisplayName = (place) =>
-  place.name || place.formatted_address || '';
 
 const getLocalDateTime = () => {
   const now = new Date();
@@ -62,15 +62,13 @@ const defaultDateTime = getLocalDateTime();
 const Home = () => {
   const navigate = useNavigate();
 
-  const toInputRef = useRef(null);
-  const fromInputRef = useRef(null);
-
   const [loading, setLoading] = useState(false);
   const [activePromo, setActivePromo] = useState(null);
   const [couponCode, setCouponCode] = useState('WELCOME30');
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [couponLoading, setCouponLoading] = useState(false);
   const [couponError, setCouponError] = useState('');
+  const [routeError, setRouteError] = useState('');
 
   const [formData, setFormData] = useState({
     fromType: 'airport',
@@ -79,6 +77,7 @@ const Home = () => {
     toType: 'custom',
     toLocation: '',
     toPlaceId: '',
+    stops: [],
     passengers: 1,
     luggage: 1,
     isRoundTrip: false,
@@ -109,28 +108,6 @@ const Home = () => {
     };
   }, [activePromo]);
 
-  /* ========================================================= */
-  /* GOOGLE AUTOCOMPLETE */
-  /* ========================================================= */
-
-  useEffect(() => {
-    if (!GOOGLE_KEY) return;
-
-    if (!window.google) {
-      const script = document.createElement('script');
-
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_KEY}&libraries=places`;
-
-      script.async = true;
-
-      script.onload = initAutocomplete;
-
-      document.body.appendChild(script);
-    } else {
-      initAutocomplete();
-    }
-  }, []);
-
   const sliderImages = [
     {
       image: welcomeOfferCarousel,
@@ -150,34 +127,65 @@ const Home = () => {
     },
   ];
 
-  const initAutocomplete = () => {
-    if (fromInputRef.current) {
-      const fromAuto = new window.google.maps.places.Autocomplete(fromInputRef.current, {
-        fields: ['name', 'formatted_address', 'place_id'],
-      });
-      fromAuto.addListener('place_changed', () => {
-        const place = fromAuto.getPlace();
-        setFormData((prev) => ({
-          ...prev,
-          fromLocation: getPlaceDisplayName(place),
-          fromPlaceId: place.place_id || '',
-        }));
-      });
+  /* ========================================================= */
+  /* ROUTE: PICKUP, STOPS, DESTINATION */
+  /* ========================================================= */
+
+  // Typing replaces a previously chosen place, so its place id is cleared until a
+  // suggestion is picked again. This keeps the priced route in sync with the text.
+  const setRoutePoint = (field, { location, placeId = '' }) => {
+    setRouteError('');
+    setFormData((prev) => ({
+      ...prev,
+      [`${field}Location`]: location,
+      [`${field}PlaceId`]: placeId,
+    }));
+  };
+
+  const updateStop = (stopId, changes) => {
+    setRouteError('');
+    setFormData((prev) => ({
+      ...prev,
+      stops: prev.stops.map((stop) =>
+        stop.id === stopId ? { ...stop, ...changes } : stop
+      ),
+    }));
+  };
+
+  const addStop = () => {
+    setFormData((prev) =>
+      prev.stops.length >= MAX_STOPS
+        ? prev
+        : { ...prev, stops: [...prev.stops, createStop()] }
+    );
+  };
+
+  const removeStop = (stopId) => {
+    setRouteError('');
+    setFormData((prev) => ({
+      ...prev,
+      stops: prev.stops.filter((stop) => stop.id !== stopId),
+    }));
+  };
+
+  /** Returns an error message for the route, or '' when it can be priced. */
+  const validateRoute = () => {
+    if (!formData.fromPlaceId) {
+      return 'Please choose your pickup location from the address suggestions.';
     }
 
-    if (toInputRef.current) {
-      const toAuto = new window.google.maps.places.Autocomplete(toInputRef.current, {
-        fields: ['name', 'formatted_address', 'place_id'],
-      });
-      toAuto.addListener('place_changed', () => {
-        const place = toAuto.getPlace();
-        setFormData((prev) => ({
-          ...prev,
-          toLocation: getPlaceDisplayName(place),
-          toPlaceId: place.place_id || '',
-        }));
-      });
+    const unconfirmedIndex = formData.stops.findIndex(
+      (stop) => stop.location.trim() && !stop.placeId
+    );
+    if (unconfirmedIndex !== -1) {
+      return `Please choose stop ${unconfirmedIndex + 1} from the address suggestions, or remove it.`;
     }
+
+    if (!formData.toPlaceId) {
+      return 'Please choose your destination from the address suggestions.';
+    }
+
+    return '';
   };
 
   /* ========================================================= */
@@ -222,6 +230,15 @@ const Home = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const routeValidationError = validateRoute();
+    if (routeValidationError) {
+      setRouteError(routeValidationError);
+      return;
+    }
+
+    // Blank stop rows are ignored; only confirmed stops are priced and booked.
+    const stops = getRouteStops(formData);
+
     setLoading(true);
 
     let confirmedCoupon = appliedCoupon;
@@ -255,6 +272,7 @@ const Home = () => {
           body: JSON.stringify({
             fromPlaceId: formData.fromPlaceId,
             toPlaceId: formData.toPlaceId,
+            stops,
             isRoundTrip: formData.isRoundTrip,
           }),
         });
@@ -269,6 +287,7 @@ const Home = () => {
       'bookingData',
       JSON.stringify({
         ...formData,
+        stops,
         pricing,
         couponCode: confirmedCoupon?.code || null,
       })
@@ -342,18 +361,70 @@ const Home = () => {
                     <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                       Pickup Location
                     </label>
-                    <input
-                      ref={fromInputRef}
-                      type="text"
+                    <PlaceAutocompleteInput
                       name="fromLocation"
                       value={formData.fromLocation}
-                      onChange={handleChange}
+                      onTextChange={(location) => setRoutePoint('from', { location })}
+                      onPlaceSelect={(place) => setRoutePoint('from', place)}
                       placeholder="Enter pickup address"
                       className="input-field h-12 border-gray-200 text-black focus:ring-primary-900 sm:h-14"
-                      autoComplete="off"
                       required
                     />
                   </div>
+
+                  {/* STOPS */}
+                  {formData.stops.length > 0 && (
+                    <ol className="space-y-3" aria-label="Stops">
+                      {formData.stops.map((stop, index) => (
+                        <li key={stop.id}>
+                          <label
+                            htmlFor={stop.id}
+                            className="mb-2 block text-sm font-semibold text-gray-700"
+                          >
+                            Stop {index + 1}
+                          </label>
+                          <div className="flex items-center gap-2">
+                            <div className="relative min-w-0 flex-1">
+                              <MapPin className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-accent-500" />
+                              <PlaceAutocompleteInput
+                                id={stop.id}
+                                value={stop.location}
+                                onTextChange={(location) =>
+                                  updateStop(stop.id, { location, placeId: '' })
+                                }
+                                onPlaceSelect={(place) => updateStop(stop.id, place)}
+                                placeholder="Enter stop address"
+                                className="input-field h-12 border-gray-200 pl-11 text-black focus:ring-primary-900 sm:h-14"
+                              />
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => removeStop(stop.id)}
+                              aria-label={`Remove stop ${index + 1}`}
+                              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-gray-200 text-gray-500 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600 sm:h-14 sm:w-14"
+                            >
+                              <X className="h-5 w-5" />
+                            </button>
+                          </div>
+                        </li>
+                      ))}
+                    </ol>
+                  )}
+
+                  {formData.stops.length < MAX_STOPS ? (
+                    <button
+                      type="button"
+                      onClick={addStop}
+                      className="inline-flex items-center gap-2 text-sm font-bold text-primary-900 transition hover:text-accent-500"
+                    >
+                      <Plus className="h-4 w-4" />
+                      Add stop
+                    </button>
+                  ) : (
+                    <p className="text-xs text-gray-500">
+                      You can add up to {MAX_STOPS} stops.
+                    </p>
+                  )}
 
                   {/* DESTINATION */}
                   <div>
@@ -361,18 +432,22 @@ const Home = () => {
                       Destination
                     </label>
 
-                    <input
-                      ref={toInputRef}
-                      type="text"
+                    <PlaceAutocompleteInput
                       name="toLocation"
                       value={formData.toLocation}
-                      onChange={handleChange}
+                      onTextChange={(location) => setRoutePoint('to', { location })}
+                      onPlaceSelect={(place) => setRoutePoint('to', place)}
                       placeholder="Enter your destination"
                       className="input-field h-12 border-gray-200 text-black focus:ring-primary-900 sm:h-14"
-                      autoComplete="off"
                       required
                     />
                   </div>
+
+                  {routeError && (
+                    <p role="alert" className="text-sm font-medium text-red-600">
+                      {routeError}
+                    </p>
+                  )}
 
                   {/* VOUCHER */}
                   <div>

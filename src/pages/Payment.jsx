@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getRouteStops } from "../lib/routeStops";
 
 import {
   ArrowLeft,
@@ -73,6 +74,7 @@ const Payment = () => {
         carId: currentBooking.selectedCar._id,
         fromPlaceId: currentBooking.fromPlaceId,
         toPlaceId: currentBooking.toPlaceId,
+        stops: getRouteStops(currentBooking),
         returnFromPlaceId:
           currentBooking.tripType === "RETURN"
             ? currentBooking.returnTrip?.pickupPlaceId
@@ -114,6 +116,7 @@ const Payment = () => {
         pickupPlaceId: paidBooking.fromPlaceId,
         dropoffLocation: paidBooking.toLocation,
         dropoffPlaceId: paidBooking.toPlaceId,
+        stops: getRouteStops(paidBooking),
         pickupDate: paidBooking.pickupDate,
         pickupTime: paidBooking.pickupTime,
         returnTrip:
@@ -306,6 +309,7 @@ const Payment = () => {
             carId: bookingData.selectedCar._id,
             fromPlaceId: bookingData.fromPlaceId,
             toPlaceId: bookingData.toPlaceId,
+            stops: getRouteStops(bookingData),
             returnFromPlaceId:
               bookingData.tripType === "RETURN"
                 ? bookingData.returnTrip?.pickupPlaceId
@@ -394,6 +398,7 @@ const Payment = () => {
             pickupPlaceId: bookingData.fromPlaceId,
             dropoffLocation: bookingData.toLocation,
             dropoffPlaceId: bookingData.toPlaceId,
+            stops: getRouteStops(bookingData),
             pickupDate: bookingData.pickupDate,
             pickupTime: bookingData.pickupTime,
             returnTrip:
@@ -765,6 +770,22 @@ const Payment = () => {
                     {bookingData.fromLocation}
                   </p>
                 </div>
+
+                {getRouteStops(bookingData).map((stop, index) => (
+                  <div key={stop.placeId + index}>
+                    <div className="border-t border-gray-100"></div>
+
+                    <div className="pt-5 sm:pt-6">
+                      <p className="mb-2 text-sm text-gray-500">
+                        Stop {index + 1}
+                      </p>
+
+                      <p className="break-words font-semibold leading-relaxed text-primary-900">
+                        {stop.location}
+                      </p>
+                    </div>
+                  </div>
+                ))}
 
                 <div className="border-t border-gray-100"></div>
 

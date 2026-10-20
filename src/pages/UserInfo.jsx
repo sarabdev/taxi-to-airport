@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { getRouteStops } from "../lib/routeStops";
 
 import {
   User,
@@ -277,6 +278,7 @@ const UserInfo = () => {
             carId: currentBooking.selectedCar?._id,
             fromPlaceId: currentBooking.fromPlaceId,
             toPlaceId: currentBooking.toPlaceId,
+            stops: getRouteStops(currentBooking),
             returnFromPlaceId: isReturnTrip ? pickupPlaceId : "",
             returnToPlaceId: isReturnTrip ? dropoffPlaceId : "",
             isReturnTrip,

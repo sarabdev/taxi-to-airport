@@ -108,6 +108,11 @@ const ThankYou = () => {
 
               <div className="grid gap-6 sm:grid-cols-2">
                 <Detail icon={MapPin} label="Pickup">{booking.pickupLocation}</Detail>
+                {(booking.stops || []).map((stop, index) => (
+                  <Detail key={stop.placeId || index} icon={MapPin} label={`Stop ${index + 1}`}>
+                    {stop.location}
+                  </Detail>
+                ))}
                 <Detail icon={MapPin} label="Destination">{booking.dropoffLocation}</Detail>
                 <Detail icon={CalendarDays} label="Pickup date">{formatDate(booking.pickupDate)}</Detail>
                 <Detail icon={Clock3} label="Pickup time">{booking.pickupTime || "Not provided"}</Detail>
