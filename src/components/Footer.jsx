@@ -148,6 +148,11 @@ const Footer = () => {
                 },
 
                 {
+                  name: 'Become A Partner',
+                  path: '/partners',
+                },
+
+                {
                   name: 'Contact',
                   path: '/contact',
                 },

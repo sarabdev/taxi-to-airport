@@ -16,6 +16,8 @@ import UserInfo from './pages/UserInfo';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import ThankYou from './pages/ThankYou';
+import Partners from './pages/Partners';
+import { captureReferralFromUrl } from './lib/partnerReferral';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -31,10 +33,22 @@ function ScrollToTop() {
   return null;
 }
 
+/** Remembers the partner when a guest arrives through a partner link. */
+function PartnerReferralCapture() {
+  const { search } = useLocation();
+
+  useEffect(() => {
+    captureReferralFromUrl();
+  }, [search]);
+
+  return null;
+}
+
 function App() {
   return (
     <Router>
       <ScrollToTop />
+      <PartnerReferralCapture />
 
       <div className="flex min-h-screen w-full flex-col overflow-x-hidden bg-gray-50">
         <Navbar />
@@ -44,6 +58,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/partners" element={<Partners />} />
             <Route path="/booking" element={<Home />} />
             <Route path="/booking/cars" element={<CarSelection />} />
             <Route path="/booking/info" element={<UserInfo />} />

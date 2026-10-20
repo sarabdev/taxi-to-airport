@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getRouteStops } from "../lib/routeStops";
+import { getActiveReferralCode } from "../lib/partnerReferral";
 
 import {
   ArrowLeft,
@@ -125,6 +126,7 @@ const Payment = () => {
             : null,
         carId: paidBooking.selectedCar._id,
         paymentIntentId,
+        partnerCode: getActiveReferralCode(),
         isReturnTrip: paidBooking.tripType === "RETURN",
         couponCode: paidBooking.pricing?.appliedCoupon || null,
         passengers: paidBooking.user.passengers,
@@ -408,6 +410,7 @@ const Payment = () => {
 
             carId: bookingData.selectedCar._id,
             paymentIntentId,
+            partnerCode: getActiveReferralCode(),
 
             isReturnTrip:
               bookingData.tripType === "RETURN",
