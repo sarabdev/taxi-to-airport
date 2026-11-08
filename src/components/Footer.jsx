@@ -238,10 +238,16 @@ const Footer = () => {
 
                 <div className="min-w-0">
                   <a
-                    href="mailto:support@myairporttaxis.uk"
+                    href="mailto:support@zalt.uk"
                     className="whitespace-nowrap text-sm font-semibold tracking-tight text-white transition-colors duration-300 hover:text-accent-400"
                   >
-                    support@myairporttaxis.uk
+                    support@zalt.uk
+                  </a>
+                  <a
+                    href="mailto:booking@zalt.uk"
+                    className="mt-1 block whitespace-nowrap text-sm font-semibold tracking-tight text-white transition-colors duration-300 hover:text-accent-400"
+                  >
+                    booking@zalt.uk
                   </a>
                 </div>
               </div>

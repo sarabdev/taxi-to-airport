@@ -139,8 +139,15 @@ const Contact = () => {
                 {
                   icon: Mail,
                   title: 'Email',
-                  value1: 'support@myairporttaxis.uk',
+                  value1: 'support@zalt.uk',
                   value2: 'We usually reply within a few hours',
+                },
+
+                {
+                  icon: Mail,
+                  title: 'Bookings',
+                  value1: 'booking@zalt.uk',
+                  value2: 'For new and existing bookings',
                 },
 
                 {

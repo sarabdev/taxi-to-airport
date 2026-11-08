@@ -188,8 +188,8 @@ const Terms = () => {
                 </BulletList>
                 <p>
                   To cancel, contact us at{' '}
-                  <a href="mailto:support@myairporttaxis.uk" className="font-semibold text-primary-900 underline decoration-accent-500 underline-offset-4">
-                    support@myairporttaxis.uk
+                  <a href="mailto:support@zalt.uk" className="font-semibold text-primary-900 underline decoration-accent-500 underline-offset-4">
+                    support@zalt.uk
                   </a>{' '}
                   or by phone at{' '}
                   <a href="tel:+447899001900" className="font-semibold text-primary-900 underline decoration-accent-500 underline-offset-4">
@@ -225,7 +225,7 @@ const Terms = () => {
 
                 <Subheading>5.4 Traveller No-Show</Subheading>
                 <p>
-                  If you fail to arrive at the agreed pickup point within the applicable waiting time in Section 5.3 (having been reasonably contactable by the Driver or our support team), the booking will be treated as a no-show and is non-refundable. If you believe a no-show was recorded in error, you may dispute it within 48 hours by contacting support@myairporttaxis.uk, and we will review the available evidence.
+                  If you fail to arrive at the agreed pickup point within the applicable waiting time in Section 5.3 (having been reasonably contactable by the Driver or our support team), the booking will be treated as a no-show and is non-refundable. If you believe a no-show was recorded in error, you may dispute it within 48 hours by contacting support@zalt.uk, and we will review the available evidence.
                 </p>
 
                 <Subheading>5.5 Driver No-Show or Delay</Subheading>
@@ -355,11 +355,11 @@ const Terms = () => {
                 <p>For questions about these Terms, complaints, or general support, please contact us at:</p>
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <a
-                    href="mailto:support@myairporttaxis.uk"
+                    href="mailto:support@zalt.uk"
                     className="inline-flex items-center justify-center gap-3 rounded-2xl bg-primary-900 px-5 py-4 font-bold text-white transition-colors hover:bg-primary-800"
                   >
                     <Mail className="h-5 w-5 text-accent-400" />
-                    support@myairporttaxis.uk
+                    support@zalt.uk
                   </a>
                   <a
                     href="tel:+447899001900"

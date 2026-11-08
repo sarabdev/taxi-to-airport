@@ -45,6 +45,12 @@ const Payment = () => {
 
   const [paymentRequest, setPaymentRequest] = useState(null);
 
+  // Stripe's PaymentRequestButtonElement can't swap its paymentRequest after
+  // mount, so remount it (via key) whenever a new request is created.
+  const [paymentRequestKey, setPaymentRequestKey] = useState(0);
+
+  const awaitingBookingOnly = Boolean(bookingData?.paymentIntentId);
+
   /* ========================================================= */
   /* LOAD */
   /* ========================================================= */
@@ -264,7 +270,10 @@ const Payment = () => {
 
     request.on("paymentmethod", handleWalletPayment);
     request.canMakePayment().then((available) => {
-      if (active && available) setPaymentRequest(request);
+      if (active && available) {
+        setPaymentRequest(request);
+        setPaymentRequestKey((key) => key + 1);
+      }
     }).catch(() => {
       if (active) setPaymentRequest(null);
     });
@@ -287,7 +296,8 @@ const Payment = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!stripe || !elements || !cardComplete) return;
+    if (!stripe || !elements) return;
+    if (!bookingData.paymentIntentId && !cardComplete) return;
 
     setProcessing(true);
 
@@ -620,6 +630,7 @@ const Payment = () => {
                       </p>
                       <div className={processing ? "pointer-events-none opacity-60" : ""}>
                         <PaymentRequestButtonElement
+                          key={paymentRequestKey}
                           options={{
                             paymentRequest,
                             style: {
@@ -642,6 +653,7 @@ const Payment = () => {
                   )}
 
                   {/* Stripe */}
+                  {!awaitingBookingOnly && (
                   <div>
                     <label className="mb-3 block text-sm font-semibold text-gray-700 sm:mb-4">
                       Card Details
@@ -677,6 +689,13 @@ const Payment = () => {
                       </div>
                     </div>
                   </div>
+                  )}
+
+                  {awaitingBookingOnly && (
+                    <div className="rounded-2xl border border-green-200 bg-green-50 px-4 py-4 text-sm text-green-800 sm:px-5 sm:text-base">
+                      Your payment was received. Click below to finish confirming your booking — you won't be charged again.
+                    </div>
+                  )}
 
                   {/* Error */}
                   {(cardError || error) && (
@@ -712,13 +731,15 @@ const Payment = () => {
                     disabled={
                       processing ||
                       !stripe ||
-                      !cardComplete
+                      (!awaitingBookingOnly && !cardComplete)
                     }
                     className="w-full rounded-2xl bg-primary-900 px-6 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-primary-800 hover:shadow-premium disabled:cursor-not-allowed disabled:opacity-50 sm:px-8 sm:py-5 sm:text-base"
                   >
                     {processing
                       ? "Processing Payment..."
-                      : `Pay £${bookingData.pricing.totalFare}`}
+                      : awaitingBookingOnly
+                        ? "Complete Booking"
+                        : `Pay £${bookingData.pricing.totalFare}`}
                   </button>
 
                   {/* Stripe */}

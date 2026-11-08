@@ -13,19 +13,9 @@ import {
   Wallet,
   BadgeCheck,
 } from 'lucide-react';
+import partnerQrStand from '../assets/partner-qr-stand.jpg';
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
-
-const PROPERTY_TYPES = [
-  { value: 'HOTEL', label: 'Hotel' },
-  { value: 'GUEST_HOUSE', label: 'Guest house / B&B' },
-  { value: 'LODGE', label: 'Lodge' },
-  { value: 'HOLIDAY_RENTAL', label: 'Holiday rental / Airbnb' },
-  { value: 'SERVICED_APARTMENTS', label: 'Serviced apartments' },
-  { value: 'OTHER', label: 'Other' },
-];
-
-const PROPERTY_COUNTS = ['1', '2-5', '6-20', '21-50', '51+'];
 
 const BENEFITS = [
   { icon: BadgeCheck, title: 'Free setup', text: 'No joining fee or integration work.' },
@@ -58,14 +48,9 @@ const STEPS = [
 ];
 
 const EMPTY_FORM = {
-  contactName: '',
-  position: '',
   companyName: '',
-  email: '',
   phone: '',
-  city: '',
-  propertyType: 'HOTEL',
-  propertyCount: '1',
+  email: '',
   message: '',
   website: '', // honeypot
 };
@@ -220,15 +205,13 @@ const Partners = () => {
           </ol>
         </div>
 
-        <div className="flex flex-col justify-center rounded-[28px] bg-accent-500 p-8 text-primary-950 sm:p-10">
-          <p className="text-2xl font-black leading-snug sm:text-3xl">
-            “Your team doesn’t need to arrange the journey. Simply give the guest a trusted
-            way to book it.”
-          </p>
-          <p className="mt-6 flex items-center gap-2 text-sm font-bold">
-            <CheckCircle className="h-5 w-5" />
-            Free to join, no integration required
-          </p>
+        <div className="overflow-hidden rounded-[28px] shadow-soft">
+          <img
+            src={partnerQrStand}
+            alt="Zalt QR code stand on a desk offering 30% off airport transfers"
+            loading="lazy"
+            className="h-full w-full object-cover"
+          />
         </div>
       </section>
 
@@ -301,45 +284,17 @@ const Partners = () => {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <div>
-                <label htmlFor="partner-contactName" className={labelClass}>Contact name</label>
-                <input id="partner-contactName" name="contactName" value={formData.contactName} onChange={handleChange} required maxLength={120} autoComplete="name" className={fieldClass} />
-              </div>
-              <div>
-                <label htmlFor="partner-position" className={labelClass}>Position</label>
-                <input id="partner-position" name="position" value={formData.position} onChange={handleChange} maxLength={120} autoComplete="organization-title" className={fieldClass} />
-              </div>
-              <div>
-                <label htmlFor="partner-companyName" className={labelClass}>Property / company</label>
+              <div className="sm:col-span-2">
+                <label htmlFor="partner-companyName" className={labelClass}>Business name</label>
                 <input id="partner-companyName" name="companyName" value={formData.companyName} onChange={handleChange} required maxLength={160} autoComplete="organization" className={fieldClass} />
+              </div>
+              <div>
+                <label htmlFor="partner-phone" className={labelClass}>Phone</label>
+                <input id="partner-phone" type="tel" name="phone" value={formData.phone} onChange={handleChange} required maxLength={40} autoComplete="tel" className={fieldClass} />
               </div>
               <div>
                 <label htmlFor="partner-email" className={labelClass}>Email</label>
                 <input id="partner-email" type="email" name="email" value={formData.email} onChange={handleChange} required maxLength={254} autoComplete="email" className={fieldClass} />
-              </div>
-              <div>
-                <label htmlFor="partner-phone" className={labelClass}>Phone</label>
-                <input id="partner-phone" type="tel" name="phone" value={formData.phone} onChange={handleChange} maxLength={40} autoComplete="tel" className={fieldClass} />
-              </div>
-              <div>
-                <label htmlFor="partner-city" className={labelClass}>City / town</label>
-                <input id="partner-city" name="city" value={formData.city} onChange={handleChange} maxLength={120} autoComplete="address-level2" className={fieldClass} />
-              </div>
-              <div>
-                <label htmlFor="partner-propertyType" className={labelClass}>Property type</label>
-                <select id="partner-propertyType" name="propertyType" value={formData.propertyType} onChange={handleChange} className={fieldClass}>
-                  {PROPERTY_TYPES.map((type) => (
-                    <option key={type.value} value={type.value}>{type.label}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label htmlFor="partner-propertyCount" className={labelClass}>Rooms or properties managed</label>
-                <select id="partner-propertyCount" name="propertyCount" value={formData.propertyCount} onChange={handleChange} className={fieldClass}>
-                  {PROPERTY_COUNTS.map((count) => (
-                    <option key={count} value={count}>{count.replace('-', '–')}</option>
-                  ))}
-                </select>
               </div>
               <div className="sm:col-span-2">
                 <label htmlFor="partner-message" className={labelClass}>
@@ -366,7 +321,7 @@ const Partners = () => {
                   disabled={submitting}
                   className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary-900 px-8 py-4 font-bold text-white transition hover:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
                 >
-                  {submitting ? 'Sending...' : 'Request partner details'}
+                  {submitting ? 'Sending...' : 'Submit'}
                   {!submitting && <Send className="h-4 w-4" />}
                 </button>
                 <p className="mt-3 flex items-start gap-2 text-xs text-gray-500">

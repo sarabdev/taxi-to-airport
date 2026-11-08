@@ -152,13 +152,22 @@ const Home = () => {
     }));
   };
 
-  const addStop = () => {
+  // 'start' adds a stop right after pickup; 'end' adds one just before the destination.
+  const addStop = (position = 'end') => {
     setFormData((prev) =>
       prev.stops.length >= MAX_STOPS
         ? prev
-        : { ...prev, stops: [...prev.stops, createStop()] }
+        : {
+            ...prev,
+            stops:
+              position === 'start'
+                ? [createStop(), ...prev.stops]
+                : [...prev.stops, createStop()],
+          }
     );
   };
+
+  const canAddStop = formData.stops.length < MAX_STOPS;
 
   const removeStop = (stopId) => {
     setRouteError('');
@@ -361,15 +370,24 @@ const Home = () => {
                     <label className="mb-2 block text-sm font-semibold text-gray-700 sm:mb-3">
                       Pickup Location
                     </label>
-                    <PlaceAutocompleteInput
-                      name="fromLocation"
-                      value={formData.fromLocation}
-                      onTextChange={(location) => setRoutePoint('from', { location })}
-                      onPlaceSelect={(place) => setRoutePoint('from', place)}
-                      placeholder="Enter pickup address"
-                      className="input-field h-12 border-gray-200 text-black focus:ring-primary-900 sm:h-14"
-                      required
-                    />
+                    <div className="flex items-center gap-2">
+                      <div className="min-w-0 flex-1">
+                        <PlaceAutocompleteInput
+                          name="fromLocation"
+                          value={formData.fromLocation}
+                          onTextChange={(location) => setRoutePoint('from', { location })}
+                          onPlaceSelect={(place) => setRoutePoint('from', place)}
+                          placeholder="Enter pickup address"
+                          className="input-field h-12 border-gray-200 text-black focus:ring-primary-900 sm:h-14"
+                          required
+                        />
+                      </div>
+                      <AddStopButton
+                        onClick={() => addStop('start')}
+                        disabled={!canAddStop}
+                        label="Add a stop after pickup"
+                      />
+                    </div>
                   </div>
 
                   {/* STOPS */}
@@ -411,16 +429,7 @@ const Home = () => {
                     </ol>
                   )}
 
-                  {formData.stops.length < MAX_STOPS ? (
-                    <button
-                      type="button"
-                      onClick={addStop}
-                      className="inline-flex items-center gap-2 text-sm font-bold text-primary-900 transition hover:text-accent-500"
-                    >
-                      <Plus className="h-4 w-4" />
-                      Add stop
-                    </button>
-                  ) : (
+                  {!canAddStop && (
                     <p className="text-xs text-gray-500">
                       You can add up to {MAX_STOPS} stops.
                     </p>
@@ -432,15 +441,24 @@ const Home = () => {
                       Destination
                     </label>
 
-                    <PlaceAutocompleteInput
-                      name="toLocation"
-                      value={formData.toLocation}
-                      onTextChange={(location) => setRoutePoint('to', { location })}
-                      onPlaceSelect={(place) => setRoutePoint('to', place)}
-                      placeholder="Enter your destination"
-                      className="input-field h-12 border-gray-200 text-black focus:ring-primary-900 sm:h-14"
-                      required
-                    />
+                    <div className="flex items-center gap-2">
+                      <div className="min-w-0 flex-1">
+                        <PlaceAutocompleteInput
+                          name="toLocation"
+                          value={formData.toLocation}
+                          onTextChange={(location) => setRoutePoint('to', { location })}
+                          onPlaceSelect={(place) => setRoutePoint('to', place)}
+                          placeholder="Enter your destination"
+                          className="input-field h-12 border-gray-200 text-black focus:ring-primary-900 sm:h-14"
+                          required
+                        />
+                      </div>
+                      <AddStopButton
+                        onClick={() => addStop('end')}
+                        disabled={!canAddStop}
+                        label="Add a stop before destination"
+                      />
+                    </div>
                   </div>
 
                   {routeError && (
@@ -1240,13 +1258,13 @@ const Home = () => {
               <a
                 href={
                   activePromo === 'rewards'
-                    ? 'mailto:support@myairporttaxis.uk?subject=Rewards%20enquiry&body=Hello%20Zalt%2C%0A%0AI%20would%20like%20to%20check%20the%20rewards%20available%20for%20my%20completed%20journey.%0A%0ABooking%20reference%3A%0AEmail%20used%20for%20booking%3A%0AJourney%20date%3A%0A'
-                    : 'mailto:support@myairporttaxis.uk?subject=Referral%20code%20request&body=Hello%20Zalt%2C%0A%0AI%20would%20like%20to%20request%20a%20personal%20referral%20code.%0A%0AName%3A%0AEmail%20used%20for%20booking%3A%0ARecent%20booking%20reference%20(if%20available)%3A%0A'
+                    ? 'mailto:support@zalt.uk?subject=Rewards%20enquiry&body=Hello%20Zalt%2C%0A%0AI%20would%20like%20to%20check%20the%20rewards%20available%20for%20my%20completed%20journey.%0A%0ABooking%20reference%3A%0AEmail%20used%20for%20booking%3A%0AJourney%20date%3A%0A'
+                    : 'mailto:support@zalt.uk?subject=Referral%20code%20request&body=Hello%20Zalt%2C%0A%0AI%20would%20like%20to%20request%20a%20personal%20referral%20code.%0A%0AName%3A%0AEmail%20used%20for%20booking%3A%0ARecent%20booking%20reference%20(if%20available)%3A%0A'
                 }
                 className="inline-flex w-full items-center justify-center rounded-2xl bg-primary-900 px-6 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-800 sm:text-base"
               >
                 <Mail className="mr-3 h-5 w-5 text-accent-400" />
-                Email support@myairporttaxis.uk
+                Email support@zalt.uk
               </a>
 
               <button
@@ -1265,3 +1283,18 @@ const Home = () => {
 };
 
 export default Home;
+
+function AddStopButton({ onClick, disabled, label }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={label}
+      title={disabled ? 'Maximum stops reached' : label}
+      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-gray-200 text-primary-900 transition hover:border-accent-500 hover:bg-accent-50 hover:text-accent-500 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-gray-200 disabled:hover:bg-transparent disabled:hover:text-primary-900 sm:h-14 sm:w-14"
+    >
+      <Plus className="h-5 w-5" />
+    </button>
+  );
+}

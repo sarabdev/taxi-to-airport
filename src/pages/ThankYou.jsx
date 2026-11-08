@@ -7,6 +7,7 @@ import {
   CarFront,
   CheckCircle2,
   Clock3,
+  KeyRound,
   Mail,
   MapPin,
   Plane,
@@ -98,6 +99,21 @@ const ThankYou = () => {
           </div>
         </section>
 
+        {booking.completionCode && (
+          <section className="mt-6 rounded-[28px] border border-accent-400 bg-accent-50 p-5 text-center shadow-soft sm:p-8">
+            <div className="flex items-center justify-center gap-2 text-sm font-black uppercase tracking-[0.18em] text-primary-900">
+              <KeyRound className="h-5 w-5 text-accent-500" />
+              Your job-end code
+            </div>
+            <p className="mt-3 font-mono text-5xl font-black tracking-[0.35em] text-primary-900 sm:text-6xl">
+              {booking.completionCode}
+            </p>
+            <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-gray-700 sm:text-base">
+              Give this code to your driver only when you have arrived. Your driver needs it to complete the ride. It's also in your confirmation email.
+            </p>
+          </section>
+        )}
+
         <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_340px] lg:gap-8">
           <div className="space-y-6">
             <section className="rounded-[28px] border border-gray-100 bg-white p-5 shadow-soft sm:p-8">
@@ -181,7 +197,7 @@ const ThankYou = () => {
               Return to home
             </Link>
             <p className="mt-4 text-center text-xs leading-relaxed text-gray-500">
-              Need help? Email support@myairporttaxis.uk and quote reference {reference}.
+              Need help? Email support@zalt.uk and quote reference {reference}.
             </p>
           </aside>
         </div>

@@ -141,8 +141,8 @@ const Privacy = () => {
                     <Bullet><strong className="text-gray-800">Company name:</strong> Zalt</Bullet>
                     <Bullet>
                       <strong className="text-gray-800">Contact email:</strong>{' '}
-                      <a className="font-semibold text-primary-900 underline decoration-accent-500 underline-offset-4" href="mailto:support@myairporttaxis.uk">
-                        support@myairporttaxis.uk
+                      <a className="font-semibold text-primary-900 underline decoration-accent-500 underline-offset-4" href="mailto:support@zalt.uk">
+                        support@zalt.uk
                       </a>
                     </Bullet>
                   </BulletList>
@@ -289,8 +289,8 @@ const Privacy = () => {
                 </BulletList>
                 <p>
                   To exercise any of these rights, contact us at{' '}
-                  <a className="font-semibold text-primary-900 underline decoration-accent-500 underline-offset-4" href="mailto:support@myairporttaxis.uk">
-                    support@myairporttaxis.uk
+                  <a className="font-semibold text-primary-900 underline decoration-accent-500 underline-offset-4" href="mailto:support@zalt.uk">
+                    support@zalt.uk
                   </a>
                   . We may ask you to verify your identity before actioning a request. We aim to respond within one month, extendable by up to two further months for complex requests, in line with UK GDPR timeframes.
                 </p>
@@ -308,11 +308,11 @@ const Privacy = () => {
               <Section number="11" title="Contact Us" icon={Mail}>
                 <p>If you have any questions about this Privacy Policy or how we handle your personal data, please contact us at:</p>
                 <a
-                  href="mailto:support@myairporttaxis.uk"
+                  href="mailto:support@zalt.uk"
                   className="inline-flex items-center gap-3 rounded-2xl bg-primary-900 px-5 py-4 font-bold text-white transition-colors hover:bg-primary-800"
                 >
                   <Mail className="h-5 w-5 text-accent-400" />
-                  support@myairporttaxis.uk
+                  support@zalt.uk
                 </a>
                 <p>
                   You also have the right to contact the Information Commissioner&apos;s Office (ICO) if you have concerns about how we process your personal data:{' '}
