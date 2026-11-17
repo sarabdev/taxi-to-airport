@@ -28,7 +28,6 @@ import executiveAirportTransfers from '../assets/hero-executive-airport-transfer
 import groupFamilyTransfers from '../assets/hero-group-family-transfers.png';
 import airportFleet from '../assets/hero-airport-fleet.png';
 import welcomeRewardsBackground from '../assets/welcome-rewards-background.png';
-import welcomeOfferCarousel from '../assets/welcome-offer-carousel.png';
 import PlaceAutocompleteInput from '../components/PlaceAutocompleteInput';
 import { MAX_STOPS, createStop, getRouteStops } from '../lib/routeStops';
 
@@ -109,10 +108,6 @@ const Home = () => {
   }, [activePromo]);
 
   const sliderImages = [
-    {
-      image: welcomeOfferCarousel,
-      title: 'Welcome offer — save 30% with code WELCOME30',
-    },
     {
       image: executiveAirportTransfers,
       title: 'Executive Airport Transfers',
