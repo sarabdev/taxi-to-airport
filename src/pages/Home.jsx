@@ -147,19 +147,21 @@ const Home = () => {
     }));
   };
 
-  // 'start' adds a stop right after pickup; 'end' adds one just before the destination.
+  // Pickup + inserts below pickup. Drop-off + keeps the current destination
+  // as a stop and opens a new final destination below it.
   const addStop = (position = 'end') => {
-    setFormData((prev) =>
-      prev.stops.length >= MAX_STOPS
-        ? prev
-        : {
-            ...prev,
-            stops:
-              position === 'start'
-                ? [createStop(), ...prev.stops]
-                : [...prev.stops, createStop()],
-          }
-    );
+    setRouteError('');
+    setFormData((prev) => {
+      if (prev.stops.length >= MAX_STOPS) return prev;
+      if (position === 'start') return { ...prev, stops: [createStop(), ...prev.stops] };
+      return {
+        ...prev,
+        stops: [...prev.stops, { ...createStop(), location: prev.toLocation, placeId: prev.toPlaceId }],
+        toLocation: '',
+        toPlaceId: '',
+        toType: 'custom',
+      };
+    });
   };
 
   const canAddStop = formData.stops.length < MAX_STOPS;
@@ -451,7 +453,7 @@ const Home = () => {
                       <AddStopButton
                         onClick={() => addStop('end')}
                         disabled={!canAddStop}
-                        label="Add a stop before destination"
+                        label="Add a new drop-off after this destination"
                       />
                     </div>
                   </div>

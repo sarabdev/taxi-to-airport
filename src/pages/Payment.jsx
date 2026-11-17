@@ -132,7 +132,7 @@ const Payment = () => {
             : null,
         carId: paidBooking.selectedCar._id,
         paymentIntentId,
-        partnerCode: getActiveReferralCode(),
+        partnerCode: Object.hasOwn(paidBooking, "partnerCode") ? paidBooking.partnerCode : getActiveReferralCode(),
         isReturnTrip: paidBooking.tripType === "RETURN",
         couponCode: paidBooking.pricing?.appliedCoupon || null,
         passengers: paidBooking.user.passengers,
@@ -420,7 +420,7 @@ const Payment = () => {
 
             carId: bookingData.selectedCar._id,
             paymentIntentId,
-            partnerCode: getActiveReferralCode(),
+            partnerCode: Object.hasOwn(bookingData, "partnerCode") ? bookingData.partnerCode : getActiveReferralCode(),
 
             isReturnTrip:
               bookingData.tripType === "RETURN",

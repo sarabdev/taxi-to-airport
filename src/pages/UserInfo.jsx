@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getRouteStops } from "../lib/routeStops";
+import { getActiveReferralCode, confirmReferralCode } from "../lib/partnerReferral";
 
 import {
   User,
@@ -94,6 +95,8 @@ const UserInfo = () => {
   const [pricingLoading, setPricingLoading] = useState(false);
 
   const [pricingError, setPricingError] = useState("");
+  const [partnerCode, setPartnerCode] = useState("");
+  const [checkingPartner, setCheckingPartner] = useState(false);
 
   const [meetAndGreetPrice, setMeetAndGreetPrice] = useState(null);
 
@@ -181,6 +184,7 @@ const UserInfo = () => {
     };
 
     setForm(nextForm);
+    setPartnerCode(Object.hasOwn(parsed, "partnerCode") ? parsed.partnerCode || "" : getActiveReferralCode() || "");
 
     setBookingData({
       ...parsed,
@@ -434,7 +438,7 @@ const UserInfo = () => {
     return err;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const err = validate();
@@ -443,6 +447,13 @@ const UserInfo = () => {
 
     if (Object.keys(err).length) return;
 
+    let confirmedPartnerCode = null;
+    if (partnerCode.trim()) {
+      setCheckingPartner(true);
+      try { confirmedPartnerCode = (await confirmReferralCode(partnerCode)).referralCode; }
+      catch (error) { setErrors((previous) => ({ ...previous, partnerCode: error.message })); return; }
+      finally { setCheckingPartner(false); }
+    }
     const existing = JSON.parse(localStorage.getItem("bookingData") || "{}");
     const { returnTrip, ...userForm } = form;
 
@@ -450,6 +461,7 @@ const UserInfo = () => {
       "bookingData",
       JSON.stringify({
         ...existing,
+        partnerCode: confirmedPartnerCode,
         returnTrip,
         isReturnTrip: existing.tripType === "RETURN",
         user: userForm,
@@ -647,6 +659,14 @@ const UserInfo = () => {
 
                         {renderError("email")}
                       </div>
+                    </div>
+
+                    <div>
+                      <label htmlFor="partner-referral-code" className="mb-2 block text-sm font-semibold text-gray-700">Partner referral code (optional)</label>
+                      <input id="partner-referral-code" maxLength={32} value={partnerCode}
+                        onChange={(event) => setPartnerCode(event.target.value.toUpperCase())}
+                        className="input-field h-12 border-gray-200 sm:h-14" placeholder="Code from your hotel or partner" />
+                      {renderError("partnerCode")}
                     </div>
 
                     {/* Passengers */}
@@ -1215,10 +1235,10 @@ const UserInfo = () => {
                 {/* BUTTON */}
                 <div className="pt-8 sm:pt-10 md:pt-12">
                   <button
-                    disabled={pricingLoading}
+                    disabled={pricingLoading || checkingPartner}
                     className="w-full rounded-2xl bg-primary-900 px-6 py-4 text-sm font-bold text-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-primary-800 hover:shadow-premium disabled:cursor-not-allowed disabled:opacity-60 sm:px-8 sm:py-5 sm:text-base"
                   >
-                    Continue To Payment
+                    {checkingPartner ? "Checking partner code…" : "Continue To Payment"}
                   </button>
                 </div>
               </div>

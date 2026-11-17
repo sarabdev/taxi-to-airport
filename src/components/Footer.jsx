@@ -46,7 +46,7 @@ const Footer = () => {
 
               <div className="min-w-0">
                 <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-gray-500 sm:text-xs">
-                  Premium Transfers
+                  Airport Transfers
                 </p>
               </div>
             </Link>
@@ -150,6 +150,10 @@ const Footer = () => {
                 {
                   name: 'Become A Partner',
                   path: '/partners',
+                },
+                {
+                  name: 'Partner Dashboard',
+                  path: '/partner/dashboard',
                 },
 
                 {

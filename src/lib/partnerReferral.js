@@ -27,6 +27,13 @@ export function getActiveReferralCode() {
   return readStoredReferral()?.referralCode || null;
 }
 
+export async function confirmReferralCode(value) {
+  const code = normalizeCode(value);
+  const response = await fetch(`${API_BASE}/api/partners/referral/${encodeURIComponent(code)}`);
+  if (!response.ok) throw new Error('Partner referral code not found. Please check it with your partner.');
+  return response.json();
+}
+
 /**
  * Remembers the partner from a `?ref=CODE` link. The code is confirmed with the
  * API first so a mistyped or suspended code never replaces a valid one. The

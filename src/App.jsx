@@ -17,6 +17,8 @@ import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import ThankYou from './pages/ThankYou';
 import Partners from './pages/Partners';
+import PartnerDashboard from './pages/PartnerDashboard';
+import DriverComplete from './pages/DriverComplete';
 import { captureReferralFromUrl } from './lib/partnerReferral';
 
 function ScrollToTop() {
@@ -59,6 +61,8 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/partners" element={<Partners />} />
+            <Route path="/partner/dashboard" element={<PartnerDashboard />} />
+            <Route path="/driver/complete" element={<DriverComplete />} />
             <Route path="/booking" element={<Home />} />
             <Route path="/booking/cars" element={<CarSelection />} />
             <Route path="/booking/info" element={<UserInfo />} />

@@ -93,7 +93,7 @@ const Navbar = () => {
 
               <div className="flex min-w-0 flex-col leading-tight">
                 <span className="hidden truncate text-[10px] uppercase tracking-[0.16em] text-gray-500 xs:block sm:text-[11px] sm:tracking-[0.2em]">
-                  Premium Airport Transfers
+                  Airport Transfers
                 </span>
               </div>
             </Link>
