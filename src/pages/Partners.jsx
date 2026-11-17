@@ -5,7 +5,7 @@ import {
   Building2,
   CheckCircle,
   Link2,
-  Percent,
+  PoundSterling,
   QrCode,
   Send,
   Share2,
@@ -20,7 +20,7 @@ const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
 const BENEFITS = [
   { icon: BadgeCheck, title: 'Free setup', text: 'No joining fee or integration work.' },
   { icon: Link2, title: 'Your own link', text: 'For reception, rooms and guest messages.' },
-  { icon: Percent, title: 'Commission', text: 'Earn on every completed journey.' },
+  { icon: PoundSterling, title: 'Commission', text: 'Earn on every completed journey.' },
   { icon: BarChart3, title: 'Clear reporting', text: 'See bookings, journeys and rewards.' },
 ];
 
