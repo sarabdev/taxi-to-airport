@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   ArrowRight,
   BarChart3,
@@ -60,21 +60,6 @@ const Partners = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  const [commissionPercent, setCommissionPercent] = useState(null);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    fetch(`${API_BASE}/api/settings/public`, { signal: controller.signal })
-      .then((response) => (response.ok ? response.json() : null))
-      .then((settings) => {
-        const value = Number(settings?.defaultPartnerCommissionPercent);
-        if (Number.isFinite(value) && value > 0) setCommissionPercent(value);
-      })
-      .catch(() => {});
-
-    return () => controller.abort();
-  }, []);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -232,9 +217,9 @@ const Partners = () => {
             <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
               <p className="text-sm font-semibold text-gray-300">Commission per journey</p>
               <p className="mt-2 text-4xl font-black text-accent-400">
-                {commissionPercent ? `${commissionPercent}%` : 'A share'}
+                Fixed Amount
               </p>
-              <p className="mt-2 text-sm text-gray-400">of every completed, paid fare.</p>
+              <p className="mt-2 text-sm text-gray-400">For every completed, paid journey.</p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
               <p className="text-sm font-semibold text-gray-300">Tracked automatically</p>

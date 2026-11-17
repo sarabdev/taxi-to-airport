@@ -90,7 +90,7 @@ const Footer = () => {
               {[
                 {
                   icon: Facebook,
-                  href: 'https://www.facebook.com/profile.php?id=61592346553306',
+                  href: 'https://www.facebook.com/zaltairporttransfers',
                 },
 
                 /* {
@@ -100,7 +100,7 @@ const Footer = () => {
 
                 {
                   icon: Instagram,
-                  href: 'https://www.instagram.com/myairporttaxis/',
+                  href: 'https://www.instagram.com/zaltairporttransfer/',
                 },
 
                 /* {
