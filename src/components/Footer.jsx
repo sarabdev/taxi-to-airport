@@ -12,7 +12,7 @@ import {
   Clock3,
   BadgeCheck,
 } from 'lucide-react';
-import zaltLogo from '../assets/zalt-logo.png';
+import zaltLogo from '../assets/zalt-logo-white.png';
 
 const Footer = () => {
   return (
@@ -36,7 +36,7 @@ const Footer = () => {
               to="/"
               className="group mb-5 flex items-center gap-3 sm:mb-6"
             >
-              <div className="flex h-12 w-32 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white transition-transform duration-300 group-hover:scale-105 sm:h-14 sm:w-36">
+              <div className="flex h-12 w-40 shrink-0 items-center justify-center transition-transform duration-300 group-hover:scale-105 sm:h-14 sm:w-48">
                 <img
                   src={zaltLogo}
                   alt="Zalt logo"
