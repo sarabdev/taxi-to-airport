@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, Sparkles, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import zaltLogo from '../assets/zalt-logo.png';
+import zaltLogo from '../assets/zalt-logo-christmas.jpg';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -83,7 +83,7 @@ const Navbar = () => {
               to="/"
               className="group flex min-w-0 items-center gap-2 sm:gap-3"
             >
-              <div className="flex h-11 w-28 shrink-0 items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-105 sm:h-12 sm:w-32">
+              <div className="flex h-11 w-32 shrink-0 items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-105 sm:h-12 sm:w-36 md:h-14 md:w-44">
                 <img
                   src={zaltLogo}
                   alt="Zalt logo"
