@@ -181,21 +181,28 @@ const Terms = () => {
 
               <Section number="5" title="Cancellations, Changes, and No-Shows">
                 <Subheading>5.1 Cancellation by the Traveller</Subheading>
-                <BulletList>
-                  <Bullet>Cancellations made more than 24 hours before the scheduled pickup time are eligible for a full refund.</Bullet>
-                  <Bullet>Cancellations made within 24 hours of pickup may be subject to a cancellation fee. Any applicable fee will be shown or communicated before cancellation is confirmed.</Bullet>
-                  <Bullet>Cancellations made after the Driver has been dispatched are non-refundable.</Bullet>
-                </BulletList>
                 <p>
-                  To cancel, contact us at{' '}
+                  Travellers who request cancellation at least six (6) hours before the originally scheduled pickup time are eligible for a refund of the amount paid, less a non-refundable 1.95% payment handling fee charged in connection with the original payment transaction.
+                </p>
+                <p>
+                  Cancellation requests submitted less than six (6) hours before the originally scheduled pickup time may not be eligible for a refund. Any refund for a late cancellation is at the Platform&apos;s discretion, subject to applicable consumer protection laws.
+                </p>
+                <p>
+                  All approved refunds will be issued by bank transfer to the bank account nominated by the traveller. Travellers may be required to provide their bank account details to facilitate the refund.
+                </p>
+                <p>
+                  Cash refunds are unavailable. Refunds will be processed once the cancellation has been reviewed and approved. Processing times may vary depending on banking procedures.
+                </p>
+                <p>
+                  To request a cancellation and refund, contact Zalt Airport Transfers at{' '}
                   <a href="mailto:support@zalt.uk" className="font-semibold text-primary-900 underline decoration-accent-500 underline-offset-4">
                     support@zalt.uk
                   </a>{' '}
                   or by phone at{' '}
                   <a href="tel:+447899001900" className="font-semibold text-primary-900 underline decoration-accent-500 underline-offset-4">
                     +44 7899 001900
-                  </a>
-                  .
+                  </a>{' '}
+                  and provide your booking reference, full name, and relevant booking details. If your refund is approved, we will ask for the bank details needed to issue it.
                 </p>
 
                 <Subheading>5.2 Changes to a Booking</Subheading>
