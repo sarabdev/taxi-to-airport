@@ -191,7 +191,7 @@ const Terms = () => {
                   All approved refunds will be issued by bank transfer to the bank account nominated by the traveller. Travellers may be required to provide their bank account details to facilitate the refund.
                 </p>
                 <p>
-                  we will not issue cash refunds. Refunds will be processed once the cancellation has been reviewed and approved. Processing times may vary depending on banking procedures.
+                  We will not issue cash refunds. Refunds will be processed once the cancellation has been reviewed and approved. Processing times may vary depending on banking procedures.
                 </p>
                 <p>
                   To request a cancellation and refund, travellers must contact Zalt Airport Transfers and provide their booking reference, full name, and relevant booking details. Where a refund is approved, the traveller will be asked to provide the necessary bank details to receive the refund.
